@@ -1,0 +1,16 @@
+.project
+.pydevproject
+MANIFEST
+build
+dist
+.settings
+__pycache__
+/.texlipse
+/.externalToolBuilders/
+/.coverage
+/runtests.pyc
+/EuclidEnv.egg-info/
+*.pyc
+/.pytest_cache
+/.cache
+/.pylintrc

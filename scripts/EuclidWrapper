@@ -1,0 +1,209 @@
+#!/usr/bin/env python%(this_python_version)s
+
+from __future__ import division, print_function
+
+import argparse
+import importlib
+import os
+import subprocess
+import sys
+
+from EuclidWrapper.logging import logger
+
+def _addWrapperArguments(parser):
+    """Add to the parser the arguments to be consumed by the wrapper.
+
+    These are the following:
+    - wrapper-module (optional): The module containing the user methods to be used
+    - workdir (required): The IAL Task API parameter with the directory all paths
+        are relative to
+    - logdir (optional): The IAL Task API parameter with the directory (relative
+        to the workdir) where all log files should be placed
+    - forward-ial-api: A flag indicating that the workdir and logdir arguments
+        should be forwarded to the wrapped executable
+    - hyphen-whitelist: A comma separated list of arguments where underscores
+        will be converted to hyphens
+    - hyphen-blacklist: A comma separated list of arguments to keep the
+        underscores (all other will be replaced by hyphens)
+    - executable (required positional argument): The wrapped executable
+
+    Args:
+        parser: The parser to add the arguments to
+
+    """
+    parser.add_argument('--wrapper-module', type=str,
+                        help='The module containing the user methods')
+    parser.add_argument('--workdir', type=str, default='.',
+                        help='The directory all paths are relative to')
+    parser.add_argument('--logdir', type=str,
+                        help='The directory where all log files should be placed')
+    parser.add_argument('--forward-ial-api', action='store_true',
+                        help='Forward the workdir and logdir to the wrapped executable')
+    parser.add_argument('--hyphen-whitelist', type=str,
+                        help='A comma separated list of arguments where underscores '
+                             'will be converted to hyphens')
+    parser.add_argument('--hyphen-blacklist', type=str,
+                        help='A comma separated list of arguments to keep the '
+                             'underscores (all other will be replaced by hyphens)')
+    parser.add_argument('--python-wrapping', action='store_true',
+                        help='Prefix the execution with the EDEN version of python')
+    parser.add_argument('executable', metavar='EXECUTABLE', type=str,
+                        help='The wrapped executable')
+
+
+def _getUserModule(executable, wrapper_module_name=None):
+    """Returns the module containing the user methods.
+
+    If the module_name parameter is given, this module will be returned. In the
+    case the module is missing an ImportError is raised. If the module_name is
+    None, the module EuclidWrapper.<EXEC_NAME> is searched. If it exists, it is
+    returned. If it doesn't exist, the default module EuclidWrapper.default is
+    returned.
+
+    Args:
+        executable: The name of the wrapped executable
+        wrapper_module_name: The name of the module containing the user methods
+    """
+    if wrapper_module_name:
+        logger.info('Using user provided wrapper module: {}'.format(wrapper_module_name))
+        return importlib.import_module(wrapper_module_name)
+
+    wrapper_module_name = 'EuclidWrapper.' + executable
+    try:
+        wrapper_module = importlib.import_module(wrapper_module_name)
+        logger.info('Using wrapper module: {}'.format(wrapper_module_name))
+    except ImportError:
+        logger.info('Wrapper module {} not found...'.format(wrapper_module_name))
+        logger.info('Using default wrapper module: EuclidWrapper.default')
+        import EuclidWrapper.default as wrapper_module
+    return wrapper_module
+
+
+def _replaceUnderscoresWithHyphens(args, whitelist=None, blacklist=None):
+    """Replaces the underscores of the given arguments with hyphens.
+
+    The whitelist and blacklist parameters control which arguments are being
+    modified. If both are None no arguments are changed. If the whitelist is
+    given, only the arguments in it are changed. If the blacklist is given, all
+    the arguments which are not in it are modified. The blacklist and whitelist
+    cannot be both given at the same time. To change all arguments, the empty
+    string can be passed as a blacklist.
+
+    Args:
+        whitelist: A comma separated list of the arguments to be changed
+        blacklist: A comma separated list of the arguments to not be changed
+    """
+    if whitelist and blacklist:
+        logger.error('Hyphen whitelist and blacklist cannot be used at the same time')
+        logger.error('Whitelist: {}'.format(whitelist))
+        logger.error('Blacklist: {}'.format(blacklist))
+        exit(1)
+
+    if whitelist is None and blacklist is None:
+        return args
+    if whitelist is not None:
+        whitelist = whitelist.split(',')
+    elif blacklist is not None:
+        blacklist = blacklist.split(',')
+    else:
+        # Both are None, so we replace nothing
+        return args
+
+    result = []
+    for arg in args:
+        if arg.startswith('--'):
+            arg = arg[2:] # Remove the --
+            # Check if the arg contains also the value
+            if '=' in arg:
+                postfix = arg[arg.index('='):]
+                arg = arg[:arg.index('=')]
+            else:
+                postfix = ''
+            # Replace the underscores with hyphens
+            if (whitelist and arg in whitelist) or (blacklist and arg not in blacklist):
+                arg = arg.replace('_', '-')
+            result.append('--' + arg + postfix)
+        else:
+            result.append(arg)
+
+    return result
+
+
+if __name__ == '__main__':
+
+    # Create the parser for all arguments that are consumed by the EuclidWrapper
+    parser = argparse.ArgumentParser()
+    _addWrapperArguments(parser)
+
+    # We do not want to handle the --help, -h arguments yet, so we remove them
+    # from the list
+    all_args = [x for x in sys.argv if x != '--help' and x != '-h']
+    show_help = len(all_args) != len(sys.argv)
+    all_args = all_args[1:] # Remove the EuclidWrapper
+    if len(all_args) == 0:
+        # The user didn't give an executable to wrap so we add the true command
+        # which does nothing
+        logger.warning('No executable to wrap. Will execute "true"')
+        all_args.append('true')
+
+    # Parse the arguments of the EuclidWrapper
+    wrapper_args, custom_args = parser.parse_known_args(all_args)
+
+    # Import the module with the user methods
+    wrapper_module = _getUserModule(wrapper_args.executable, wrapper_args.wrapper_module)
+
+    # Get the user defined wrapper program options
+    user_parser = wrapper_module.defineWrapperProgramOptions()
+
+    # If the user gave the --help or -h parameters print the help containing
+    # both the user and the wrapper arguments. This will terminate the program.
+    if show_help:
+        _addWrapperArguments(user_parser)
+        user_parser.parse_args(['--help'])
+
+    # Switch into the workdir, so all relative paths will be resolved correctly.
+    # If the user didn't give a workdir we use the current working directory.
+    workdir = wrapper_args.workdir
+    os.chdir(workdir)
+
+    # Parse the arguments that are handled by the user methods
+    user_args, app_args = user_parser.parse_known_args(custom_args)
+
+    # If the user has defined a preActions() method we call it
+    if hasattr(wrapper_module, 'preActions'):
+        wrapper_module.preActions(user_args)
+
+    # Replace the underscores with hyphens to all application arguments
+    app_args = _replaceUnderscoresWithHyphens(app_args, wrapper_args.hyphen_whitelist,
+                                              wrapper_args.hyphen_blacklist)
+
+    # Check if we need to forward the IAL Task API arguments
+    extra_args = []
+    if wrapper_args.forward_ial_api:
+        extra_args += ['--workdir', workdir]
+        if wrapper_args.logdir:
+            extra_args += ['--logdir', wrapper_args.logdir]
+
+    # Call the user defined method to retrieve the extra options to pass to the
+    # wrapped executable
+    extra_args += wrapper_module.getOptionsToAppend(user_args, wrapper_args.executable)
+
+    # Now execute the command
+    if wrapper_args.python_wrapping:
+        logger.info('Python wrapping is enabled. Executable will be called using ' + sys.executable)
+        full_exec_path = subprocess.getoutput('which ' + wrapper_args.executable)
+        cmd = [sys.executable, full_exec_path]
+    else:
+        cmd = [wrapper_args.executable]
+    cmd += app_args + extra_args
+    logger.info('Executing command: {}'.format(cmd))
+    exit_code = subprocess.call(cmd)
+    # If the command returned an error exit code we terminate here and we do
+    # not do any post actions
+    if exit_code != 0:
+        sys.exit(exit_code)
+
+    # If the user has defined a postActions() method we call it
+    if hasattr(wrapper_module, 'postActions'):
+        wrapper_module.postActions(user_args)
+

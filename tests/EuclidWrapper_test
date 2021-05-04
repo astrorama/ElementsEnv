@@ -1,0 +1,440 @@
+#!/bin/sh
+
+home_dir=${PWD}
+
+# Create unique directory
+tmpdir=$(mktemp -dq -t temp.XXXXXX)
+
+# Clean and exit
+local_clean_exit() {
+  cd ${home_dir}
+  rm -rf ${tmpdir}
+  exit $1
+}
+
+# Check that the temporary directory is created correctly
+cd ${tmpdir} || local_clean_exit 1
+cd ${home_dir}
+
+echo ""
+echo "Running EuclidWrapper tests..."
+echo ""
+
+##############################################################################
+# Check that the wrapper calls the wrapped executable with all the parameters
+# forwarded
+##############################################################################
+
+echo "Test wrapped executable is called with arguments forwarded..."
+
+result=$(EuclidWrapper --workdir ${tmpdir} echo Wrapped Called)
+if [ "${result}" != "Wrapped Called" ]; then
+  echo "Error: Test failed: Wrapped executable was not called" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+
+##############################################################################
+# Check that the wrapped executable runs in the workdir
+##############################################################################
+
+echo "Test --workdir parameter..."
+
+result=$(EuclidWrapper --workdir ${tmpdir} pwd)
+if [ $result != $tmpdir ]; then
+  echo "Error: Test failed: Wrapped executable is not executed in $tmpdir but in $result" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir=${tmpdir} pwd)
+if [ $result != $tmpdir ]; then
+  echo "Error: Test failed: Wrapped executable is not executed in $tmpdir but in $result" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+##############################################################################
+# Check that if no workdir is given the wrapped executable runs in the
+# current working directory
+##############################################################################
+
+echo "Test default --workdir parameter..."
+
+result=$(EuclidWrapper pwd)
+if [ $result != $(pwd) ]; then
+  echo "Error: Test failed: Wrapped executable is not executed in the current working directory" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+##############################################################################
+# Check that if the logdir parameter is given it is consumed by the script
+##############################################################################
+
+echo "Test --logdir is consumed..."
+
+result=$(EuclidWrapper --logdir ${tmpdir} echo)
+if [ "$result" != "" ]; then
+  echo "Error: Test failed: logdir parameter was not consumed by the script" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --logdir=${tmpdir} echo)
+if [ "$result" != "" ]; then
+  echo "Error: Test failed: logdir parameter was not consumed by the script" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+##############################################################################
+# Check that when the --forward-ial-api is passed the --workdir and --logdir
+# parameters are forwarded
+##############################################################################
+
+echo "Test --forward-ial-api parameter..."
+
+result=$(EuclidWrapper --forward-ial-api --workdir ${tmpdir} --logdir ${tmpdir} echo other params)
+if [ "$result" != "other params --workdir ${tmpdir} --logdir ${tmpdir}" ]; then
+  echo "Error: Test failed: IAL API parameters where not forwarded" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --forward-ial-api --workdir=${tmpdir} --logdir=${tmpdir} echo other params)
+if [ "$result" != "other params --workdir ${tmpdir} --logdir ${tmpdir}" ]; then
+  echo "Error: Test failed: IAL API parameters where not forwarded" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper echo other params --forward-ial-api --workdir ${tmpdir} --logdir ${tmpdir})
+if [ "$result" != "other params --workdir ${tmpdir} --logdir ${tmpdir}" ]; then
+  echo "Error: Test failed: IAL API parameters where not forwarded" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper echo other params --forward-ial-api --workdir=${tmpdir} --logdir=${tmpdir})
+if [ "$result" != "other params --workdir ${tmpdir} --logdir ${tmpdir}" ]; then
+  echo "Error: Test failed: IAL API parameters where not forwarded" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check that if no hyphen white or black list is given parameters are not
+# modified
+###############################################################################
+
+echo "Test hyphen replacement disabled..."
+
+result=$(EuclidWrapper --workdir ${tmpdir} echo --first_arg=first --second_arg=second)
+if [ "$result" != "--first_arg=first --second_arg=second" ]; then
+  echo "Error: Test failed: Hyphen replacement happened when functionality was disabled" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir ${tmpdir} echo --first_arg first --second_arg second)
+if [ "$result" != "--first_arg first --second_arg second" ]; then
+  echo "Error: Test failed: Hyphen replacement happened when functionality was disabled" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check the --hyphen-whitelist parameter
+###############################################################################
+
+echo "Test --hyphen-whitelist parameter..."
+
+result=$(EuclidWrapper --workdir ${tmpdir} --hyphen-whitelist=first_arg,third_arg echo --first_arg=first --second_arg=second --third_arg=third)
+if [ "$result" != "--first-arg=first --second_arg=second --third-arg=third" ]; then
+  echo "Error: Test failed: Failed to replace correctly hyphens when whitelist is given" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir ${tmpdir} --hyphen-whitelist=first_arg,third_arg echo --first_arg first --second_arg second --third_arg third)
+if [ "$result" != "--first-arg first --second_arg second --third-arg third" ]; then
+  echo "Error: Test failed: Failed to replace correctly hyphens when whitelist is given" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check the --hyphen-blacklist parameter
+###############################################################################
+
+echo "Test --hyphen-blacklist parameter..."
+
+result=$(EuclidWrapper --workdir ${tmpdir} --hyphen-blacklist=first_arg,third_arg echo --first_arg=first --second_arg=second --third_arg=third)
+if [ "$result" != "--first_arg=first --second-arg=second --third_arg=third" ]; then
+  echo "Error: Test failed: Failed to replace correctly hyphens when blacklist is given" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir ${tmpdir} --hyphen-blacklist=first_arg,third_arg echo --first_arg first --second_arg second --third_arg third)
+if [ "$result" != "--first_arg first --second-arg second --third_arg third" ]; then
+  echo "Error: Test failed: Failed to replace correctly hyphens when blacklist is given" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check the empty --hyphen-blacklist parameter converts all the parameters
+###############################################################################
+
+echo "Test --hyphen-blacklist parameter..."
+
+result=$(EuclidWrapper --workdir ${tmpdir} --hyphen-blacklist="" echo --first_arg=first --second_arg=second --third_arg=third)
+if [ "$result" != "--first-arg=first --second-arg=second --third-arg=third" ]; then
+  echo "Error: Test failed: Not all parameters with hyphens were fixed with empty blacklist" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir ${tmpdir} --hyphen-blacklist="" echo --first_arg first --second_arg second --third_arg third)
+if [ "$result" != "--first-arg first --second-arg second --third-arg third" ]; then
+  echo "Error: Test failed: Not all parameters with hyphens were fixed with empty blacklist" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check the default ECDM configuration XML file parsing
+###############################################################################
+
+echo "Test default ECDM configuration..."
+
+cat > ${tmpdir}/default_ecdm_conf.xml << EOF
+<Testing>
+    <ConfigurationFile>
+        <ModuleName>echo</ModuleName>
+        <FileContainer filestatus="PROPOSED">
+            <FileName>
+                MyExecutable.conf
+            </FileName>
+        </FileContainer>
+    </ConfigurationFile>
+    <ConfigurationFile>
+        <ModuleName>OtherExecutable</ModuleName>
+        <FileContainer filestatus="PROPOSED">
+            <FileName>
+                OtherExecutable.conf
+            </FileName>
+        </FileContainer>
+    </ConfigurationFile>
+</Testing>
+EOF
+
+result=$(EuclidWrapper --workdir ${tmpdir} echo --ecdm_config_xml=default_ecdm_conf.xml)
+if [ "$result" != "--config-file data/MyExecutable.conf" ]; then
+  echo "Error: Test failed: Failed to retrieve the correct conf file from the XML" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir ${tmpdir} echo --ecdm_config_xml default_ecdm_conf.xml)
+if [ "$result" != "--config-file data/MyExecutable.conf" ]; then
+  echo "Error: Test failed: Failed to retrieve the correct conf file from the XML" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check custom XPath for searching in the ECDM configuration file
+###############################################################################
+
+echo "Test custom ECDM configuration XPath..."
+
+cat > ${tmpdir}/custom_xpath_ecdm_conf.xml << EOF
+<Testing>
+    <ConfigurationFile>
+        <ModuleName>echo</ModuleName>
+        <SubModuleIdentifier>sub1</SubModuleIdentifier>
+        <DataContainer filestatus="PROPOSED">
+            <FileName>
+                sub1.conf
+            </FileName>
+        </DataContainer>
+    </ConfigurationFile>
+    <ConfigurationFile>
+        <ModuleName>echo</ModuleName>
+        <SubModuleIdentifier>config-file</SubModuleIdentifier>
+        <DataContainer filestatus="PROPOSED">
+            <FileName>
+                MyExecutable.conf
+            </FileName>
+        </DataContainer>
+    </ConfigurationFile>
+    <ConfigurationFile>
+        <ModuleName>echo</ModuleName>
+        <SubModuleIdentifier>sub2</SubModuleIdentifier>
+        <DataContainer filestatus="PROPOSED">
+            <FileName>
+                sub2.conf
+            </FileName>
+        </DataContainer>
+    </ConfigurationFile>
+</Testing>
+EOF
+
+result=$(EuclidWrapper --workdir ${tmpdir} echo --ecdm_config_xml=custom_xpath_ecdm_conf.xml --ecdm_config_xpath="//ConfigurationFile[ModuleName='{}'][SubModuleIdentifier='config-file']/DataContainer/FileName")
+if [ "$result" != "--config-file data/MyExecutable.conf" ]; then
+  echo "Error: Test failed: Failed to retrieve the correct conf file from the XML" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir ${tmpdir} echo --ecdm_config_xml custom_xpath_ecdm_conf.xml --ecdm_config_xpath "//ConfigurationFile[ModuleName='{}'][SubModuleIdentifier='config-file']/DataContainer/FileName")
+if [ "$result" != "--config-file data/MyExecutable.conf" ]; then
+  echo "Error: Test failed: Failed to retrieve the correct conf file from the XML" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check forwarding of the ECDM configuration XML file
+###############################################################################
+
+echo "Test forwarding of the ECDM configuration XML file..."
+
+cat > ${tmpdir}/default_ecdm_conf.xml << EOF
+<Testing>
+    <ConfigurationFile>
+        <ModuleName>echo</ModuleName>
+        <FileContainer filestatus="PROPOSED">
+            <FileName>
+                MyExecutable.conf
+            </FileName>
+        </FileContainer>
+    </ConfigurationFile>
+    <ConfigurationFile>
+        <ModuleName>OtherExecutable</ModuleName>
+        <FileContainer filestatus="PROPOSED">
+            <FileName>
+                OtherExecutable.conf
+            </FileName>
+        </FileContainer>
+    </ConfigurationFile>
+</Testing>
+EOF
+
+result=$(EuclidWrapper --workdir ${tmpdir} --forward_ecdm_config_xml=xmlconf echo --ecdm_config_xml=default_ecdm_conf.xml)
+if [ "$result" != "--config-file data/MyExecutable.conf --xmlconf default_ecdm_conf.xml" ]; then
+  echo "Error: Test failed: ECDM configuration XML file was not forwarded" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check passing additional configuration files
+###############################################################################
+
+echo "Test extra ECDM configuration files..."
+
+cat > ${tmpdir}/extra_ecdm_conf.xml << EOF
+<Testing>
+    <ConfigurationFile>
+        <ModuleName>echo</ModuleName>
+        <FileContainer filestatus="PROPOSED">
+            <FileName>
+                MyExecutable.conf
+            </FileName>
+        </FileContainer>
+    </ConfigurationFile>
+    <ConfigurationFile>
+        <ModuleName>echo</ModuleName>
+        <ParameterName>extra-config-file</ParameterName>
+        <FileContainer filestatus="PROPOSED">
+            <FileName>
+                ExtraConfigFile.conf
+            </FileName>
+        </FileContainer>
+    </ConfigurationFile>
+</Testing>
+EOF
+
+result=$(EuclidWrapper --workdir ${tmpdir} echo --ecdm_config_xml=extra_ecdm_conf.xml)
+if [ "$result" != "--config-file data/MyExecutable.conf --extra-config-file data/ExtraConfigFile.conf" ]; then
+  echo "Error: Test failed: Failed to retrieve the correct extra conf file from the XML" 1>&2
+  local_clean_exit 1
+fi
+result=$(EuclidWrapper --workdir ${tmpdir} echo --ecdm_config_xml extra_ecdm_conf.xml)
+if [ "$result" != "--config-file data/MyExecutable.conf --extra-config-file data/ExtraConfigFile.conf" ]; then
+  echo "Error: Test failed: Failed to retrieve the correct extra conf file from the XML" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check overriding the EuclidWrapper functionality with module in default
+# package (EuclidWrapper.EXEC_NAME)
+###############################################################################
+
+echo "Test overriding EuclidWrapper functionality..."
+
+mkdir -p ${tmpdir}/python_default/EuclidWrapper
+
+cat > ${tmpdir}/python_default/EuclidWrapper/__init__.py << EOF
+import pkgutil
+__path__ = pkgutil.extend_path(__path__, __name__)
+EOF
+
+cat > ${tmpdir}/python_default/EuclidWrapper/echo.py << EOF
+import argparse
+def defineWrapperProgramOptions():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--in-test-arg', type=str)
+    return parser
+def getOptionsToAppend(args, executable):
+    if args.in_test_arg:
+        return ['--out-test-arg', args.in_test_arg]
+    else:
+        return []
+EOF
+
+export PYTHONPATH=${tmpdir}/python_default:$PYTHONPATH
+
+result=$(EuclidWrapper --workdir ${tmpdir} echo --in-test-arg test_value)
+if [ "$result" != "--out-test-arg test_value" ]; then
+  echo "Error: Test failed: EuclidWrapper functionality was not overridden" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# Check overriding the EuclidWrapper functionality using the --wrapper-module
+###############################################################################
+
+echo "Test --wrapper-module parameter..."
+
+mkdir -p ${tmpdir}/python_custom/MyPackage
+
+touch ${tmpdir}/python_custom/MyPackage/__init__.py
+
+cat > ${tmpdir}/python_custom/MyPackage/MyModule.py << EOF
+import argparse
+def defineWrapperProgramOptions():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--in-test-arg', type=str)
+    return parser
+def getOptionsToAppend(args, executable):
+    if args.in_test_arg:
+        return ['--out-test-arg-custom', args.in_test_arg]
+    else:
+        return []
+EOF
+
+export PYTHONPATH=${tmpdir}/python_custom:$PYTHONPATH
+
+result=$(EuclidWrapper --workdir ${tmpdir} --wrapper-module MyPackage.MyModule echo --in-test-arg test_value)
+if [ "$result" != "--out-test-arg-custom test_value" ]; then
+  echo "Error: Test failed: EuclidWrapper functionality was not overridden" 1>&2
+  local_clean_exit 1
+fi
+
+echo ""
+
+###############################################################################
+# All tests finished successfully
+###############################################################################
+echo "All test passed!"
+local_clean_exit 0

@@ -1,0 +1,60 @@
+#!/usr/bin/env python%(this_python_version)s
+
+import os
+import subprocess
+from lxml import etree
+
+if not os.path.isfile('.pydevproject'):
+    print 'Current directory does not contain a Eclipse Python project'
+    exit(1)
+
+run_cmd = 'build.' + os.environ['BINARY_TAG'] + '/run'
+if not os.path.isfile(run_cmd):
+    print 'Elements run script not found (try run "make configure")'
+    exit(1)
+
+# Get the PYTHONPATH from the Elements run script
+pythonpath = ''
+p = subprocess.Popen(run_cmd, stdout=subprocess.PIPE)
+for l in p.stdout.readlines():
+     if 'PYTHONPATH=' in l:
+         pythonpath = l[l.index('=')+1:]
+
+# If we have a pythonpth, update the Eclipse file
+if pythonpath:
+    xml = etree.parse('.pydevproject')
+    # Get the element of the external paths and empty it. If it doesn't
+    # exist create an empty new one
+    external = xml.xpath('//pydev_pathproperty[@name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH"]')
+    if external:
+        external = external[0]
+        for child in external.getchildren():
+            external.remove(child)
+    else:
+        external = etree.Element('pydev_pathproperty')
+        external.set('name', 'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH')
+        xml.getroot().append(external)
+    
+    # Get the element of the project paths and empty it. If it doesn't
+    # exist create an empty new one
+    project = xml.xpath('//pydev_pathproperty[@name="org.python.pydev.PROJECT_SOURCE_PATH"]')
+    if project:
+        project = project[0]
+        for child in project.getchildren():
+            project.remove(child)
+    else:
+        project = etree.Element('pydev_pathproperty')
+        project.set('name', 'org.python.pydev.PROJECT_SOURCE_PATH')
+        xml.getroot().append(project)
+    
+    cwd = os.getcwd()
+    for path in pythonpath.split(':'):
+        element = etree.Element('path')
+        if cwd in path:
+            element.text = '/${PROJECT_DIR_NAME}' + path[len(cwd):]
+            project.append(element)
+        else:
+            element.text = path
+            external.append(element)
+
+    xml.write('.pydevproject', pretty_print=True)

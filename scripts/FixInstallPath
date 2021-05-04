@@ -1,0 +1,37 @@
+import sys
+import argparse
+
+import fileinput
+import logging
+
+
+def fixInstallPath(prefix, file_list, name="this_install_prefix"):
+    inst_dict = { name : prefix }
+    for f in file_list:
+        logging.info("fixing %s: replacing %s with %s" % (f, name, prefix))
+    for line in fileinput.input(file_list, inplace=1) :
+        try:
+            line = line % inst_dict
+        except:
+            pass
+        sys.stdout.write(line)
+
+
+if __name__ == '__main__':
+
+    logging.basicConfig(format='%(levelname)s\t:FixInstallPath\t: %(message)s',level=logging.INFO)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-n","--name", metavar="NAME",
+                        default="this_install_prefix", 
+                        help="name of the prefix variable to replace (default: %(default)s)")
+    parser.add_argument('prefix', metavar="PREFIX",
+                        help="prefix to replace")
+    parser.add_argument('files', metavar='FILE', nargs='+',
+                   help='Files to be processed')
+    args = parser.parse_args()
+    logging.debug(args)
+
+    fixInstallPath(args.prefix, args.files, args.name)
+    
+    sys.exit(0)

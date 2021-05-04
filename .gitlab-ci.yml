@@ -1,0 +1,23 @@
+image: python:3.6
+stages:
+  - build
+  - dist
+  - validate
+
+build:
+  stage: build
+  script:
+    - python setup.py build
+  
+dist:
+  stage: dist
+  script:
+    - python setup.py sdist
+
+validate:
+  stage: validate
+  script:
+    - pip install pytest
+    - pip install lxml
+    - python setup.py build
+    - python setup.py test

@@ -1,0 +1,3 @@
+#!/usr/bin/env python%(this_python_version)s
+
+print(__file__)

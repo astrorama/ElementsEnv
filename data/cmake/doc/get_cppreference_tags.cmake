@@ -1,0 +1,21 @@
+# Download Doxygen tags from cppreference.com
+
+message(STATUS "Downloading Doxygen tags from cppreference.com...")
+set(tags_url http://upload.cppreference.com/mwiki/images/f/f8/cppreference-doxygen-web.tag.xml)
+if(CMAKE_VERSION VERSION_LESS 2.8.12)
+  find_program(CURL_CMD curl)
+  if(CURL_CMD)
+    execute_process(COMMAND curl --location --output ${DEST_DIR}/cppreference-doxygen-web.tag.xml ${tags_url})
+  else()
+    find_package(Wget)
+    if(WGET_FOUND)
+      execute_process(COMMAND ${WGET_EXECUTABLE} -O ${DEST_DIR}/cppreference-doxygen-web.tag.xml ${tags_url})
+    else()
+      message(FATAL_ERROR "Cannot find a way of downloading the cppreference doxygen tag file.")
+    endif()
+  endif()
+else()
+  file(DOWNLOAD ${tags_url} ${DEST_DIR}/cppreference-doxygen-web.tag.xml)
+endif()
+
+message(STATUS "Doxygen tags downloaded.")
