@@ -1,4 +1,4 @@
-""" General Euclid platform configuration """
+""" General ElementsEnv platform configuration """
 
 import sys
 import platform

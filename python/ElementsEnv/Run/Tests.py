@@ -44,8 +44,8 @@ class TempDir(object):
 
 
 def test_import():
-    import Euclid.Run
-    assert Euclid.Run.path
+    import ElementsEnv.Run
+    assert ElementsEnv.Run.path
 
 
 def test_version():
@@ -110,20 +110,20 @@ def test_options_addPlatform():
     opts, _ = parse_args(addPlatform, [])
     assert opts.platform
 
-    import Euclid.Platform
-    bk = Euclid.Platform.NativeMachine
+    import ElementsEnv.Platform
+    bk = ElementsEnv.Platform.NativeMachine
 
     class dummy():
 
         def CMTSupportedConfig(self):
             return None
-    Euclid.Platform.NativeMachine = dummy
+    ElementsEnv.Platform.NativeMachine = dummy
     try:
         opts, _ = parse_args(addPlatform, [])
         assert False, 'exception expected'
     except SystemExit:
         pass
-    Euclid.Platform.NativeMachine = bk
+    ElementsEnv.Platform.NativeMachine = bk
 
 
 def test_options_addSearchPath():

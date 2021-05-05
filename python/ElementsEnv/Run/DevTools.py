@@ -3,7 +3,7 @@
 import os
 import logging
 
-import Euclid.Run
+import ElementsEnv.Run
 
 from string import Template
 
@@ -60,7 +60,7 @@ def main():
 
     # prepend dev dirs to the search path
     if opts.dev_dirs:
-        Euclid.Run.path[:] = map(str, opts.dev_dirs) + Euclid.Run.path
+        ElementsEnv.Run.path[:] = map(str, opts.dev_dirs) + ElementsEnv.Run.path
 
     try:
         projectDir = findProject(project, version, opts.platform)
@@ -84,9 +84,9 @@ def main():
 
     data = dict(project=project,
                 version=version,
-                search_path=' '.join(['"%s"' % p for p in Euclid.Run.path]),
-                search_path_repr=repr(Euclid.Run.path),
-                search_path_env=os.pathsep.join(Euclid.Run.path),
+                search_path=' '.join(['"%s"' % p for p in ElementsEnv.Run.path]),
+                search_path_repr=repr(ElementsEnv.Run.path),
+                search_path_env=os.pathsep.join(ElementsEnv.Run.path),
                 use_cmake=(use_cmake and 'yes' or ''),
                 PROJECT=project.upper(),
                 local_project=local_project,

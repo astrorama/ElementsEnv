@@ -1,4 +1,4 @@
-""" Main script to setup the basic Euclid environment """
+""" Main script to setup the basic ElementsEnv environment """
 
 import sys
 import os
@@ -40,9 +40,9 @@ else:
         # special procedure to handle the situation when __file__ is not defined.
         # It happens typically when trying to use pdb.
         from imp import find_module, load_module
-        _FF, _FILENAME, _DESC = find_module("Euclid")
+        _FF, _FILENAME, _DESC = find_module("ElementsEnv")
         try:
-            LBCONF_PACKAGE = load_module('Euclid', _FF, _FILENAME, _DESC)
+            LBCONF_PACKAGE = load_module('ElementsEnv', _FF, _FILENAME, _DESC)
             _FF, _FILENAME, _DESC = find_module(
                 'Login', LBCONF_PACKAGE.__path__)
             _THIS_FILE = _FILENAME
@@ -51,7 +51,7 @@ else:
     # Bootstrapping the python location
     _PYEUC_DIR = os.path.dirname(_THIS_FILE)
     _PY_DIR = os.path.dirname(_PYEUC_DIR)
-    if os.path.basename(_PYEUC_DIR) == "Euclid":
+    if os.path.basename(_PYEUC_DIR) == "ElementsEnv":
         _BASE_DIR = os.path.dirname(_PY_DIR)
         PYTHON_LOC = _PY_DIR
 
@@ -646,10 +646,10 @@ The type is to be chosen among the following list:
             vers = __version__
             if vers:
                 self.addEcho(
-                    "*" + ("---- Euclid Login %s ----" % vers).center(78) + "*")
+                    "*" + ("---- ElementsEnv Login %s ----" % vers).center(78) + "*")
             else:
                 self.addEcho(
-                    "*" + "---- Euclid Login ----".center(78) + "*")
+                    "*" + "---- ElementsEnv Login ----".center(78) + "*")
             if self.binary:
                 self.addEcho("*" + ("Building with %s on %s %s system (%s)" % (
                     self.compdef, self.platform, self.binary, ev["BINARY_TAG"])).center(78) + "*")
