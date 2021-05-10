@@ -75,6 +75,7 @@ if HAS_VERSION:
 #-------------------------------------------------------------------------
 # Helper functions
 
+
 def getLoginEnv(optionlist=None):
     if not optionlist:
         optionlist = []
@@ -212,7 +213,7 @@ The type is to be chosen among the following list:
 
         log.debug("%s is set to %s" % ("PATH", ev["PATH"]))
 
-        # try the installed directory in $prefix/share/EuclidEnv/cmake/...
+        # try the installed directory in $prefix/share/ElementsEnv/cmake/...
 
         if PYTHON_LOC:
             python_prefix = PYTHON_LOC
@@ -221,7 +222,7 @@ The type is to be chosen among the following list:
 
         cmake_loc = getClosestPath(python_prefix,
                                    os.sep.join(
-                                       ["share", "EuclidEnv", "cmake", "ElementsProjectConfig.cmake"]),
+                                       ["share", "ElementsEnv", "cmake", "ElementsProjectConfig.cmake"]),
                                    alloccurences=False)
         if not cmake_loc:
             # use the local source directory
@@ -242,27 +243,6 @@ The type is to be chosen among the following list:
 
         if "CMAKE_PREFIX_PATH" in ev:
             log.debug("%s is set to %s" % ("CMAKE_PREFIX_PATH", ev["CMAKE_PREFIX_PATH"]))
-
-        texmf_loc = getClosestPath(python_prefix,
-                                   os.sep.join(
-                                       ["share", "EuclidEnv", "texmf", "esgsdoc.cls"]),
-                                   alloccurences=False)
-        if not texmf_loc:
-            # use the local source directory
-            texmf_loc = getClosestPath(python_prefix,
-                                       os.sep.join(
-                                           ["data", "texmf", "esgsdoc.cls"]),
-                                       alloccurences=False)
-
-        if texmf_loc:
-            the_loc = os.path.dirname(texmf_loc[0])
-            if "TEXINPUTS" in ev:
-                ev["TEXINPUTS"] = pathPrepend(ev["TEXINPUTS"],
-                                              the_loc,
-                                              exist_check=opts.strip_path,
-                                              unique=opts.strip_path)
-            elif os.path.exists(the_loc):
-                ev["TEXINPUTS"] = the_loc
 
 #-------------------------------------------------------------------------
 
@@ -364,7 +344,7 @@ The type is to be chosen among the following list:
                 if os.path.exists(sbrc):
                     try:
                         shutil.copy(sbrc, hbrc)
-                        log.warning("Copying %s to %s" %(sbrc, hbrc))
+                        log.warning("Copying %s to %s" % (sbrc, hbrc))
                     except IOError:
                         log.warning("Failed to copy %s to %s" % (sbrc, hbrc))
         if "LD_LIBRARY_PATH" not in ev:
@@ -535,7 +515,6 @@ The type is to be chosen among the following list:
             if "EUCLID_BASE" in ev:
                 ev["EUCLIDPROJECTPATH"] = ev["EUCLID_BASE"]
 
-
         if "EUCLIDPROJECTPATH" not in ev:
             if os.path.exists("%(this_euclid_base)s"):
                 ev["EUCLIDPROJECTPATH"] = "%(this_euclid_base)s"
@@ -560,7 +539,6 @@ The type is to be chosen among the following list:
 
         log.debug("The value of CMAKE_PROJECT_PATH is %s" % ev["CMAKE_PROJECT_PATH"])
 
-
         log.debug("CMAKE_PROJECT_PATH is set to %s" % ev["CMAKE_PROJECT_PATH"])
 
         if not opts.no_explicit_python_version:
@@ -582,7 +560,6 @@ The type is to be chosen among the following list:
                 else:
                     ev["CMAKEFLAGS"] = "-DPYTHON_EXPLICIT_VERSION=%s" % __exec_exp_vers
 
-
         if "MACPORT_LOCATION" in ev:
             if "CMAKEFLAGS" in ev:
                 ev["CMAKEFLAGS"] += " -DCMAKE_FIND_FRAMEWORK=LAST"
@@ -590,7 +567,6 @@ The type is to be chosen among the following list:
             else:
                 ev["CMAKEFLAGS"] = "-DCMAKE_FIND_FRAMEWORK=LAST"
                 ev["CMAKEFLAGS"] += " -DCMAKE_FIND_ROOT_PATH=%s" % ev["MACPORT_LOCATION"]
-
 
     def setExtraEnv(self):
 
@@ -699,6 +675,7 @@ The type is to be chosen among the following list:
         self.flush()
 
         return 0
+
 
 if __name__ == '__main__':
     sys.exit(LoginScript(usage="%prog [options] [type]").run())

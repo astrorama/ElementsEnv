@@ -31,7 +31,7 @@ logging.basicConfig(format='%(levelname)s\t: %(message)s', level=logging.INFO)
 from string import Template
 
 __version__ = "3.18.0"
-__project__ = "EuclidEnv"
+__project__ = "ElementsEnv"
 __full_exec__ = sys.executable
 __usr_loc__ = os.path.dirname(os.path.dirname(__full_exec__))
 __root_loc__ = os.path.dirname(__usr_loc__)
@@ -536,7 +536,7 @@ setup(name=__project__,
       description="Euclid Environment Scripts",
       author="Hubert Degaudenzi",
       author_email="Hubert.Degaudenzi@unige.ch",
-      url="http://www.isdc.unige.ch/redmine/projects/euclidenv",
+      url="https://github.com/astrorama/ElementsEnv",
       package_dir={"Euclid": os.path.join("python", "Euclid"), },
       packages=["Euclid", "Euclid.Run"],
       scripts=[os.path.join("scripts", s) for s in get_script_files()],

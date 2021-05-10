@@ -3,7 +3,7 @@ Notes
 
 1) In order to create the source tarball suitable for the creation of RPM, 2 commands are possible:
 
-  git archive --format=tar.gz --prefix=EuclidEnv-0.2/ --output ~/.local/tmp/rpmbuild/SOURCES/EuclidEnv-0.2.tar.gz 0.2
+  git archive --format=tar.gz --prefix=ElementsEnv-0.2/ --output ~/.local/tmp/rpmbuild/SOURCES/ElementsEnv-0.2.tar.gz 0.2
   
   or
   
@@ -24,7 +24,7 @@ Notes
    rpm -Uvh --relocate /etc/=/home/hubert/.local/tmp/testrpm \
             --relocate /usr=/home/hubert/.local/tmp/testrpm \
             --relocate /opt/euclid=/home/hubert/.local/tmp/testrpm  
-            ../RPMS/noarch/EuclidEnv-0.3-1.fc19.noarch.rpm
+            ../RPMS/noarch/ElementsEnv-0.3-1.fc19.noarch.rpm
 
             
 4) The direct installation with the "python setup.py install" support several 
@@ -40,13 +40,13 @@ Notes
      
      I)  python setup.py install  --user --euclid-base=/my/custom/dir
        
-     That will use the common user python installation for EuclidEnv and set
+     That will use the common user python installation for ElementsEnv and set
      the default Euclid software location to /my/custom/dir
      
      II) python setup.py install --prefix=~/Work/Env --euclid-base=/my/custom/dir
      
      This will do the same as the previous one, except that the very installation
-     of the EuclidEnv package will be done at a custom prefix location.
+     of the ElementsEnv package will be done at a custom prefix location.
      
      
    
