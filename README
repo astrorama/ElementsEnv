@@ -23,7 +23,7 @@ Notes
 
    rpm -Uvh --relocate /etc/=/home/hubert/.local/tmp/testrpm \
             --relocate /usr=/home/hubert/.local/tmp/testrpm \
-            --relocate /opt/euclid=/home/hubert/.local/tmp/testrpm  
+            --relocate /opt=/home/hubert/.local/tmp/testrpm  
             ../RPMS/noarch/ElementsEnv-0.3-1.fc19.noarch.rpm
 
             
@@ -33,17 +33,17 @@ Notes
    are:
      --skip-custom-postinstall: to avoid the postinstall treatment. Useful when
      creating RPMs
-     --euclid-base: to specify the native Euclid Software installation base. This will
+     --elementsenv-base: to specify the native ElementsEnv Software installation base. This will
      trigger a post install script to hardcode the location in the scripts.
      
      Typical call are:
      
-     I)  python setup.py install  --user --euclid-base=/my/custom/dir
+     I)  python setup.py install  --user --elementsenv-base=/my/custom/dir
        
      That will use the common user python installation for ElementsEnv and set
-     the default Euclid software location to /my/custom/dir
+     the default ElementsEnv software location to /my/custom/dir
      
-     II) python setup.py install --prefix=~/Work/Env --euclid-base=/my/custom/dir
+     II) python setup.py install --prefix=~/Work/Env --elementsenv-base=/my/custom/dir
      
      This will do the same as the previous one, except that the very installation
      of the ElementsEnv package will be done at a custom prefix location.

@@ -1,5 +1,4 @@
-from Euclid.Login import getLoginEnv, getLoginAliases, getLoginExtra
-from Euclid.Login import DEFAULT_BUILD_TYPE
+from ElementsEnv.Login import getLoginEnv, getLoginAliases
 
 import unittest
 import os
@@ -40,7 +39,7 @@ class LoginTestCase(unittest.TestCase):
     def testAlias(self):
         al = getLoginAliases()
         self.assertEqual(al["ERun"], "E-Run")
-        self.assertEqual(al["EuclidRun"], "E-Run")
+        self.assertEqual(al["ElementsRun"], "E-Run")
 
 
 if __name__ == '__main__':

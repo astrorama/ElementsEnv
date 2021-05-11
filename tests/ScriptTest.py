@@ -2,10 +2,9 @@
 # $Id: ScriptTest.py 122763 2011-05-03 12:16:51Z hmdegaud $
 """ Don't forget about the description """
 
-from Euclid.Script import ConfigScript as Script
+from ElementsEnv.Script import ConfigScript as Script
 
 import logging
-import os
 
 __version__ = "$Id: ScriptTest.py 122763 2011-05-03 12:16:51Z hmdegaud $"
 
@@ -27,6 +26,7 @@ class ScriptTest(Script):
         log.warning("This is a warning message")
         print(self.options.toto_val)
         return 0
+
 
 if __name__ == '__main__':
     s = ScriptTest(usage="ScriptTest [options] path", use_config_file=True)

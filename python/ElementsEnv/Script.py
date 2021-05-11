@@ -1,8 +1,8 @@
-from Euclid.Option import Parser
-from Euclid.ConfigFile import addConfigFileOptions, readConfigFile
-from Euclid.ConfigFile import setConfigFileDefaultValues
-from Euclid.ConfigFile import setDefaultConfig
-from Euclid.Env import Environment, Aliases, getDefaultEnv
+from ElementsEnv.Option import Parser
+from ElementsEnv.ConfigFile import addConfigFileOptions, readConfigFile
+from ElementsEnv.ConfigFile import setConfigFileDefaultValues
+from ElementsEnv.ConfigFile import setDefaultConfig
+from ElementsEnv.Env import Environment, Aliases, getDefaultEnv
 
 from tempfile import mkstemp
 from optparse import OptionValueError
@@ -237,6 +237,7 @@ class ConfigScript(PlainScript):
         if self.use_config_file:
             args = self.parseConfigArgs(args)
         PlainScript.parseOpts(self, args)
+
 
 # backward compatibility for old clients
 Script = PlainScript

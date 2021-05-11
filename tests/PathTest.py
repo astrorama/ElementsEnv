@@ -1,8 +1,8 @@
-from Euclid.Path import multiPathJoin, multiPathUpdate, cleanPath
-from Euclid.Path import pathRemove, hasCommand
-from Euclid.Path import upWalk, getClosestPath
+from ElementsEnv.Path import multiPathJoin, multiPathUpdate, cleanPath
+from ElementsEnv.Path import pathRemove, hasCommand
+from ElementsEnv.Path import upWalk, getClosestPath
 
-from Euclid.Temporary import TempDir
+from ElementsEnv.Temporary import TempDir
 
 import unittest
 import os

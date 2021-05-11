@@ -49,7 +49,7 @@ def test_import():
 
 
 def test_version():
-    from Euclid.Run.Version import expandVersionAlias, isValidVersion
+    from ElementsEnv.Run.Version import expandVersionAlias, isValidVersion
 
     # this is a dummy test, waiting for a real implementation of version
     # aliases
@@ -69,7 +69,7 @@ def parse_args(func, args):
 
 
 def test_options_addOutputLevel():
-    from Euclid.Run.Options import addOutputLevel
+    from ElementsEnv.Run.Options import addOutputLevel
     import logging
 
     opts, _ = parse_args(addOutputLevel, [])
@@ -86,7 +86,7 @@ def test_options_addOutputLevel():
 
 
 def test_options_addPlatform():
-    from Euclid.Run.Options import addPlatform
+    from ElementsEnv.Run.Options import addPlatform
 
     opts, _ = parse_args(addPlatform, ['-c', 'platform1'])
     assert opts.platform == 'platform1'
@@ -117,6 +117,7 @@ def test_options_addPlatform():
 
         def CMTSupportedConfig(self):
             return None
+
     ElementsEnv.Platform.NativeMachine = dummy
     try:
         opts, _ = parse_args(addPlatform, [])
@@ -127,7 +128,7 @@ def test_options_addPlatform():
 
 
 def test_options_addSearchPath():
-    from Euclid.Run.Options import addSearchPath
+    from ElementsEnv.Run.Options import addSearchPath
 
     if 'LHCBDEV' not in os.environ:
         os.environ['LHCBDEV'] = '/afs/cern.ch/lhcb/software/DEV'
@@ -212,7 +213,7 @@ def test_options_addSearchPath():
 
 
 def test_profiling():
-    from Euclid.Run import Profiling
+    from ElementsEnv.Run import Profiling
 
     from StringIO import StringIO
 

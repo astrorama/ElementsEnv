@@ -3,7 +3,8 @@
 import os
 import sys
 
-from Euclid.Path import multiPathGetFirst
+from ElementsEnv.Path import multiPathGetFirst
+
 
 def getEnvConfigPath(exist_check=False):
     paths = []
@@ -29,12 +30,13 @@ def getEnvConfigPath(exist_check=False):
 
     return paths
 
+
 def lookupPackage(name, prefix_paths=None):
 
     env_conf_subdir = os.path.join(name, "__init__.py")
-    
+
     env_py = ""
-    
+
     if not prefix_paths:
         prefix_paths = getEnvConfigPath()
 
@@ -46,6 +48,7 @@ def lookupPackage(name, prefix_paths=None):
 
     return env_py
 
+
 try:
     import EnvConfig  # @UnresolvedImport @UnusedImport
 except:
@@ -53,9 +56,8 @@ except:
     sys.path.insert(0, env_py)
     import EnvConfig  # @UnresolvedImport @Reimport
 
-
-from Euclid.Run.Lookup import getEnvXmlPath
-from Euclid.Run.Version import isValidVersion, expandVersionAlias
+from ElementsEnv.Run.Lookup import getEnvXmlPath
+from ElementsEnv.Run.Version import isValidVersion, expandVersionAlias
 
 # auto_override_projects = [('Compat', 'latest')]
 auto_override_projects = []
@@ -65,7 +67,7 @@ class ERun(EnvConfig.Script):
     __usage__ = "Usage: %prog [OPTION]... [NAME=VALUE]... PROJECT VERSION [COMMAND [ARG]...]"
 
     def _prepare_parser(self):
-        from Euclid.Run.Options import addSearchPath, addPlatform
+        from ElementsEnv.Run.Options import addSearchPath, addPlatform
         from optparse import OptionValueError
 
         super(ERun, self)._prepare_parser()

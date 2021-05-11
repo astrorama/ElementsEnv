@@ -60,12 +60,12 @@ if PYTHON_LOC:
 
 #============================================================================
 
-from Euclid.Platform import getBinaryOfType, BUILD_TYPES, DEFAULT_BUILD_TYPE
-from Euclid.Platform import getBinaryTypeName
-from Euclid.Platform import getCompiler, getPlatformType, getArchitecture
-from Euclid.Platform import isBinaryType, NativeMachine
-from Euclid.Script import SourceScript
-from Euclid.Path import pathPrepend, getClosestPath
+from ElementsEnv.Platform import getBinaryOfType, BUILD_TYPES, DEFAULT_BUILD_TYPE
+from ElementsEnv.Platform import getBinaryTypeName
+from ElementsEnv.Platform import getCompiler, getPlatformType, getArchitecture
+from ElementsEnv.Platform import isBinaryType, NativeMachine
+from ElementsEnv.Script import SourceScript
+from ElementsEnv.Path import pathPrepend, getClosestPath
 
 __version__ = ""
 
@@ -146,7 +146,7 @@ The type is to be chosen among the following list:
         parser.add_option("-s", "--shared",
                           dest="sharedarea",
                           help="set the shared area",
-                          fallback_env="EUCLID_BASE")
+                          fallback_env="ELEMENTSENV_BASE")
         parser.set_defaults(strip_path=True)
         parser.add_option("--no-strip-path",
                           dest="strip_path",
@@ -509,19 +509,19 @@ The type is to be chosen among the following list:
             prefix_path.append(ev["User_area"])
 
         if opts.sharedarea:
-            ev["EUCLIDPROJECTPATH"] = opts.sharedarea
+            ev["ELEMENTSENVPROJECTPATH"] = opts.sharedarea
 
-        if "EUCLIDPROJECTPATH" not in ev:
-            if "EUCLID_BASE" in ev:
-                ev["EUCLIDPROJECTPATH"] = ev["EUCLID_BASE"]
+        if "ELEMENTSENVPROJECTPATH" not in ev:
+            if "ELEMENTSENV_BASE" in ev:
+                ev["ELEMENTSENVPROJECTPATH"] = ev["ELEMENTSENV_BASE"]
 
-        if "EUCLIDPROJECTPATH" not in ev:
-            if os.path.exists("%(this_euclid_base)s"):
-                ev["EUCLIDPROJECTPATH"] = "%(this_euclid_base)s"
+        if "ELEMENTSENVPROJECTPATH" not in ev:
+            if os.path.exists("%(this_elementsenv_base)s"):
+                ev["ELEMENTSENVPROJECTPATH"] = "%(this_elementsenv_base)s"
 
-        if "EUCLIDPROJECTPATH" in ev:
-            log.debug("The value of EUCLIDPROJECTPATH is %s" % ev["EUCLIDPROJECTPATH"])
-            prefix_path.append(ev["EUCLIDPROJECTPATH"])
+        if "ELEMENTSENVPROJECTPATH" in ev:
+            log.debug("The value of ELEMENTSENVPROJECTPATH is %s" % ev["ELEMENTSENVPROJECTPATH"])
+            prefix_path.append(ev["ELEMENTSENVPROJECTPATH"])
 
         if not opts.remove_userarea and "User_area" in ev:
             prefix_path.append(ev["User_area"])
@@ -607,7 +607,7 @@ The type is to be chosen among the following list:
             al["ELogin"] = "source \\`/usr/bin/which ELogin.%s\\`" % self.targetShell()
 
         al["ERun"] = "E-Run"
-        al["EuclidRun"] = "E-Run"
+        al["ElementsRun"] = "E-Run"
 
         return self.copyEnv()[1]
 
@@ -635,9 +635,9 @@ The type is to be chosen among the following list:
             self.addEcho("*" * 80)
             if "User_area" in ev:
                 self.addEcho(" --- User_area is set to %s" % ev["User_area"])
-            if "EUCLIDPROJECTPATH" in ev:
-                self.addEcho(" --- EUCLIDPROJECTPATH is set to:")
-                for p in ev["EUCLIDPROJECTPATH"].split(os.pathsep):
+            if "ELEMENTSENVPROJECTPATH" in ev:
+                self.addEcho(" --- ELEMENTSENVPROJECTPATH is set to:")
+                for p in ev["ELEMENTSENVPROJECTPATH"].split(os.pathsep):
                     if p:
                         self.addEcho("    %s" % p)
             if self._nativemachine.OSType() == "Darwin" and opts.use_macport:

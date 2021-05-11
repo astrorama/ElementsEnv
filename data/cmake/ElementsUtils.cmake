@@ -726,7 +726,7 @@ function(get_rpm_dep_list project_use package_suffix squeezed_install output_var
 
   if(NOT squeezed_install)
     if("${package_suffix}" STREQUAL "")
-      set(output_str_list "${output_str_list}, EuclidEnv")
+      set(output_str_list "${output_str_list}, ElementsEnv")
     endif()
   endif()
     

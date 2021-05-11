@@ -1,4 +1,4 @@
-""" Euclid version style definition and massaging """
+""" Elements version style definition and massaging """
 # $Id$
 
 from fnmatch import fnmatch
