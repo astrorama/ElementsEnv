@@ -351,10 +351,6 @@ The type is to be chosen among the following list:
             ev["LD_LIBRARY_PATH"] = ""
             log.debug("Setting a default LD_LIBRARY_PATH")
 
-        if "ROOTSYS" not in ev:
-            ev["ROOTSYS"] = ""
-            log.debug("Setting a default ROOTSYS")
-
         self.setUserArea()
 
     def setUserArea(self):
