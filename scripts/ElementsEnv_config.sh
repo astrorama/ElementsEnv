@@ -52,7 +52,7 @@ export SOFTWARE_BASE_VAR=ELEMENTSENV_BASE
 export ELEMENTSENV_BASE=%(this_elementsenv_base)s
 export ELEMENTSENV_USE_BASE=no
 export ELEMENTSENV_USE_PREFIX=no
-export ELEMENTSENV_CUSTOM_PREFIX=%(this_elementsenv_base)s/../../usr
+export ELEMENTSENV_CUSTOM_PREFIX=%(this_custom_prefix)s
 export ELEMENTSENV_USE_CUSTOM_PREFIX=no
 
 if [[ -n "${elementsenv_config_file_current}" ]]; then

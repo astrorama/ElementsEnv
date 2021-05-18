@@ -15,6 +15,7 @@ BuildArch:      noarch
 Prefix:         ${usr_prefix}
 Prefix:         ${etc_prefix}
 Prefix:         ${elementsenv_base}
+Prefix:         ${custom_prefix}
 
 AutoReq: no
 
@@ -67,6 +68,8 @@ python_loc=$$(%{__python${python_explicit_version}} -c "from distutils.sysconfig
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_elementsenv_base $$RPM_INSTALL_PREFIX2 $$RPM_INSTALL_PREFIX1/sysconfig/elementsenv
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_elementsenv_base $$RPM_INSTALL_PREFIX2 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_elementsenv_base $$RPM_INSTALL_PREFIX2 $$python_loc/ElementsEnv/Login.py
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_custom_prefix $$RPM_INSTALL_PREFIX3 $$RPM_INSTALL_PREFIX1/sysconfig/elementsenv
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_custom_prefix $$RPM_INSTALL_PREFIX3 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_etc_install_prefix $$RPM_INSTALL_PREFIX1 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/eclipse_pythonpath_fix
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ELogin.csh

@@ -46,6 +46,7 @@ if __exec__.endswith(__exec_maj_vers):
 dist_elementsenv_base = "/opt"
 dist_etc_prefix = "/etc"
 dist_usr_prefix = "/usr"
+dist_custom_prefix = "/usr"
 dist_exp_version = __exec_exp_vers
 dist_impl_major_version = __exec_maj_vers
 dist_full_exec_python = __full_exec__
@@ -56,10 +57,12 @@ if __usr_loc__ != "/usr":
     dist_elementsenv_base = os.path.join(__root_loc__, dist_elementsenv_base.lstrip("/"))
     dist_etc_prefix = os.path.join(__root_loc__, dist_etc_prefix.lstrip("/"))
     dist_usr_prefix = os.path.join(__root_loc__, dist_usr_prefix.lstrip("/"))
+    dist_custom_prefix = os.path.join(__root_loc__, dist_custom_prefix.lstrip("/"))
     this_use_custom_prefix = "yes"
 
 # variable interpolated at install time
 this_elementsenv_base = "/opt"
+this_custom_prefix = "/usr"
 
 if not dist_exp_version:
     pytest_cmd = "py.test"
@@ -161,6 +164,16 @@ for a in sys.argv:
         e_base = a.split("=")[1:]
         if len(e_base) == 1:
             this_elementsenv_base = e_base[0]
+            this_custom_prefix = os.path.normpath(os.path.join(this_elementsenv_base, "..", "..", "usr"))
+        sys.argv.remove(a)
+
+for a in sys.argv:
+    if a.startswith("--custom-prefix"):
+        # TODO implement the extratction of the value from
+        # the option
+        c_base = a.split("=")[1:]
+        if len(c_base) == 1:
+            this_custom_prefix = c_base[0]
         sys.argv.remove(a)
 
 fixscript_name = "FixInstallPath"
@@ -228,6 +241,7 @@ class MySdist(_sdist):
                 elementsenv_base=dist_elementsenv_base,
                 usr_prefix=dist_usr_prefix,
                 etc_prefix=dist_etc_prefix,
+                custom_prefix=dist_custom_prefix,
                 python_explicit_version=dist_exp_version,
                 python_implicit_version=dist_impl_major_version,
                 full_exec_python=dist_full_exec_python
@@ -357,6 +371,14 @@ class MyInstall(_install):
             call(
                 [__exec__, fixscript, "-n", "this_elementsenv_base", this_elementsenv_base, p])
 
+    def fix_custom_prefix(self):
+        fixscript = os.path.join(self.install_scripts, fixscript_name)
+        proc_list = self.get_sysconfig_files()
+        proc_list += self.get_config_scripts()
+        for p in proc_list:
+            call(
+                [__exec__, fixscript, "-n", "this_custom_prefix", this_custom_prefix, p])
+
     def fix_use_custom_prefix(self):
         fixscript = os.path.join(self.install_scripts, fixscript_name)
         proc_list = self.get_sysconfig_files()
@@ -390,6 +412,7 @@ __path__ = extend_path(__path__, __name__)  # @ReservedAssignment
         self.fix_install_path()
         self.fix_version()
         self.fix_elementsenv_base()
+        self.fix_custom_prefix()
         self.fix_use_custom_prefix()
         self.fix_python_version()
         self.create_extended_init()

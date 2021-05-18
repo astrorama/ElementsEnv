@@ -58,7 +58,7 @@ setenv SOFTWARE_BASE_VAR ELEMENTSENV_BASE
 setenv ELEMENTSENV_BASE %(this_elementsenv_base)s
 setenv ELEMENTSENV_USE_BASE no
 setenv ELEMENTSENV_USE_PREFIX no
-setenv ELEMENTSENV_CUSTOM_PREFIX %(this_elementsenv_base)s/../../usr
+setenv ELEMENTSENV_CUSTOM_PREFIX %(this_custom_prefix)s
 setenv ELEMENTSENV_USE_CUSTOM_PREFIX no
 
 if ( "${elementsenv_config_file_current}" != "" ) then
