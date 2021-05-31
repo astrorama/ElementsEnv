@@ -53,6 +53,7 @@ dist_full_exec_python = __full_exec__
 
 this_use_custom_prefix = "no"
 
+# Fix the dist locations if the python executable is not in the default location
 if __usr_loc__ != "/usr":
     dist_elementsenv_base = os.path.join(__root_loc__, dist_elementsenv_base.lstrip("/"))
     dist_etc_prefix = os.path.join(__root_loc__, dist_etc_prefix.lstrip("/"))
@@ -102,12 +103,17 @@ for a in sys.argv:
     for b in ["--user", "--prefix", "--home"]:
         if a.startswith(b):
             use_local_install = True
+    # subcase when the prefix is /usr
+    if a.startswith("--prefix"):
+        u_base = a.split("=")[1:][0]
+        if u_base == "/usr":
+            use_local_install = False
 
 etc_install_root = None
 install_root = None
 for a in sys.argv:
     if a.startswith("--etc-root"):
-        # TODO implement the extratction of the value from
+        # TODO implement the extraction of the value from
         # the option
         e_base = a.split("=")[1:]
         if len(e_base) == 1:
