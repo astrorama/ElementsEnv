@@ -1,7 +1,7 @@
 # $Id$
 
 from optparse import OptionParser, Option, OptionContainer, OptParseError
-from Euclid import Log, Env
+from ElementsEnv import Log, Env
 import os
 import sys
 import logging

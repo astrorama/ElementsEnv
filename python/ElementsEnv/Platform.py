@@ -516,6 +516,8 @@ class NativeMachine:
         version = "0.0.0"
         ncv = version
 
+        log = logging.getLogger()
+
         compiler_root = {"gcc": "g++", "clang": "clang++", "llvm": "clang++"}
 
         compiler_re = dict()
@@ -527,7 +529,10 @@ class NativeMachine:
             ncv = "9.0.0"
         else:
             try:
-                gpp = self._findCompiler(compiler_root[compiler_name])
+                try:
+                    gpp = self._findCompiler(compiler_root[compiler_name])
+                except IndexError:
+                    log.error("Cannot find the %s executable" % compiler_root[compiler_name])
                 compstr = Popen(gpp + " --version", shell=True,
                                 stdin=PIPE, stdout=PIPE, stderr=PIPE,
                                 close_fds=True).communicate()[0]

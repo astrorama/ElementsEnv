@@ -6,7 +6,7 @@
 Name:           ${project}
 Version:        ${version}
 Release:        1%{?dist}
-Summary:        Euclid Environment Login and Utilities
+Summary:        Elements Environment Login and Utilities
 
 License:        Public Domain
 Source:         %{name}-%{version}.tar.gz
@@ -14,7 +14,8 @@ Source:         %{name}-%{version}.tar.gz
 BuildArch:      noarch
 Prefix:         ${usr_prefix}
 Prefix:         ${etc_prefix}
-Prefix:         ${euclid_base}
+Prefix:         ${elementsenv_base}
+Prefix:         ${custom_prefix}
 
 AutoReq: no
 
@@ -49,9 +50,9 @@ rm -rf $$RPM_BUILD_ROOT
 # For noarch packages: sitelib
 %{python${python_explicit_version}_sitelib}/*
 %{_bindir}/*
-%{_sysconfdir}/profile.d/euclid.csh
-%{_sysconfdir}/profile.d/euclid.sh
-%{_sysconfdir}/sysconfig/euclid
+%{_sysconfdir}/profile.d/elementsenv.csh
+%{_sysconfdir}/profile.d/elementsenv.sh
+%{_sysconfdir}/sysconfig/elementsenv
 %{_datadir}/%{name}/cmake/*
 %{_datadir}/%{name}/texmf/*
 %{_datadir}/%{name}/make/*
@@ -59,44 +60,46 @@ rm -rf $$RPM_BUILD_ROOT
 %post
 python_loc=$$(%{__python${python_explicit_version}} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='$$RPM_INSTALL_PREFIX0'))")
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/ELogin.{,c}sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/Euclid_group_{login,setup}.{,c}sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/Euclid_config.{,c}sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX1/profile.d/euclid.{,c}sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$python_loc/Euclid/Login.py
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_install_version %{version} $$python_loc/Euclid/Login.py
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_euclid_base $$RPM_INSTALL_PREFIX2 $$RPM_INSTALL_PREFIX1/sysconfig/euclid
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_euclid_base $$RPM_INSTALL_PREFIX2 $$RPM_INSTALL_PREFIX0/bin/Euclid_config.{,c}sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_euclid_base $$RPM_INSTALL_PREFIX2 $$python_loc/Euclid/Login.py
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_etc_install_prefix $$RPM_INSTALL_PREFIX1 $$RPM_INSTALL_PREFIX0/bin/Euclid_config.{,c}sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_group_{login,setup}.{,c}sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX1/profile.d/elementsenv.{,c}sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$python_loc/ElementsEnv/Login.py
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_install_version %{version} $$python_loc/ElementsEnv/Login.py
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_elementsenv_base $$RPM_INSTALL_PREFIX2 $$RPM_INSTALL_PREFIX1/sysconfig/elementsenv
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_elementsenv_base $$RPM_INSTALL_PREFIX2 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_elementsenv_base $$RPM_INSTALL_PREFIX2 $$python_loc/ElementsEnv/Login.py
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_custom_prefix $$RPM_INSTALL_PREFIX3 $$RPM_INSTALL_PREFIX1/sysconfig/elementsenv
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_custom_prefix $$RPM_INSTALL_PREFIX3 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_etc_install_prefix $$RPM_INSTALL_PREFIX1 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/eclipse_pythonpath_fix
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ELogin.csh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ELogin.sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/E-Run
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ERun_autocompletion.sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/Euclid_config.csh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/Euclid_config.sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/Euclid_group_login.csh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/Euclid_group_login.sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/Euclid_group_setup.csh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/Euclid_group_setup.sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.csh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_group_login.csh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_group_login.sh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_group_setup.csh
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_group_setup.sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/runpy
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/StripPath.csh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/StripPath.sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/WhereAmI
-if [[ ! -f "$${python_loc}/Euclid/__init__.py" ]]; then
-cat << EOF > $${python_loc}/Euclid/__init__.py
+if [[ ! -f "$${python_loc}/ElementsEnv/__init__.py" ]]; then
+cat << EOF > $${python_loc}/ElementsEnv/__init__.py
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)  # @ReservedAssignment
 EOF
 fi
-if [[ ( "/usr" = "$${RPM_INSTALL_PREFIX0}" ) || ( "/opt/euclid" = "$${RPM_INSTALL_PREFIX2}" ) ]]; then
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_use_custom_prefix no $${RPM_INSTALL_PREFIX1}/sysconfig/euclid
+if [[ ( "/usr" = "$${RPM_INSTALL_PREFIX0}" ) || ( "/opt" = "$${RPM_INSTALL_PREFIX2}" ) ]]; then
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_use_custom_prefix no $${RPM_INSTALL_PREFIX1}/sysconfig/elementsenv
 else
 echo "Activating the custom prefix environment prepending"
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_use_custom_prefix yes $${RPM_INSTALL_PREFIX1}/sysconfig/euclid
+%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_use_custom_prefix yes $${RPM_INSTALL_PREFIX1}/sysconfig/elementsenv
 fi
-%{__python${python_explicit_version}} -m compileall $${python_loc}/Euclid/Login.py $${python_loc}/Euclid/__init__.py
-%{__python${python_explicit_version}} -O -m compileall $${python_loc}/Euclid/Login.py $${python_loc}/Euclid/__init__.py
+%{__python${python_explicit_version}} -m compileall $${python_loc}/ElementsEnv/Login.py $${python_loc}/ElementsEnv/__init__.py
+%{__python${python_explicit_version}} -O -m compileall $${python_loc}/ElementsEnv/Login.py $${python_loc}/ElementsEnv/__init__.py
 
 
 %changelog

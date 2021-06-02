@@ -1,14 +1,14 @@
-# main login script for the Euclid environment
+# main login script for the ElementsEnv environment
 
 my_own_prefix="%(this_install_prefix)s"
 
 python_loc=`python%(this_python_version)s -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='$my_own_prefix'))"`
 
-if [[ -r ${python_loc}/Euclid/Login.py ]]; then
-  ELogin_tmpfile=`python%(this_python_version)s ${python_loc}/Euclid/Login.py --shell=sh --mktemp "$@"`
+if [[ -r ${python_loc}/ElementsEnv/Login.py ]]; then
+  ELogin_tmpfile=`python%(this_python_version)s ${python_loc}/ElementsEnv/Login.py --shell=sh --mktemp "$@"`
   ELoginStatus="$?"
 else
-  ELogin_tmpfile=`python%(this_python_version)s -m Euclid.Login --shell=sh --mktemp "$@"`
+  ELogin_tmpfile=`python%(this_python_version)s -m ElementsEnv.Login --shell=sh --mktemp "$@"`
   ELoginStatus="$?"
 fi
 

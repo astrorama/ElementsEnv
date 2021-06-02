@@ -60,12 +60,12 @@ if PYTHON_LOC:
 
 #============================================================================
 
-from Euclid.Platform import getBinaryOfType, BUILD_TYPES, DEFAULT_BUILD_TYPE
-from Euclid.Platform import getBinaryTypeName
-from Euclid.Platform import getCompiler, getPlatformType, getArchitecture
-from Euclid.Platform import isBinaryType, NativeMachine
-from Euclid.Script import SourceScript
-from Euclid.Path import pathPrepend, getClosestPath
+from ElementsEnv.Platform import getBinaryOfType, BUILD_TYPES, DEFAULT_BUILD_TYPE
+from ElementsEnv.Platform import getBinaryTypeName
+from ElementsEnv.Platform import getCompiler, getPlatformType, getArchitecture
+from ElementsEnv.Platform import isBinaryType, NativeMachine
+from ElementsEnv.Script import SourceScript
+from ElementsEnv.Path import pathPrepend, getClosestPath
 
 __version__ = ""
 
@@ -74,6 +74,7 @@ if HAS_VERSION:
 
 #-------------------------------------------------------------------------
 # Helper functions
+
 
 def getLoginEnv(optionlist=None):
     if not optionlist:
@@ -145,7 +146,7 @@ The type is to be chosen among the following list:
         parser.add_option("-s", "--shared",
                           dest="sharedarea",
                           help="set the shared area",
-                          fallback_env="EUCLID_BASE")
+                          fallback_env="ELEMENTSENV_BASE")
         parser.set_defaults(strip_path=True)
         parser.add_option("--no-strip-path",
                           dest="strip_path",
@@ -212,7 +213,7 @@ The type is to be chosen among the following list:
 
         log.debug("%s is set to %s" % ("PATH", ev["PATH"]))
 
-        # try the installed directory in $prefix/share/EuclidEnv/cmake/...
+        # try the installed directory in $prefix/share/ElementsEnv/cmake/...
 
         if PYTHON_LOC:
             python_prefix = PYTHON_LOC
@@ -221,7 +222,7 @@ The type is to be chosen among the following list:
 
         cmake_loc = getClosestPath(python_prefix,
                                    os.sep.join(
-                                       ["share", "EuclidEnv", "cmake", "ElementsProjectConfig.cmake"]),
+                                       ["share", "ElementsEnv", "cmake", "ElementsProjectConfig.cmake"]),
                                    alloccurences=False)
         if not cmake_loc:
             # use the local source directory
@@ -242,27 +243,6 @@ The type is to be chosen among the following list:
 
         if "CMAKE_PREFIX_PATH" in ev:
             log.debug("%s is set to %s" % ("CMAKE_PREFIX_PATH", ev["CMAKE_PREFIX_PATH"]))
-
-        texmf_loc = getClosestPath(python_prefix,
-                                   os.sep.join(
-                                       ["share", "EuclidEnv", "texmf", "esgsdoc.cls"]),
-                                   alloccurences=False)
-        if not texmf_loc:
-            # use the local source directory
-            texmf_loc = getClosestPath(python_prefix,
-                                       os.sep.join(
-                                           ["data", "texmf", "esgsdoc.cls"]),
-                                       alloccurences=False)
-
-        if texmf_loc:
-            the_loc = os.path.dirname(texmf_loc[0])
-            if "TEXINPUTS" in ev:
-                ev["TEXINPUTS"] = pathPrepend(ev["TEXINPUTS"],
-                                              the_loc,
-                                              exist_check=opts.strip_path,
-                                              unique=opts.strip_path)
-            elif os.path.exists(the_loc):
-                ev["TEXINPUTS"] = the_loc
 
 #-------------------------------------------------------------------------
 
@@ -364,16 +344,12 @@ The type is to be chosen among the following list:
                 if os.path.exists(sbrc):
                     try:
                         shutil.copy(sbrc, hbrc)
-                        log.warning("Copying %s to %s" %(sbrc, hbrc))
+                        log.warning("Copying %s to %s" % (sbrc, hbrc))
                     except IOError:
                         log.warning("Failed to copy %s to %s" % (sbrc, hbrc))
         if "LD_LIBRARY_PATH" not in ev:
             ev["LD_LIBRARY_PATH"] = ""
             log.debug("Setting a default LD_LIBRARY_PATH")
-
-        if "ROOTSYS" not in ev:
-            ev["ROOTSYS"] = ""
-            log.debug("Setting a default ROOTSYS")
 
         self.setUserArea()
 
@@ -529,20 +505,19 @@ The type is to be chosen among the following list:
             prefix_path.append(ev["User_area"])
 
         if opts.sharedarea:
-            ev["EUCLIDPROJECTPATH"] = opts.sharedarea
+            ev["ELEMENTSENVPROJECTPATH"] = opts.sharedarea
 
-        if "EUCLIDPROJECTPATH" not in ev:
-            if "EUCLID_BASE" in ev:
-                ev["EUCLIDPROJECTPATH"] = ev["EUCLID_BASE"]
+        if "ELEMENTSENVPROJECTPATH" not in ev:
+            if "ELEMENTSENV_BASE" in ev:
+                ev["ELEMENTSENVPROJECTPATH"] = ev["ELEMENTSENV_BASE"]
 
+        if "ELEMENTSENVPROJECTPATH" not in ev:
+            if os.path.exists("%(this_elementsenv_base)s"):
+                ev["ELEMENTSENVPROJECTPATH"] = "%(this_elementsenv_base)s"
 
-        if "EUCLIDPROJECTPATH" not in ev:
-            if os.path.exists("%(this_euclid_base)s"):
-                ev["EUCLIDPROJECTPATH"] = "%(this_euclid_base)s"
-
-        if "EUCLIDPROJECTPATH" in ev:
-            log.debug("The value of EUCLIDPROJECTPATH is %s" % ev["EUCLIDPROJECTPATH"])
-            prefix_path.append(ev["EUCLIDPROJECTPATH"])
+        if "ELEMENTSENVPROJECTPATH" in ev:
+            log.debug("The value of ELEMENTSENVPROJECTPATH is %s" % ev["ELEMENTSENVPROJECTPATH"])
+            prefix_path.append(ev["ELEMENTSENVPROJECTPATH"])
 
         if not opts.remove_userarea and "User_area" in ev:
             prefix_path.append(ev["User_area"])
@@ -559,7 +534,6 @@ The type is to be chosen among the following list:
                                                    unique=opts.strip_path)
 
         log.debug("The value of CMAKE_PROJECT_PATH is %s" % ev["CMAKE_PROJECT_PATH"])
-
 
         log.debug("CMAKE_PROJECT_PATH is set to %s" % ev["CMAKE_PROJECT_PATH"])
 
@@ -582,7 +556,6 @@ The type is to be chosen among the following list:
                 else:
                     ev["CMAKEFLAGS"] = "-DPYTHON_EXPLICIT_VERSION=%s" % __exec_exp_vers
 
-
         if "MACPORT_LOCATION" in ev:
             if "CMAKEFLAGS" in ev:
                 ev["CMAKEFLAGS"] += " -DCMAKE_FIND_FRAMEWORK=LAST"
@@ -590,7 +563,6 @@ The type is to be chosen among the following list:
             else:
                 ev["CMAKEFLAGS"] = "-DCMAKE_FIND_FRAMEWORK=LAST"
                 ev["CMAKEFLAGS"] += " -DCMAKE_FIND_ROOT_PATH=%s" % ev["MACPORT_LOCATION"]
-
 
     def setExtraEnv(self):
 
@@ -631,7 +603,7 @@ The type is to be chosen among the following list:
             al["ELogin"] = "source \\`/usr/bin/which ELogin.%s\\`" % self.targetShell()
 
         al["ERun"] = "E-Run"
-        al["EuclidRun"] = "E-Run"
+        al["ElementsRun"] = "E-Run"
 
         return self.copyEnv()[1]
 
@@ -659,9 +631,9 @@ The type is to be chosen among the following list:
             self.addEcho("*" * 80)
             if "User_area" in ev:
                 self.addEcho(" --- User_area is set to %s" % ev["User_area"])
-            if "EUCLIDPROJECTPATH" in ev:
-                self.addEcho(" --- EUCLIDPROJECTPATH is set to:")
-                for p in ev["EUCLIDPROJECTPATH"].split(os.pathsep):
+            if "ELEMENTSENVPROJECTPATH" in ev:
+                self.addEcho(" --- ELEMENTSENVPROJECTPATH is set to:")
+                for p in ev["ELEMENTSENVPROJECTPATH"].split(os.pathsep):
                     if p:
                         self.addEcho("    %s" % p)
             if self._nativemachine.OSType() == "Darwin" and opts.use_macport:
@@ -699,6 +671,7 @@ The type is to be chosen among the following list:
         self.flush()
 
         return 0
+
 
 if __name__ == '__main__':
     sys.exit(LoginScript(usage="%prog [options] [type]").run())

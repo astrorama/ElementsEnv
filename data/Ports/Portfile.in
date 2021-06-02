@@ -6,11 +6,11 @@ PortGroup python 1.0
 
 name            ${project}
 version         ${version}
-categories      euclid
+categories      elementsenv
 platforms       darwin
 supported_archs	noarch
-description     Euclid environment setup
-master_sites    http://degauden.isdc.unige.ch/euclid/repo/sources 
+description     ElementsEnv environment setup
+master_sites    http://degauden.isdc.unige.ch/elementsenv/repo/sources 
 checksums           rmd160  ${rmd160} \
                     sha256  ${sha256}
 

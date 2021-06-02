@@ -15,10 +15,10 @@ Script to run a command in an environment modified for an LHCb application.
 __author__ = 'Marco Clemencic <marco.clemencic@cern.ch>'
 
 import sys
-from Euclid.Run.Script import ERun
+from ElementsEnv.Run.Script import ERun
 # special handling of the option --profile
 if '--profile' in sys.argv:
-    from Euclid.Run.Profiling import run
+    from ElementsEnv.Run.Profiling import run
     run('ERun().main()')
 else:
     ERun().main()

@@ -1,11 +1,11 @@
 """
-This is the initial setup for the Euclid namespace package
+This is the initial setup for the ElementsEnv namespace package
 """
 from pkgutil import extend_path
 
 __path__ = extend_path(__path__, __name__)  # @ReservedAssignment
 
-__author__  = 'Hubert Degaudenzi'
+__author__ = 'Hubert Degaudenzi'
 
 import sys
 
@@ -18,7 +18,7 @@ if _is_ipython:
     from IPython import get_ipython
     _ip = get_ipython()
     _cleanup_list.append(_ip)
-    if hasattr(_ip,"kernel"):
+    if hasattr(_ip, "kernel"):
         from .Login import LoginScript
         from .Env import Environment
         # _option_list = ["--debug"]
@@ -31,7 +31,7 @@ if _is_ipython:
         _ex = _login_script.setExtra()
 
         from IPython.core import magic_arguments, magic
- 
+
         @magic.magics_class
         class Magics(magic.Magics):
 
@@ -66,13 +66,16 @@ if _is_ipython:
 
         _ip.register_magics(Magics)
 
-# _cleanup 
+# _cleanup
 import atexit
+
+
 def _cleanup():
 
     import sys
-    # destroy Euclid module
-    del sys.modules[ 'Euclid' ]
+    # destroy ElementsEnv module
+    del sys.modules[ 'ElementsEnv' ]
 
-atexit.register( _cleanup )
+
+atexit.register(_cleanup)
 del _cleanup, atexit, sys

@@ -1,12 +1,12 @@
 #!/bin/sh
-if [[ ! -e ${HOME}/.noEuclidLoginScript ]]; then
+if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
 
   my_own_prefix3="%(this_install_prefix)s"
 
-  if [[ -r ${my_own_prefix3}/bin/Euclid_config.sh ]]; then
-    confscr=${my_own_prefix3}/bin/Euclid_config.sh
+  if [[ -r ${my_own_prefix3}/bin/ElementsEnv_config.sh ]]; then
+    confscr=${my_own_prefix3}/bin/ElementsEnv_config.sh
   else
-    confscr=`/usr/bin/which Euclid_config.sh`
+    confscr=`/usr/bin/which ElementsEnv_config.sh`
   fi
   . ${confscr} "$@" > /dev/null 2>&1
   unset confscr
@@ -29,16 +29,16 @@ if [[ ! -e ${HOME}/.noEuclidLoginScript ]]; then
       export E_BANNER=`mktemp`
       . ${elogscr} --quiet "$@" >> ${E_BANNER}
       
-      if [[ ! -n "$EUCLID_POST_DONE" ]]; then
-        if [[ -n "$EUCLID_POST_SCRIPT" ]]; then
-          if [[ -r ${my_own_prefix3}/bin/${EUCLID_POST_SCRIPT}.sh ]]; then
-            epostscr=${my_own_prefix3}/bin/${EUCLID_POST_SCRIPT}.sh
+      if [[ ! -n "$ELEMENTSENV_POST_DONE" ]]; then
+        if [[ -n "$ELEMENTSENV_POST_SCRIPT" ]]; then
+          if [[ -r ${my_own_prefix3}/bin/${ELEMENTSENV_POST_SCRIPT}.sh ]]; then
+            epostscr=${my_own_prefix3}/bin/${ELEMENTSENV_POST_SCRIPT}.sh
           else
-            epostscr=`/usr/bin/which ${EUCLID_POST_SCRIPT}.sh 2> /dev/null`
+            epostscr=`/usr/bin/which ${ELEMENTSENV_POST_SCRIPT}.sh 2> /dev/null`
           fi
           if [[ -r ${epostscr} ]]; then
             . ${epostscr} "$@" >> ${E_BANNER}
-            export EUCLID_POST_DONE=yes
+            export ELEMENTSENV_POST_DONE=yes
             needs_cleanup3=yes
           fi
           unset epostscr

@@ -1,4 +1,4 @@
-from Euclid.Temporary import TempDir
+from ElementsEnv.Temporary import TempDir
 import os
 
 import unittest

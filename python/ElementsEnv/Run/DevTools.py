@@ -13,8 +13,8 @@ def main():
     Script to generate a local development project.
     '''
     from optparse import OptionParser
-    from Euclid.Run.Options import addSearchPath, addOutputLevel, addPlatform
-    from Euclid.Run.Lookup import findProject, MissingProjectError
+    from ElementsEnv.Run.Options import addSearchPath, addOutputLevel, addPlatform
+    from ElementsEnv.Run.Lookup import findProject, MissingProjectError
 
     parser = OptionParser(usage='%prog [options] Project version')
 

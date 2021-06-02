@@ -75,7 +75,7 @@ def addPlatform(parser):
         platform = os.environ['BINARY_TAG']
     else:
         # auto-detect
-        from Euclid.Platform import NativeMachine
+        from ElementsEnv.Platform import NativeMachine
         supported = NativeMachine().supportedBinaryTag()
         if supported:
             platform = supported[0]

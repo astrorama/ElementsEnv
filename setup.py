@@ -31,7 +31,7 @@ logging.basicConfig(format='%(levelname)s\t: %(message)s', level=logging.INFO)
 from string import Template
 
 __version__ = "3.18.0"
-__project__ = "EuclidEnv"
+__project__ = "ElementsEnv"
 __full_exec__ = sys.executable
 __usr_loc__ = os.path.dirname(os.path.dirname(__full_exec__))
 __root_loc__ = os.path.dirname(__usr_loc__)
@@ -43,23 +43,27 @@ if __exec__.endswith(__exec_maj_vers):
     __exec_exp_vers = __exec_maj_vers
 
 # variable used for the package creation
-dist_euclid_base = "/opt/euclid"
+dist_elementsenv_base = "/opt"
 dist_etc_prefix = "/etc"
 dist_usr_prefix = "/usr"
+dist_custom_prefix = "/usr"
 dist_exp_version = __exec_exp_vers
 dist_impl_major_version = __exec_maj_vers
 dist_full_exec_python = __full_exec__
 
 this_use_custom_prefix = "no"
 
+# Fix the dist locations if the python executable is not in the default location
 if __usr_loc__ != "/usr":
-    dist_euclid_base = os.path.join(__root_loc__, dist_euclid_base.lstrip("/"))
+    dist_elementsenv_base = os.path.join(__root_loc__, dist_elementsenv_base.lstrip("/"))
     dist_etc_prefix = os.path.join(__root_loc__, dist_etc_prefix.lstrip("/"))
     dist_usr_prefix = os.path.join(__root_loc__, dist_usr_prefix.lstrip("/"))
+    dist_custom_prefix = os.path.join(__root_loc__, dist_custom_prefix.lstrip("/"))
     this_use_custom_prefix = "yes"
 
 # variable interpolated at install time
-this_euclid_base = "/opt/euclid"
+this_elementsenv_base = "/opt"
+this_custom_prefix = "/usr"
 
 if not dist_exp_version:
     pytest_cmd = "py.test"
@@ -99,12 +103,17 @@ for a in sys.argv:
     for b in ["--user", "--prefix", "--home"]:
         if a.startswith(b):
             use_local_install = True
+    # subcase when the prefix is /usr
+    if a.startswith("--prefix"):
+        u_base = a.split("=")[1:][0]
+        if u_base == "/usr":
+            use_local_install = False
 
 etc_install_root = None
 install_root = None
 for a in sys.argv:
     if a.startswith("--etc-root"):
-        # TODO implement the extratction of the value from
+        # TODO implement the extraction of the value from
         # the option
         e_base = a.split("=")[1:]
         if len(e_base) == 1:
@@ -125,10 +134,10 @@ if not etc_install_root:
 else:
     etc_install_prefix = os.path.join(etc_install_root, "etc")
 
-etc_files = [(os.path.join(etc_install_prefix, "profile.d"), [os.path.join("data", "profile", "euclid.sh"),
-                                       os.path.join("data", "profile", "euclid.csh")]),
+etc_files = [(os.path.join(etc_install_prefix, "profile.d"), [os.path.join("data", "profile", "elementsenv.sh"),
+                                       os.path.join("data", "profile", "elementsenv.csh")]),
              (os.path.join(etc_install_prefix, "sysconfig"),
-                  [os.path.join("data", "sys", "config", "euclid")])
+                  [os.path.join("data", "sys", "config", "elementsenv")])
             ]
 
 use_custom_install_root = False
@@ -155,12 +164,22 @@ for a in sys.argv:
         sys.argv.remove(a)
 
 for a in sys.argv:
-    if a.startswith("--euclid-base"):
+    if a.startswith("--elementsenv-base"):
         # TODO implement the extratction of the value from
         # the option
         e_base = a.split("=")[1:]
         if len(e_base) == 1:
-            this_euclid_base = e_base[0]
+            this_elementsenv_base = e_base[0]
+            this_custom_prefix = os.path.normpath(os.path.join(this_elementsenv_base, "..", "..", "usr"))
+        sys.argv.remove(a)
+
+for a in sys.argv:
+    if a.startswith("--custom-prefix"):
+        # TODO implement the extratction of the value from
+        # the option
+        c_base = a.split("=")[1:]
+        if len(c_base) == 1:
+            this_custom_prefix = c_base[0]
         sys.argv.remove(a)
 
 fixscript_name = "FixInstallPath"
@@ -225,9 +244,10 @@ class MySdist(_sdist):
                 rmd160=rmd160_digest,
                 sha256=sha256_digest,
                 changelog=changelog_content,
-                euclid_base=dist_euclid_base,
+                elementsenv_base=dist_elementsenv_base,
                 usr_prefix=dist_usr_prefix,
                 etc_prefix=dist_etc_prefix,
+                custom_prefix=dist_custom_prefix,
                 python_explicit_version=dist_exp_version,
                 python_implicit_version=dist_impl_major_version,
                 full_exec_python=dist_full_exec_python
@@ -274,7 +294,7 @@ class MyInstall(_install):
 
     def get_login_scripts(self):
         p_list = []
-        for c in ["ELogin", "Euclid_group_login", "Euclid_group_setup"]:
+        for c in ["ELogin", "ElementsEnv_group_login", "ElementsEnv_group_setup"]:
             for s in ["sh", "csh"]:
                 file2fix = os.path.join(self.install_scripts, "%s.%s" % (c, s))
                 if os.path.exists(file2fix):
@@ -286,7 +306,7 @@ class MyInstall(_install):
         this_install = self.get_etc_install_root()
         for s in ["sh", "csh"]:
             file2fix = os.path.join(
-                this_install, "etc", "profile.d", "%s.%s" % ("euclid", s))
+                this_install, "etc", "profile.d", "%s.%s" % ("elementsenv", s))
             if os.path.exists(file2fix):
                 p_list.append(file2fix)
         return p_list
@@ -312,7 +332,7 @@ class MyInstall(_install):
     def fix_install_path(self):
         fixscript = os.path.join(self.install_scripts, fixscript_name)
         proc_list = self.get_login_scripts() + self.get_config_scripts()
-        file2fix = os.path.join(self.install_lib, "Euclid", "Login.py")
+        file2fix = os.path.join(self.install_lib, "ElementsEnv", "Login.py")
         if os.path.exists(file2fix):
             proc_list.append(file2fix)
         proc_list += self.get_profile_scripts()
@@ -322,7 +342,7 @@ class MyInstall(_install):
 
     def fix_version(self):
         fixscript = os.path.join(self.install_scripts, fixscript_name)
-        file2fix = os.path.join(self.install_lib, "Euclid", "Login.py")
+        file2fix = os.path.join(self.install_lib, "ElementsEnv", "Login.py")
         if os.path.exists(file2fix):
             call(
                 [__exec__, fixscript, "-n", "this_install_version", __version__, file2fix])
@@ -332,7 +352,7 @@ class MyInstall(_install):
 
         this_install = self.get_etc_install_root()
 
-        file2fix = os.path.join(this_install, "etc", "sysconfig", "euclid")
+        file2fix = os.path.join(this_install, "etc", "sysconfig", "elementsenv")
         if os.path.exists(file2fix):
             p_list.append(file2fix)
         return p_list
@@ -341,21 +361,29 @@ class MyInstall(_install):
         p_list = []
         for s in ["sh", "csh"]:
             file2fix = os.path.join(
-                self.install_scripts, "%s.%s" % ("Euclid_config", s))
+                self.install_scripts, "%s.%s" % ("ElementsEnv_config", s))
             if os.path.exists(file2fix):
                 p_list.append(file2fix)
         return p_list
 
-    def fix_euclid_base(self):
+    def fix_elementsenv_base(self):
         fixscript = os.path.join(self.install_scripts, fixscript_name)
         proc_list = self.get_sysconfig_files()
         proc_list += self.get_config_scripts()
-        file2fix = os.path.join(self.install_lib, "Euclid", "Login.py")
+        file2fix = os.path.join(self.install_lib, "ElementsEnv", "Login.py")
         if os.path.exists(file2fix):
             proc_list.append(file2fix)
         for p in proc_list:
             call(
-                [__exec__, fixscript, "-n", "this_euclid_base", this_euclid_base, p])
+                [__exec__, fixscript, "-n", "this_elementsenv_base", this_elementsenv_base, p])
+
+    def fix_custom_prefix(self):
+        fixscript = os.path.join(self.install_scripts, fixscript_name)
+        proc_list = self.get_sysconfig_files()
+        proc_list += self.get_config_scripts()
+        for p in proc_list:
+            call(
+                [__exec__, fixscript, "-n", "this_custom_prefix", this_custom_prefix, p])
 
     def fix_use_custom_prefix(self):
         fixscript = os.path.join(self.install_scripts, fixscript_name)
@@ -375,11 +403,11 @@ class MyInstall(_install):
                 call([__exec__, fixscript, "-n", "this_python_version", dist_impl_major_version, full_s])
 
     def create_extended_init(self):
-        init_file = os.path.join(self.install_lib, "Euclid", "__init__.py")
+        init_file = os.path.join(self.install_lib, "ElementsEnv", "__init__.py")
 
         if not os.path.exists(init_file):
             logging.info("Creating the %s file" % init_file)
-            init_content = """# This is the initial setup for the Euclid namespace package
+            init_content = """# This is the initial setup for the ElementsEnv namespace package
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)  # @ReservedAssignment
 
@@ -389,7 +417,8 @@ __path__ = extend_path(__path__, __name__)  # @ReservedAssignment
     def custom_post_install(self):
         self.fix_install_path()
         self.fix_version()
-        self.fix_euclid_base()
+        self.fix_elementsenv_base()
+        self.fix_custom_prefix()
         self.fix_use_custom_prefix()
         self.fix_python_version()
         self.create_extended_init()
@@ -462,7 +491,7 @@ class PyTest(Command):
         import sys
         sys.path.insert(0, self._get_python_path())
         os.environ["PYTHONPATH"] = os.pathsep.join(sys.path)
-        from Euclid.Path import envPathPrepend
+        from ElementsEnv.Path import envPathPrepend
         envPathPrepend("PATH", self._get_scripts_path())
         envPathPrepend("PATH", self._get_scripts_build_path())
         errno = subprocess.call([pytest_cmd] + self._get_tests_files())
@@ -533,12 +562,12 @@ class Uninstall(Command):
 
 setup(name=__project__,
       version=__version__,
-      description="Euclid Environment Scripts",
+      description="Elements Environment Scripts",
       author="Hubert Degaudenzi",
       author_email="Hubert.Degaudenzi@unige.ch",
-      url="http://www.isdc.unige.ch/redmine/projects/euclidenv",
-      package_dir={"Euclid": os.path.join("python", "Euclid"), },
-      packages=["Euclid", "Euclid.Run"],
+      url="https://github.com/astrorama/ElementsEnv",
+      package_dir={"ElementsEnv": os.path.join("python", "ElementsEnv"), },
+      packages=["ElementsEnv", "ElementsEnv.Run"],
       scripts=[os.path.join("scripts", s) for s in get_script_files()],
       data_files=etc_files + these_files,
       cmdclass={"install": MyInstall,

@@ -1,7 +1,0 @@
-SOFTWARE_BASE_VAR=EUCLID_BASE
-EUCLID_BASE=%(this_euclid_base)s
-EUCLID_USE_BASE=no
-EUCLID_USE_PREFIX=no
-EUCLID_CUSTOM_PREFIX=%(this_euclid_base)s/../../usr
-EUCLID_USE_CUSTOM_PREFIX=%(this_use_custom_prefix)s
-EUCLID_POST_SCRIPT=EdenEnv

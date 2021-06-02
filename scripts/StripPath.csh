@@ -1,4 +1,4 @@
-set StripPath_tmpfile = `python%(this_python_version)s -m Euclid.PathStripper --shell=csh --mktemp -e PATH -e LD_LIBRARY_PATH -e PYTHONPATH -e HPATH `
+set StripPath_tmpfile = `python%(this_python_version)s -m ElementsEnv.PathStripper --shell=csh --mktemp -e PATH -e LD_LIBRARY_PATH -e PYTHONPATH -e HPATH `
 set StripPathStatus = $?
 if ( ! $StripPathStatus && "$StripPath_tmpfile" != "" ) then
   source $StripPath_tmpfile

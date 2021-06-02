@@ -1,6 +1,6 @@
-from Euclid.Platform import NativeMachine, getBinaryOfType, getBinaryTypeName
-from Euclid.Platform import isBinaryType
-from Euclid.Platform import getSearchList
+from ElementsEnv.Platform import NativeMachine, getBinaryOfType, getBinaryTypeName
+from ElementsEnv.Platform import isBinaryType
+from ElementsEnv.Platform import getSearchList
 
 import unittest
 

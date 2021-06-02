@@ -9,7 +9,7 @@ __pycache__
 /.externalToolBuilders/
 /.coverage
 /runtests.pyc
-/EuclidEnv.egg-info/
+/ElementsEnv.egg-info/
 *.pyc
 /.pytest_cache
 /.cache

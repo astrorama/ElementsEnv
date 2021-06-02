@@ -1,4 +1,4 @@
 include ChangeLog
-# exclude python/Euclid/__init__.*
+# exclude python/ElementsEnv/__init__.*
 recursive-include tests *
 recursive-include data *
