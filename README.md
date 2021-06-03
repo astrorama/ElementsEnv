@@ -1,5 +1,3 @@
-# ElementsEnv README
-
 ElementsEnv is a python package that can be used as a companion software for the development of Elements-based software projects. It allows to builds and use several version of the same project in a consistent way. 
 
 For this purpose, ElementsEnv provides 2 executable:

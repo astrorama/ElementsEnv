@@ -1,5 +1,3 @@
-# [[ElementsEnv]] User Manual
-
 # User Manual
 
 ## Introduction
