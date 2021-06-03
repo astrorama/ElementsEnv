@@ -36,7 +36,7 @@ For the runtime, in order to run any executable of any project with the
 correct environment: the `E-Run` script that generates automatically the
 runtime environment (`PATH`, `LD_LIBRAY_PATH`, `PYTHONPATH`,
 `ELEMENTS_AUX_PATH` and `ELELEMTS_CONF_PATH`) and runs the command. This
-command is also aliased to `EuclidRun` and `ERun`.
+command is also aliased to `ERun`.
 
 This command has to be run explicitly for any executable that you would
 like to run in the environment of any project. For example
@@ -61,50 +61,6 @@ The first method being quite adequate for development or production
 servers and the second one is more suited for custom installation on a
 laptop and/or a non-RPM based installation system.
 
-### Installation of the Official RPM package
-
-The RPM files to be installed (like
-[ElementsEnv-1.4-1.fc19.noarch.rpm](https://redmine.isdc.unige.ch/attachments/download/277/ElementsEnv-1.4-1.fc19.noarch.rpm\))
-are located in the [Files
-section](https://redmine.isdc.unige.ch/projects/ElementsEnv/files) of this
-project. A more up-to-date version of this list can also be accessed on
-the [genuine repository
-location](http://degauden.isdc.unige.ch/euclid/repo/fedora/19/x86_64/).
-
-These ElementsEnv RPM files can be downloaded installed in the usual way
-by using the `yum` command for example:
-
-    wget http://degauden.isdc.unige.ch/euclid/repo/fedora/19/x86_64/ElementsEnv-1.4-1.fc19.noarch.rpm
-    sudo yum localinstall ElementsEnv-1.4-1.fc19.noarch.rpm
-
-  
-This is an example for the Fedora 19 platform.
-
-A more convenient and *recommended* way is to install the Repo RPM that
-will configure the repository on the target machine:
-
-    wget http://degauden.isdc.unige.ch/euclid/repo/fedora/19/x86_64/EuclidRepo-0.1-1.noarch.rpm
-    sudo yum localinstall EuclidRepo-0.1-1.noarch.rpm
-    sudo yum install ElementsEnv
-
-  
-This will provide a more easy way to update the software:
-
-    sudo yum update ElementsEnv
-
-  
-or simply
-
-    sudo yum update
-
-  
-that will trigger the update of the whole system.
-
-Please note that the installation of these packages is not just the
-deployment of the files: some post-processing has to be done to fix the
-install location. The layout of the installed files is described
-\[\[UserManual\#For-Standard-System-Installation|here\]\].
-
 ### Local Custom Installation
 
 For more that one reason, the installation of the software by RPM
@@ -123,14 +79,13 @@ In this situation, the procedure looks like:
 3.  choose a target directory
 4.  run the install script
 
-and that can be translated into (if we use the `$HOME/Work/Euclid`
+and that can be translated into (if we use the `$HOME/Work/Projects`
 directory as prefix for the installation path):
 
-    wget http://degauden.isdc.unige.ch/euclid/repo/sources/ElementsEnv-1.4.tar.gz
     tar zxvf ElementsEnv-1.4.tar.gz
     cd ElementsEnv-1.4
-    mkdir -p $HOME/Work/Euclid
-    python setup.py install --prefix=$HOME/Work/Euclid
+    mkdir -p $HOME/Work/Projects
+    python setup.py install --prefix=$HOME/Work/Projects
 
 As for the RPM installation the last step running the `setup.py` script
 is necessary. It runs a post install script that sets the very install
@@ -144,14 +99,14 @@ RPM system installation is described in the following table:
 
 | File Type            | Standard Installation                     | Local Installation                                   |
 | -------------------- | ----------------------------------------- | ---------------------------------------------------- |
-| profile scripts      | `/etc/profile.d/euclid.{,c}sh`            | `<install_prefix>/etc/profile.d/euclid.{,c}sh`       |
-| config file          | `/etc/sysconfig/euclid`                   | `<install_prefix>/etc/sysconfig/euclid`              |
+| profile scripts      | `/etc/profile.d/elementsenv.{,c}sh`            | `<install_prefix>/etc/profile.d/elementsenv.{,c}sh`       |
+| config file          | `/etc/sysconfig/elementsenv`                   | `<install_prefix>/etc/sysconfig/elementsenv`              |
 | executable directory | `/usr/bin`                                | `<install_prefix>/bin`                               |
-| python modules       | `/usr/lib/python2.7/site-packages/Euclid` | `<install_prefix>lib/python2.7/site-packages/Euclid` |
+| python modules       | `/usr/lib/python2.7/site-packages/ElementsEnv` | `<install_prefix>lib/python2.7/site-packages/ElementsEnv` |
 | CMake library        | `/usr/share/ElementsEnv/cmake`              | `<install_prefix>/share/ElementsEnv/cmake`             |
 | LaTeX files          | `/usr/share/ElementsEnv/texmf`              | `<install_prefix>/share/ElementsEnv/texmf`             |
 
-From the previous example we have `<install_prefix>=$HOME/Work/Euclid`
+From the previous example we have `<install_prefix>=$HOME/Work/Projects`
 
 Remarks:
 
@@ -185,7 +140,7 @@ Remarks:
 
 ### Quick Setup
 
-The quick way to setup the base Euclid development environment is done
+The quick way to setup the base ElementsEnv development environment is done
 by sourcing the ELogin script for your shell type. For the csh-like
 shells, the command looks like:
 
@@ -201,12 +156,12 @@ installation\]\], the full path to the scripts
 (`<install_prefix>/bin/ELogin.{,c}sh`) has to be explicitly given. For
 the csh-like:
 
-    source $HOME/Work/Euclid/bin/ELogin.csh
+    source $HOME/Work/ElementsEnv/bin/ELogin.csh
 
   
 and for the sh-like:
 
-    source $HOME/Work/Euclid/binELogin.sh
+    source $HOME/Work/ElementsEnv/binELogin.sh
 
 It is worth noting that a new aliases is available after this sourcing.
 For csh-like shells:
@@ -252,14 +207,14 @@ first part from the `.bash_profile` file and the second one from the
 ### The Group Login and Group Setup Wrappers
 
 In order to simplify the usage of the `ELogin.sh` script in the 2
-different cases, 2 wrappers have been written : `Euclid_group_login.sh`
-and `Euclid_group_setup.sh`. They will provide respectively the “full
+different cases, 2 wrappers have been written : `ElementsEnv_group_login.sh`
+and `ElementsEnv_group_setup.sh`. They will provide respectively the “full
 login” and “shell setup only” feature that are mentioned above. ie :
 
 1.  The **login part** is called from the `.bash_profile` file like: 
-        source <install_prefix>/bin/Euclid_group_login.sh 
+        source <install_prefix>/bin/ElementsEnv_group_login.sh 
 2.  The **shell only part** is called from the `.bashrc` file like:
-        source <install_prefix>/bin/Euclid_group_setup.sh
+        source <install_prefix>/bin/ElementsEnv_group_setup.sh
 
 While wrapping up the direct call the the `ELogin.sh` script, these 2
 wrappers provide some extra features that are described below.
@@ -269,19 +224,19 @@ wrappers provide some extra features that are described below.
 The group login and group setup wrapper scripts are reading the base
 configuration file. It contains:
 
-    EUCLID_BASE=/opt/euclid
-    EUCLID_USE_BASE=no
+    ELEMENTSENV_BASE=/opt
+    ELEMENTSENV_USE_BASE=no
 
   
-The `EUCLID_BASE` environment variable points to the main installation
-location of the Euclid software projects (like Elements and Alexandria).
-Its default value is `/opt/euclid`. The `EUCLID_USE_BASE` is only used
+The `ELEMENTSENV_BASE` environment variable points to the main installation
+location of the ElementEnv software projects (like Elements and Alexandria).
+Its default value is `/opt`. The `ELEMENTSENV_USE_BASE` is only used
 internally.
 
 The location of the configuration file is shown in the table for the
 structure of the installation above : it is either
-`/etc/sysconfig/euclid` for the standard installation or
-`<install_prefix>/etc/sysconfig/euclid` for the local installation.
+`/etc/sysconfig/elementsenv` for the standard installation or
+`<install_prefix>/etc/sysconfig/elementsenv` for the local installation.
 
 ### The Profile Setup
 
@@ -292,13 +247,13 @@ mechanism.
 Each shell at startup reads some mandatory system config files that in
 turn read source the files of the `/etc/profile.d` directory. In that
 directory there are files for both `sh` and `csh` families of shells.
-And this is not different for the `/etc/profile.d/euclid.sh` and
-`/etc/profile.d/euclid.csh` files. They are read whenever a new shell is
+And this is not different for the `/etc/profile.d/elementsenv.sh` and
+`/etc/profile.d/elementsenv.csh` files. They are read whenever a new shell is
 created.
 
 And these latter files reads the correct file at the correct moment. For
-the login procedure they source the `Euclid_group_login.{,c}sh` files
-and for the subshell creation, the `Euclid_group_setup.{,c}sh` files
+the login procedure they source the `ElementsEnv_group_login.{,c}sh` files
+and for the subshell creation, the `ElementsEnv_group_setup.{,c}sh` files
 
 ### The Manual Setup
 
@@ -308,11 +263,11 @@ configuration file and one sourced from the shell configuration part.
 
 For tcsh, this is rather easy just put
 
-    source <install_prefix>/bin/Euclid_group_login.csh
+    source <install_prefix>/bin/ElementsEnv_group_login.csh
 
 in the `$HOME/.login` file and
 
-    source <install_prefix>/bin/Euclid_group_setup.csh
+    source <install_prefix>/bin/ElementsEnv_group_setup.csh
 
 in the `$HOME/.tcshrc` file and
 
@@ -332,7 +287,7 @@ skeleton has to look like:
     ...
     ...
     
-    source <install_prefix>/bin/Euclid_group_login.sh
+    source <install_prefix>/bin/ElementsEnv_group_login.sh
 
 and for the `$HOME/.bashrc`:
 
@@ -349,7 +304,7 @@ and for the `$HOME/.bashrc`:
     ...
     
     
-    source <install_prefix>/bin/Euclid_group_setup.sh
+    source <install_prefix>/bin/ElementsEnv_group_setup.sh
 
 ## Customisation
 
@@ -357,9 +312,9 @@ and for the `$HOME/.bashrc`:
 
 To prevent the automatic setup to be launched, one can create a single
 file that can prevent the wrapper scripts
-(`Euclid_group_{login,setup}.{,c}sh`) to do anything:
+(`ElementsEnv_group_{login,setup}.{,c}sh`) to do anything:
 
-    touch $HOME/.noEuclidLoginScript
+    touch $HOME/.noElementsEnvLoginScript
 
 This is really useful for debugging system installation of ElementsEnv
 with RPM for example.
@@ -372,20 +327,20 @@ this file.
 The script that searches for the global configuration of the ElementsEnv
 package looks for these files in the following order:
 
-1.  `$XDG_CONFIG_HOME/Euclid/default` (if `XDG_CONFIG_HOME` exists)
-2.  `$HOME/.config/Euclid/default`
-3.  for f in `$XDG_CONFIG_DIRS` : `$f/Euclid/default`
-4.  `/etc/default/Euclid`
-5.  `/etc/sysconfig/euclid`
-6.  `<prefix>/etc/sysconfig/euclid`
+1.  `$XDG_CONFIG_HOME/ElementsEnv/default` (if `XDG_CONFIG_HOME` exists)
+2.  `$HOME/.config/ElementsEnv/default`
+3.  for f in `$XDG_CONFIG_DIRS` : `$f/ElementsEnv/default`
+4.  `/etc/default/ElementsEnv`
+5.  `/etc/sysconfig/elementsenv`
+6.  `<prefix>/etc/sysconfig/elementsenv`
 
 The script uses the first file that exists. The search is also
-completely skipped if the `EUCLID_CONFIG_FILE` environment variable is
+completely skipped if the `ELEMENTSENV_CONFIG_FILE` environment variable is
 defined. It has to point to a valid configuration file.
 
 It is important to note that the search and reading of the global
-configuration file is only done in `/etc/profile.d/euclid.sh`,
-`Euclid_group_login.{,c}sh` and `Euclid_group_setup.{,c}sh`. It is not
+configuration file is only done in `/etc/profile.d/elementsenv.sh`,
+`ElementsEnv_group_login.{,c}sh` and `ElementsEnv_group_setup.{,c}sh`. It is not
 used when calling the shallow wrapper `ELogin.{,c}sh`. In the later
 case, the variables defined for the configuration have to be set
 beforehand.
@@ -393,17 +348,17 @@ beforehand.
 ### The Content of the Configuration File
 
 As described above one of the only meaningful variable that is defined
-in the configuration file is the `EUCLID_BASE` location. It has to point
+in the configuration file is the `ELEMENTSENV_BASE` location. It has to point
 to the top location containing the Elements-based projects. Namely the
 structure of the software tree must look like:
 
-    $EUCLID_BASE/Elements/1.3
-    $EUCLID_BASE/Elements/2.2
-    $EUCLID_BASE/Alexandria/2.0
+    $ELEMENTSENV_BASE/Elements/1.3
+    $ELEMENTSENV_BASE/Elements/2.2
+    $ELEMENTSENV_BASE/Alexandria/2.0
     ...
 
   
-Please note that the `EUCLID_BASE` location can be completely
+Please note that the `ELEMENTSENV_BASE` location can be completely
 independent from the `<install_prefix>` location.
 
 The other setting that the configuration file can contain is a locale
@@ -411,7 +366,7 @@ site tuning script.
 
 ### Local Site Tunning
 
-The configuration can also contain the variable `EUCLID_POST_SCRIPT`.
+The configuration can also contain the variable `ELEMENTSENV_POST_SCRIPT`.
 This variable has to point to the absolute location of a locate
 customization script. This script should contains some specific
 environment variable to be set for the site tailoring. Therefore it has
@@ -420,13 +375,13 @@ to be a script “to be sourced” with an “sh” or “csh” extension.
 Actually both `sh` and `csh` are needed and it should appear without
 extension in the configuration file:
 
-    EUCLID_BASE=/opt/euclid
-    EUCLID_USE_BASE=no
-    EUCLID_POST_SCRIPT=${EUCLID_BASE}/scripts/my_site
+    ELEMENTSENV_BASE=/opt
+    ELEMENTSENV_USE_BASE=no
+    ELEMENTSENV_POST_SCRIPT=${ELEMENTSENV_BASE}/scripts/my_site
 
   
-and the `/opt/euclid/scripts/my_site.sh` and
-`/opt/euclid/scripts/my_site.csh` should be written accordingly for the
+and the `/opt/scripts/my_site.sh` and
+`/opt/scripts/my_site.csh` should be written accordingly for the
 tuning.
 
 ## The Tools
@@ -454,13 +409,13 @@ already been done*. ie:
 
 -----
 
-  - —— Euclid Login —— \*
+  - —— ElementsEnv Login —— \*
   - Building with gcc48 on fc19 x86\_64 system (x86\_64-fc19-gcc48-o2g)
     \*  
     ****  
-    —- User\_area is set to /home/isdc/degauden/Work/Space/Euclid  
-    —- EUCLIDPROJECTPATH is set to:  
-    /opt/euclid  
+    —- User\_area is set to /home/isdc/degauden/Work/Space/Projects 
+    —- ELEMENTSENVPROJECTPATH is set to:  
+    /opt
     ————————————————————————————————————————  
     \[degauden@piecld00:\~\] which ELogin  
     ELogin=‘. \`/usr/bin/which ELogin.sh\`’  
