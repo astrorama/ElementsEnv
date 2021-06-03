@@ -54,7 +54,6 @@ rm -rf $$RPM_BUILD_ROOT
 %{_sysconfdir}/profile.d/elementsenv.sh
 %{_sysconfdir}/sysconfig/elementsenv
 %{_datadir}/%{name}/cmake/*
-%{_datadir}/%{name}/texmf/*
 %{_datadir}/%{name}/make/*
 
 %post

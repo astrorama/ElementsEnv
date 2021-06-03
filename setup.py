@@ -18,13 +18,16 @@ from distutils.command.bdist_rpm import bdist_rpm as _bdist_rpm
 from distutils.command.build import build as _build
 from distutils.command.build_scripts import build_scripts as _build_scripts
 from distutils.command.install_data import install_data as _install_data
+from distutils.command.install_scripts import install_scripts as _install_scripts
 from distutils.util import convert_path
+from distutils import log
 
 import os
 import sys
 import logging
 from subprocess import call, check_output
 from glob import glob
+from stat import ST_MODE, S_IEXEC
 
 logging.basicConfig(format='%(levelname)s\t: %(message)s', level=logging.INFO)
 
@@ -502,6 +505,28 @@ class MyInstallData(_install_data):
     pass
 
 
+class MyInstallScripts(_install_scripts):
+
+    def run(self):
+        if not self.skip_build:
+            self.run_command('build_scripts')
+        self.outfiles = self.copy_tree(self.build_dir, self.install_dir)
+        if os.name == 'posix':
+            # Set the executable bits (owner, group, and world) on
+            for file in self.get_outputs():
+                if  os.path.splitext(file)[1] in [".sh", ".csh"] or os.path.basename(file) == fixscript_name:
+                    mode = os.stat(file)[ST_MODE] & ~S_IEXEC
+                    log.info("changing mode of %s to %o", file, mode)
+                    os.chmod(file, mode)
+                else:
+                    if self.dry_run:
+                        log.info("changing mode of %s", file)
+                    else:
+                        mode = ((os.stat(file)[ST_MODE]) | 0o555) & 0o7777
+                        log.info("changing mode of %s to %o", file, mode)
+                        os.chmod(file, mode)
+
+
 class Purge(Command):
     user_options = []
 
@@ -579,5 +604,6 @@ setup(name=__project__,
                 "purge": Purge,
                 "uninstall": Uninstall,
                 "build_scripts": MyBuildScripts,
+                "install_scripts": MyInstallScripts,
                 },
       )
