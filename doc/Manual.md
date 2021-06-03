@@ -110,27 +110,29 @@ From the previous example we have `<install_prefix>=$HOME/Work/Projects`
 
 Remarks:
 
-  - Except for the profile scripts, all the other scripts are located in
-    the `bin` subdirectory.
-  - The scripts are sourced and that is the reason why they come in 2
-    flavors, `sh` and `csh` depending on the shell that you use. Many
-    examples in this manual are using the `sh` version only for
-    conciseness but the `csh` can be used as well.
-  - For the standard installation, the scripts are located by default in
-    the `PATH` environment variable at the `/usr/bin` location. They can
-    thus be easily located by the `which` command and thus, we can call
-    them with:
-        source `/usr/bin/which <script>.sh`
-    Please note that the `which` command is the one from the system, not
-    an alias of the shell.
-  - For the local installation, the scripts have to be addressed with
-    their full path:
-        source <install_prefix>/bin/<script>.sh
+- Except for the profile scripts, all the other scripts are located in
+  the `bin` subdirectory.
+- The scripts are sourced and that is the reason why they come in 2
+  flavors, `sh` and `csh` depending on the shell that you use. Many
+  examples in this manual are using the `sh` version only for
+  conciseness but the `csh` can be used as well.
+- For the standard installation, the scripts are located by default in
+  the `PATH` environment variable at the `/usr/bin` location. They can
+  thus be easily located by the `which` command and thus, we can call
+  them with:
+  ``source `/usr/bin/which <script>.sh``` 
+  Please note that the `which` command is the one from the system, not
+  an alias of the shell.
+- For the local installation, the scripts have to be addressed with
+  their full path: `source <install_prefix>/bin/<script>.sh`
+    
   - For the local installation, the initial setup done with the
     `ELogin.sh` script updates the environment part that was not needed
     for the standard installation
-        PATH=<install_prefix>/bin:$PATH
-        PYTHONPATH=<install_prefix>/lib/python2.7/site-packages:$PYTHONPATH
+    ```
+    PATH=<install_prefix>/bin:$PATH
+    PYTHONPATH=<install_prefix>/lib/python2.7/site-packages:$PYTHONPATH
+    ```
   - For both local and standard installation, the following environment
     variable are updated:
         TEXINPUTS=<install_prefix>/share/ElementsEnv/texmf:$TEXINPUTS                 # For local installation 
@@ -161,7 +163,7 @@ the csh-like:
   
 and for the sh-like:
 
-    source $HOME/Work/ElementsEnv/binELogin.sh
+    source $HOME/Work/ElementsEnv/bin/ELogin.sh
 
 It is worth noting that a new aliases is available after this sourcing.
 For csh-like shells:
