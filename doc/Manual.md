@@ -398,9 +398,3 @@ to enable the environment variables needed by the project instance.
 
 Both of these tools are equipped with a `--help` that will provide some
 rather compact info.
-
-### ELogin
-
-The ELogin command (the alias) is only available when a full login *has
-already been done*. ie:
-

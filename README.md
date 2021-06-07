@@ -1,16 +1,18 @@
 ElementsEnv is a python package that can be used as a companion software for the development of Elements-based software projects. It allows to builds and use several version of the same project in a consistent way. 
 
-For this purpose, ElementsEnv provides 2 executable:
+For this purpose, ElementsEnv provides 2 executables:
 * **ELogin** that sets up the build environment. It has to be called before anything else and it might be interesting to have called by the shell login script. Please have a look at the [user manual](doc/Manual.md) for more details.
 * **E-Run** (**ERun**) that enables to call the executable of any version of any reachable project
 
 ## Quick Install
 
-1. Once the source tarball has been downloaded and expanded, the user installation of the software can be done with the usual `setup.py` script.
-   ```
-   python setup.py install --user
-   ```
-   This will perform the installation in various sub-directories of the home directory of the user. This will install the `ELogin` and `E-Run` scripts.
+Once the source tarball has been downloaded and expanded, the user installation of the software can be done with the usual `setup.py` script.
+
+```
+python setup.py install --user
+```
+
+This will perform the installation in various sub-directories of the home directory of the user. This will install the `ELogin` and `E-Run` scripts. More installation options are described at [this section](doc/Manual.md#local-custom-installation) of the [user manual](doc/Manual.md).
 
 ## Setup
 
@@ -49,14 +51,16 @@ E-Run MyProject 1.2 MyExec arg1 arg2 ...
 ```
 
 The locations of the source trees of the various projects would look like, in general:
-  ```
-  ~/Work/Projects/MyProject/1.2
-  ~/Work/Projects/MyProject/1.3
-  /opt/MyProject/1.0
-  /opt/MyProject/1.2
-  /opt/MySecondProject/0.1
-  ...
-  ``` 
+
+```
+~/Work/Projects/MyProject/1.2
+~/Work/Projects/MyProject/1.3
+/opt/MyProject/1.0
+/opt/MyProject/1.2
+/opt/MySecondProject/0.1
+...
+
+```
 
 ### Remarks
 
