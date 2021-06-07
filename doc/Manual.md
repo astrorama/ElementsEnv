@@ -104,7 +104,6 @@ RPM system installation is described in the following table:
 | executable directory | `/usr/bin`                                | `<install_prefix>/bin`                               |
 | python modules       | `/usr/lib/python2.7/site-packages/ElementsEnv` | `<install_prefix>lib/python2.7/site-packages/ElementsEnv` |
 | CMake library        | `/usr/share/ElementsEnv/cmake`              | `<install_prefix>/share/ElementsEnv/cmake`             |
-| LaTeX files          | `/usr/share/ElementsEnv/texmf`              | `<install_prefix>/share/ElementsEnv/texmf`             |
 
 From the previous example we have `<install_prefix>=$HOME/Work/Projects`
 
@@ -135,8 +134,6 @@ Remarks:
     ```
   - For both local and standard installation, the following environment
     variable are updated:
-        TEXINPUTS=<install_prefix>/share/ElementsEnv/texmf:$TEXINPUTS                 # For local installation 
-        TEXINPUTS=/usr/share/ElementsEnv/texmf:$TEXINPUTS                             # For standard installation
         CMAKE_PREFIX_PATH=<install_prefix>/share/ElementsEnv/cmake:$CMAKE_PREFIX_PATH # For local installation
         CMAKE_PREFIX_PATH=/usr/share/ElementsEnv/cmake:$CMAKE_PREFIX_PATH             # For standard installation
 
@@ -406,20 +403,4 @@ rather compact info.
 
 The ELogin command (the alias) is only available when a full login *has
 already been done*. ie:
-
-<pre>
-
------
-
-  - —— ElementsEnv Login —— \*
-  - Building with gcc48 on fc19 x86\_64 system (x86\_64-fc19-gcc48-o2g)
-    \*  
-    ****  
-    —- User\_area is set to /home/isdc/degauden/Work/Space/Projects 
-    —- ELEMENTSENVPROJECTPATH is set to:  
-    /opt
-    ————————————————————————————————————————  
-    \[degauden@piecld00:\~\] which ELogin  
-    ELogin=‘. \`/usr/bin/which ELogin.sh\`’  
-    \[de
 
