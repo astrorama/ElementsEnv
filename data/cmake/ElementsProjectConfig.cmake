@@ -5,7 +5,7 @@
 #
 # Commit Id: $Format:%H$
 
-cmake_minimum_required(VERSION 2.8.5)
+cmake_minimum_required(VERSION 2.8.12)
 
 # FIXME: use of LOCATION property is deprecated and should be replaced with the
 #        generator expression $<TARGET_FILE>, but the way we use it requires
@@ -343,11 +343,6 @@ macro(elements_project project version)
     set(CppUnit_testmain_cmd ${PYTHON_EXECUTABLE} ${CppUnit_testmain_cmd})
   endif()
 
-  find_program(zippythondir_cmd ZipPythonDir.py HINTS ${binary_paths})
-  if(zippythondir_cmd)
-    set(zippythondir_cmd ${PYTHON_EXECUTABLE} ${zippythondir_cmd})
-  endif()
-
   find_program(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
   if(elementsrun_cmd)
     set(elementsrun_cmd ${PYTHON_EXECUTABLE} ${elementsrun_cmd})
@@ -382,8 +377,7 @@ macro(elements_project project version)
                    versmodule_cmd instmodule_cmd
                    thisheader_cmd thismodule_cmd
                    thismodheader_cmd
-                   Boost_testmain_cmd CppUnit_testmain_cmd
-                   zippythondir_cmd elementsrun_cmd
+                   Boost_testmain_cmd CppUnit_testmain_cmd elementsrun_cmd
                    pythonprogramscript_cmd ctest2junit_cmd ctestxml2html_cmd)
 
 
@@ -644,16 +638,6 @@ execute_process\(COMMAND ${instmodule_cmd} --quiet ${so_version_option} ${projec
   endforeach()
   file(APPEND ${CMAKE_BINARY_DIR}/subdirs_deps.dot "}\n")
 
-  # FIXME: it is not possible to produce the file python.zip at installation time
-  # because the install scripts of the subdirectories are executed after those
-  # of the parent project and we cannot have a post-install target because of
-  # http://public.kitware.com/Bug/view.php?id=8438
-  # install(CODE "execute_process(COMMAND  ${zippythondir_cmd} ${CMAKE_INSTALL_PREFIX}/python)")
-  if(zippythondir_cmd)
-    add_custom_target(python.zip
-                      COMMAND ${zippythondir_cmd} ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_SUFFIX}
-                      COMMENT "Zipping Python modules")
-  endif()
   #--- Prepare environment configuration
   message(STATUS "Preparing environment configuration:")
 
@@ -1017,9 +1001,9 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
   option(RPM_FORWARD_PREFIX_PATH "Forward the CMAKE_PREFIX_PATH when using 'make rpm'" ON)
 
   if(NOT SQUEEZED_INSTALL)
-    set(CPACK_CMAKE_PREFIX_PATH_LINE "export CMAKE_PREFIX_PATH=\$PWD/cmake:/usr/share/ElementsEnv/cmake")
+    set(CPACK_CMAKE_PREFIX_PATH_LINE "export CMAKE_PREFIX_PATH=\$PWD/cmake:/usr/share/ElementsEnv/cmake:/usr/share/EuclidEnv/cmake")
   else()
-    set(CPACK_CMAKE_PREFIX_PATH_LINE "#")  
+    set(CPACK_CMAKE_PREFIX_PATH_LINE "#")
   endif()
 
   if(USE_RPM_CMAKE_MACRO)
@@ -1052,6 +1036,10 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
           list(FIND CPACK_PREFIX_LIST "/usr/share/ElementsEnv/cmake" _index)
           if(${_index} EQUAL -1)
               list(APPEND CPACK_PREFIX_LIST "/usr/share/ElementsEnv/cmake")
+          endif()
+          list(FIND CPACK_PREFIX_LIST "/usr/share/EuclidEnv/cmake" _index)
+          if(${_index} EQUAL -1)
+              list(APPEND CPACK_PREFIX_LIST "/usr/share/EuclidEnv/cmake")
           endif()
       endif()
   
@@ -1337,7 +1325,7 @@ ${_do}")
         if(SQUEEZED_INSTALL)
           get_rpm_sys_dep_lines("python${PYTHON_EXPLICIT_VERSION}" "Requires" RPM_DEP_SYS_LINES)
         else()
-          get_rpm_sys_dep_lines("python${PYTHON_EXPLICIT_VERSION};ElementsEnv" "Requires" RPM_DEP_SYS_LINES)
+          get_rpm_sys_dep_lines("python${PYTHON_EXPLICIT_VERSION}" "Requires" RPM_DEP_SYS_LINES)
         endif()
         get_rpm_sys_dep_lines("cmake >= 2.8.5" "Requires" RPM_DEVEL_DEP_SYS_LINES)
       endif()
