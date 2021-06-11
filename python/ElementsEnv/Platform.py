@@ -10,6 +10,12 @@ from subprocess import Popen, PIPE
 
 from .Path import hasCommand
 
+# Compiler version position used
+# 2 means major and minor versions
+# 1 means only major
+
+COMPILER_VERSION_POSITION = 2
+
 # CMake Build Types
 
 DEFAULT_BUILD_TYPE = "RelWithDebInfo"
@@ -552,7 +558,7 @@ class NativeMachine:
                 ncv = None
         return ncv
 
-    def nativeCompilerVersion(self, position=None):
+    def nativeCompilerVersion(self, position=COMPILER_VERSION_POSITION):
         """
         return the native compiler version
         @param position: if not None returns up to the nth position. ie for gcc 3.4.5 with
@@ -581,7 +587,7 @@ class NativeMachine:
             root_name = self.nativeCompilerName()
             try:
                 cvers = [
-                    int(c) for c in self.nativeCompilerVersion(position=2).split(".")]
+                    int(c) for c in self.nativeCompilerVersion(position=COMPILER_VERSION_POSITION).split(".")]
                 self._compiler = "%s%d%d" % (root_name, cvers[0], cvers[1])
             except:
                 self._compiler = None
