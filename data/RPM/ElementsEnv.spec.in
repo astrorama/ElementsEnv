@@ -84,7 +84,7 @@ python_loc=$$(%{__python${python_explicit_version}} -c "from distutils.sysconfig
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/runpy
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/StripPath.csh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/StripPath.sh
-%{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath -n this_python_version "${python_implicit_version}" $$RPM_INSTALL_PREFIX0/bin/WhereAmI
+%{__chmod} +x $$RPM_INSTALL_PREFIX0/bin/*
 if [[ ! -f "$${python_loc}/ElementsEnv/__init__.py" ]]; then
 cat << EOF > $${python_loc}/ElementsEnv/__init__.py
 from pkgutil import extend_path

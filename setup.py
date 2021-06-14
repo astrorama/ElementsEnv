@@ -27,7 +27,7 @@ import sys
 import logging
 from subprocess import call, check_output
 from glob import glob
-from stat import ST_MODE, S_IEXEC
+from stat import ST_MODE, S_IEXEC, S_IXUSR, S_IXGRP, S_IXOTH
 
 logging.basicConfig(format='%(levelname)s\t: %(message)s', level=logging.INFO)
 
@@ -513,16 +513,18 @@ class MyInstallScripts(_install_scripts):
         self.outfiles = self.copy_tree(self.build_dir, self.install_dir)
         if os.name == 'posix':
             # Set the executable bits (owner, group, and world) on
+            # all the scripts we just installed.
             for file in self.get_outputs():
-                if  os.path.splitext(file)[1] in [".sh", ".csh"] or os.path.basename(file) == fixscript_name:
-                    mode = os.stat(file)[ST_MODE] & ~S_IEXEC
+                if self.dry_run:
+                    log.info("changing mode of %s", file)
+                else:
+                    mode = ((os.stat(file)[ST_MODE]) | 0o555) & 0o7777
                     log.info("changing mode of %s to %o", file, mode)
                     os.chmod(file, mode)
-                else:
-                    if self.dry_run:
-                        log.info("changing mode of %s", file)
-                    else:
-                        mode = ((os.stat(file)[ST_MODE]) | 0o555) & 0o7777
+            if skip_custom_postinstall:
+                for file in self.get_outputs():
+                    if  os.path.splitext(file)[1] in [".sh", ".csh"] or os.path.basename(file) == fixscript_name:
+                        mode = os.stat(file)[ST_MODE] & ~(S_IEXEC | S_IXUSR | S_IXGRP | S_IXOTH)
                         log.info("changing mode of %s to %o", file, mode)
                         os.chmod(file, mode)
 
