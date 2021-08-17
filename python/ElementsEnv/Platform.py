@@ -14,7 +14,7 @@ from .Path import hasCommand
 # 2 means major and minor versions
 # 1 means only major
 
-COMPILER_VERSION_POSITION = 2
+COMPILER_VERSION_POSITION = 1
 
 # CMake Build Types
 
@@ -588,7 +588,7 @@ class NativeMachine:
             try:
                 cvers = [
                     int(c) for c in self.nativeCompilerVersion(position=COMPILER_VERSION_POSITION).split(".")]
-                self._compiler = "%s%d%d" % (root_name, cvers[0], cvers[1])
+                self._compiler = root_name + "".join([str(i) for i in cvers])
             except:
                 self._compiler = None
 
