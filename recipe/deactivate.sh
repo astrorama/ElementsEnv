@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+
+
+unset EUCLID_POST_DONE
+unset ELOGIN_DONE
+unset EUCLID_CONFIG_SCRIPT
+unset EUCLID_POST_SCRIPT
+unset PYTHONPATH
+unset CMAKEFLAGS
+unset EUCLID_BASE
+   
