@@ -7,7 +7,7 @@ source:
 
 build: 
    noarch: python
-   string: eden3py39_b5
+   string: eden300_0
    
 requirements:
   build:
