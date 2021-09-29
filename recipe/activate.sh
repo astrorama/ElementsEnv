@@ -2,7 +2,7 @@
 
 export BINARY_TAG=x86_64-conda_cos6-gcc93-o2g
 
-export CMAKE_CONDA_PREFIX_PATH=${CONDA_PREFIX}:${CONDA_PREFIX}/share/EuclidEnv/cmake
+export CMAKE_CONDA_PREFIX_PATH=${CONDA_PREFIX}:${CONDA_PREFIX}/share/ElementsEnv/cmake
 export CMAKE_PROJECT_PATH=${HOME}/Work/Projects:${CONDA_PREFIX}/opt/euclid
 export ELEMENTS_NAMING_DB_URL=https://pieclddj00.isdc.unige.ch/elementsnaming
 
