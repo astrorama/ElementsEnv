@@ -7,11 +7,10 @@ source:
 
 build: 
    noarch: python
-   string: eden3py39_b3
+   string: eden3py39_b5
    
 requirements:
   build:
     - python
-    - gcc_linux-64
   host:
     - python
