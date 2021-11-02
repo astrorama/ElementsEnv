@@ -1,6 +1,10 @@
+""" Module to remove non-existing entries
+    in the path list
+"""
+
 
 from sys import stdout
-from os import pathsep, listdir, environ, fdopen
+from os import pathsep, listdir, environ, fdopen, linesep
 from os.path import exists, isdir, realpath
 from optparse import OptionParser, OptionValueError
 from tempfile import mkstemp
@@ -8,6 +12,9 @@ from zipfile import is_zipfile
 
 
 def stripPath(path):
+    """ Main function to remove non-existing entries
+    in the path list
+    """
     collected = []
     for p in path.split(pathsep):
         if p not in collected:
@@ -23,17 +30,19 @@ def stripPath(path):
 
 
 def cleanVariable(varname, shell, out):
+    """ Clean up the variable and write out the shell snipet"""
     if varname in environ:
         pth = stripPath(environ[varname])
         if shell == "csh" or shell.find("csh") != -1:
-            out.write("setenv %s %s\n" % (varname, pth))
+            out.write("setenv %s %s" % (varname, pth) + linesep)
         elif shell == "sh" or shell.find("sh") != -1:
-            out.write("export %s=%s\n" % (varname, pth))
+            out.write("export %s=%s" % (varname, pth) + linesep)
         elif shell == "bat":
-            out.write("set %s=%s\n" % (varname, pth))
+            out.write("set %s=%s" % (varname, pth) + linesep)
 
 
 def _check_output_options_cb(option, opt_str, value, parser):
+    """ Callback for the output options"""
     if opt_str == "--mktemp":
         if parser.values.output != stdout:
             raise OptionValueError(
@@ -53,27 +62,33 @@ def _check_output_options_cb(option, opt_str, value, parser):
 
 if __name__ == '__main__':
 
-    script_parser = OptionParser()
+    parser = OptionParser()
 
-    script_parser.add_option("-e", "--env",
-                             action="append",
-                             dest="envlist",
-                             metavar="PATHVAR",
-                             help="add environment variable to be processed")
-    script_parser.add_option("--shell", action="store", dest="shell", type="choice", metavar="SHELL",
-                             choices=['csh', 'sh', 'bat'],
-                             help="select the type of shell to use")
+    parser.add_option("-e", "--env",
+                      action="append",
+                      dest="envlist",
+                      metavar="PATHVAR",
+                      help="add environment variable to be processed")
+    parser.add_option("--shell", action="store", dest="shell", type="choice", metavar="SHELL",
+                      choices=['csh', 'sh', 'bat'],
+                      help="select the type of shell to use")
 
-    script_parser.set_defaults(output=stdout)
-    script_parser.add_option("-o", "--output", action="callback", metavar="FILE",
-                             type="string", callback=_check_output_options_cb,
-                             help="(internal) output the command to set up the environment ot the given file instead of stdout")
-    script_parser.add_option("--mktemp", action="callback",
-                             dest="mktemp",
-                             callback=_check_output_options_cb,
-                             help="(internal) send the output to a temporary file and print on stdout the file name (like mktemp)")
+    parser.set_defaults(output=stdout)
+    parser.add_option("-o",
+                      "--output",
+                      action="callback",
+                      metavar="FILE",
+                      type="string",
+                      callback=_check_output_options_cb,
+                      help="(internal) output the command to set up the environment"
+                            "of the given file instead of stdout")
+    parser.add_option("--mktemp", action="callback",
+                      dest="mktemp",
+                      callback=_check_output_options_cb,
+                      help="(internal) send the output to a temporary file and print"
+                           "on stdout the file name (like mktemp)")
 
-    options, args = script_parser.parse_args()
+    options, args = parser.parse_args()
 
     if not options.shell and "SHELL" in environ:
         options.shell = environ["SHELL"]
