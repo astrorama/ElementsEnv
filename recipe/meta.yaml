@@ -1,0 +1,16 @@
+package:
+  name: elementsenv
+  version: 3.18.0
+
+source:
+  path: ../
+
+build: 
+   noarch: python
+   string: eden300_0
+   
+requirements:
+  build:
+    - python
+  host:
+    - python
