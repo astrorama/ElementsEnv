@@ -5,16 +5,28 @@ stages:
 
 build:
   stage: build
+  tags:
+    - Fedora
+  before_script:
+    - dnf install -y python-unversioned-command
   script:
     - python setup.py build
   
 dist:
   stage: dist
+  tags:
+    - Fedora
+  before_script:
+    - dnf install -y python-unversioned-command
   script:
     - python setup.py sdist
 
 validate:
   stage: validate
+  tags:
+    - Fedora
+  before_script:
+    - dnf install -y python-unversioned-command
   script:
     - pip install pytest
     - pip install lxml
