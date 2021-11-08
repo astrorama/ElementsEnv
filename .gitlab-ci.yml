@@ -8,7 +8,7 @@ build:
   tags:
     - Fedora
   before_script:
-    - dnf install -y python-unversioned-command
+    - dnf install -y python-unversioned-command openssl
   script:
     - python setup.py build
   
@@ -17,7 +17,7 @@ dist:
   tags:
     - Fedora
   before_script:
-    - dnf install -y python-unversioned-command
+    - dnf install -y python-unversioned-command openssl
   script:
     - python setup.py sdist
 
@@ -26,7 +26,7 @@ validate:
   tags:
     - Fedora
   before_script:
-    - dnf install -y python-unversioned-command
+    - dnf install -y python-unversioned-command openssl
   script:
     - pip install pytest
     - pip install lxml
