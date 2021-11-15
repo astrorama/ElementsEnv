@@ -527,9 +527,9 @@ class NativeMachine:
         compiler_root = {"gcc": "g++", "clang": "clang++", "llvm": "clang++"}
 
         compiler_re = dict()
-        compiler_re["gcc"] = re.compile(b"\ +(\d+(?:\.\d+)*)")
-        compiler_re["clang"] = re.compile(b"\([^)]*LLVM *(\d+\.?\d*)")
-        compiler_re["llvm"] = re.compile(b"\ +(\d+(?:\.\d+)*)")
+        compiler_re["gcc"] = re.compile(r"\ +(\d+(?:\.\d+)*)")
+        compiler_re["clang"] = re.compile(r"\([^)]*LLVM *(\d+\.?\d*)")
+        compiler_re["llvm"] = re.compile(r"\ +(\d+(?:\.\d+)*)")
 
         if compiler_name == "vc":
             ncv = "9.0.0"
