@@ -41,12 +41,8 @@ validate2:
   tags:
     - Fedora
   before_script:
-    - rpm --import https://raw.githubusercontent.com/UnitedRPMs/unitedrpms/master/URPMS-GPG-PUBLICKEY-Fedora
-    - dnf install -y https://github.com/UnitedRPMs/unitedrpms/releases/download/19/unitedrpms-$(rpm -E %fedora)-19.fc$(rpm -E %fedora).noarch.rpm
-    - dnf install -y python2.7 openssl python2-pip
+    - dnf install -y python2.7 openssl
   script:
-    - pip2 install pytest
-    - pip2 install lxml
     - python2 setup.py build
     - python2 setup.py test
   needs: [build2]
