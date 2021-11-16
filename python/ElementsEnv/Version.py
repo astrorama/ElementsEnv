@@ -2,10 +2,11 @@
 # $Id$
 
 from fnmatch import fnmatch
-from past.builtins import cmp
 
 import re
 import os
+
+from ElementsEnv.Legacy import cmp
 
 # This is the version style used in the releases: vXrY[pZ]
 _txt_version_style = r'v([0-9]+)r([0-9]+)(?:p([0-9]+))?(?:g([0-9]+))?'
