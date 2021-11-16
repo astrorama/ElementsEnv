@@ -1,71 +1,39 @@
 stages:
-  - build
-  - validate
-  - dist
+   - build
+   - validate
+   - dist
+
+before_script:
+   - dnf install -y python-unversioned-command openssl python3-pip
 
 build:
-  stage: build
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python-unversioned-command openssl
-  script:
-    - python setup.py build
-
-build2:
-  stage: build
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python2.7 openssl
-  script:
-    - python2 setup.py build
+   stage: build
+   tags:
+      - Fedora
+   script:
+      - python setup.py build
 
 
 validate:
-  stage: validate
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python-unversioned-command openssl python3-pip
-  script:
-    - pip install -U pip
-    - pip install pytest
-    - pip install lxml
-    - python setup.py build
-    - python setup.py test
-  needs: [build]
+   stage: validate
+   tags:
+      - Fedora
+   script:
+      - pip install -U pip
+      - pip install pytest
+      - pip install lxml
+      - python setup.py build
+      - python setup.py test
+   needs: [build]
 
-validate2:
-  stage: validate
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python2.7 openssl
-  script:
-    - python2 setup.py build
-    - python2 setup.py test
-  needs: [build2]
-    
 
 dist:
-  stage: dist
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python-unversioned-command openssl
-  script:
-    - python setup.py sdist
-  needs: [validate]
+   stage: dist
+   tags:
+      - Fedora
+   script:
+      - python setup.py sdist
+   needs: [validate]
 
-dist2:
-  stage: dist
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python2.7 openssl
-  script:
-    - python2 setup.py sdist
-  needs: [validate2]
 
     
