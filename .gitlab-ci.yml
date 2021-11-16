@@ -21,25 +21,6 @@ build2:
   script:
     - python2 setup.py build
 
-  
-dist:
-  stage: dist
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python-unversioned-command openssl
-  script:
-    - python setup.py sdist
-
-dist:
-  stage: dist
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python2.7 openssl
-  script:
-    - python2 setup.py sdist
-
 
 validate:
   stage: validate
@@ -53,6 +34,7 @@ validate:
     - pip install lxml
     - python setup.py build
     - python setup.py test
+  needs: ["build"]
 
 validate2:
   stage: validate
@@ -67,4 +49,27 @@ validate2:
     - pip2 install lxml
     - python2 setup.py build
     - python2 setup.py test
+  needs: ["build2"]
+    
+
+dist:
+  stage: dist
+  tags:
+    - Fedora
+  before_script:
+    - dnf install -y python-unversioned-command openssl
+  script:
+    - python setup.py sdist
+  needs: ["validate"]
+
+dist2:
+  stage: dist
+  tags:
+    - Fedora
+  before_script:
+    - dnf install -y python2.7 openssl
+  script:
+    - python2 setup.py sdist
+  needs: ["validate2"]
+
     
