@@ -12,14 +12,14 @@ build:
   script:
     - python setup.py build
 
-build2:
-  stage: build
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python2.7 openssl
-  script:
-    - python2 setup.py build
+# build2:
+#   stage: build
+#   tags:
+#     - Fedora
+#   before_script:
+#     - dnf install -y python2.7 openssl
+#   script:
+#     - python2 setup.py build
 
 
 validate:
@@ -34,22 +34,22 @@ validate:
     - pip install lxml
     - python setup.py build
     - python setup.py test
-  needs: ["build"]
+  needs: [build]
 
-validate2:
-  stage: validate
-  tags:
-    - Fedora
-  before_script:
-    - rpm --import https://raw.githubusercontent.com/UnitedRPMs/unitedrpms/master/URPMS-GPG-PUBLICKEY-Fedora
-    - dnf install -y https://github.com/UnitedRPMs/unitedrpms/releases/download/19/unitedrpms-$(rpm -E %fedora)-19.fc$(rpm -E %fedora).noarch.rpm
-    - dnf install -y python2.7 openssl python2-pip
-  script:
-    - pip2 install pytest
-    - pip2 install lxml
-    - python2 setup.py build
-    - python2 setup.py test
-  needs: ["build2"]
+# validate2:
+#   stage: validate
+#   tags:
+#     - Fedora
+#   before_script:
+#     - rpm --import https://raw.githubusercontent.com/UnitedRPMs/unitedrpms/master/URPMS-GPG-PUBLICKEY-Fedora
+#     - dnf install -y https://github.com/UnitedRPMs/unitedrpms/releases/download/19/unitedrpms-$(rpm -E %fedora)-19.fc$(rpm -E %fedora).noarch.rpm
+#     - dnf install -y python2.7 openssl python2-pip
+#   script:
+#     - pip2 install pytest
+#     - pip2 install lxml
+#     - python2 setup.py build
+#     - python2 setup.py test
+#   needs: ["build2"]
     
 
 dist:
@@ -60,16 +60,16 @@ dist:
     - dnf install -y python-unversioned-command openssl
   script:
     - python setup.py sdist
-  needs: ["validate"]
+  needs: [validate]
 
-dist2:
-  stage: dist
-  tags:
-    - Fedora
-  before_script:
-    - dnf install -y python2.7 openssl
-  script:
-    - python2 setup.py sdist
-  needs: ["validate2"]
-
+# dist2:
+#   stage: dist
+#   tags:
+#     - Fedora
+#   before_script:
+#     - dnf install -y python2.7 openssl
+#   script:
+#     - python2 setup.py sdist
+#   needs: ["validate2"]
+# 
     
