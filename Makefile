@@ -16,6 +16,14 @@ include $(SGS_MAKEFILE)
 
 .PHONY: FORCE
 
+
+configure:
+	$(MAKE) -f $(SGS_MAKEFILE) configure
+	$(call setup_env)
+	$(MAKE) configure-conda
+
+
+
 package: FORCE
 	$(MAKE) conda-package
 
