@@ -33,3 +33,16 @@ validate:
     - pip install lxml
     - python setup.py build
     - python setup.py test
+
+validate2:
+  stage: validate
+  tags:
+    - Fedora
+  before_script:
+    - dnf install -y python2.7 openssl python2-pip
+  script:
+    - pip2 install pytest
+    - pip2 install lxml
+    - python2 setup.py build
+    - python2 setup.py test
+    
