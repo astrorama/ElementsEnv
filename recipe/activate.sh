@@ -20,7 +20,7 @@ fi
 
 . ${CONDA_PREFIX}/bin/ERun_autocompletion.sh
 
-export BINARY_TAG=x86_64-conda_cos6-gcc93-o2g
+export BINARY_TAG=x86_64-conda_cos6-gcc9-o2g
 
 export CMAKE_CONDA_PREFIX_PATH=${CONDA_PREFIX}:${CONDA_PREFIX}/share/ElementsEnv/cmake
 export CMAKE_PROJECT_PATH=${HOME}/Work/Projects:${CONDA_PREFIX}/opt/euclid

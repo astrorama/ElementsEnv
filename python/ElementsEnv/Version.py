@@ -2,10 +2,11 @@
 # $Id$
 
 from fnmatch import fnmatch
-from past.builtins import cmp
 
 import re
 import os
+
+from ElementsEnv.Legacy import cmp
 
 # This is the version style used in the releases: vXrY[pZ]
 _txt_version_style = r'v([0-9]+)r([0-9]+)(?:p([0-9]+))?(?:g([0-9]+))?'
@@ -181,17 +182,6 @@ def LHCb2CMT(project, version):
     return (cmtproj, cmtvers)
 
 
-def CMT2LHCb(project, version):
-    """ coonvert raw CMT project version to LHCb version:
-        DAVINCI, DAVINCI_v20r3 -> DaVinci, v20r3
-    """
-
-    lbproj = None
-    lbvers = None
-
-    return (lbproj, lbvers)
-
-
 def ParseSvnVersion(svn_id, url=""):
     """
     Translate the SVN url of the file to a version number, if possible;
@@ -211,15 +201,15 @@ def ParseSvnVersion(svn_id, url=""):
         return m.group(1)
 
 
-def stringVersion2Tuple(strver):
+def stringVersion2Tuple(strver, only_numbers=False):
     """ convert string into a tuple of number and strings """
-    sl = re.split("(\d+)", strver)
+    sl = re.split(r"(\d+)", strver)
     nsl = []
     for i in sl:
         if i:
-            if re.match("\d+", i):
+            if re.match(r"\d+", i):
                 nsl.append(int(i))
-            else:
+            elif not only_numbers:
                 nsl.append(i)
     return tuple(nsl)
 

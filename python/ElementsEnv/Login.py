@@ -147,15 +147,29 @@ The type is to be chosen among the following list:
                           dest="sharedarea",
                           help="set the shared area",
                           fallback_env="ELEMENTSENV_BASE")
+
         parser.set_defaults(strip_path=True)
         parser.add_option("--no-strip-path",
                           dest="strip_path",
                           action="store_false",
-                          help="prevent the cleanup of invalid entries in pathes")
+                          help="prevent the cleanup of invalid entries in paths")
         parser.add_option("--strip-path",
                           dest="strip_path",
                           action="store_true",
-                          help="activate the cleanup of invalid entries in pathes [default: %default]")
+                          help="activate the cleanup of invalid entries in paths [default: %default]")
+
+        parser.set_defaults(strip_non_exist_only=False)
+        parser.add_option("--strip-non-exist-only",
+                          dest="strip_non_exist_only",
+                          action="store_true",
+                          help="cleanup only the non-existent entries in paths")
+
+        parser.set_defaults(regular_strip=False)
+        parser.add_option("--regular-strip",
+                          dest="regular_strip",
+                          action="store_true",
+                          help="use the regular strip of the paths: empty and non-existent entries")
+
         parser.set_defaults(no_explicit_python_version=False)
         parser.add_option("--no-explicit-python-version",
                           dest="no_explicit_python_version",
@@ -269,6 +283,7 @@ The type is to be chosen among the following list:
         al = self.Aliases()
         opts = self.options
         log = logging.getLogger()
+
         if not opts.strip_path:
             log.debug("Disabling the path stripping")
             ev["E_NO_STRIP_PATH"] = "1"
@@ -276,6 +291,13 @@ The type is to be chosen among the following list:
             if "E_NO_STRIP_PATH" in ev:
                 log.debug("Reenabling the path stripping")
                 del ev["E_NO_STRIP_PATH"]
+
+        if opts.strip_non_exist_only:
+            log.debug("Stripping only non-existent path entries")
+            ev["E_STRIP_NON_EXIST_ONLY"] = "1"
+        elif opts.regular_strip and "E_STRIP_NON_EXIST_ONLY" in ev:
+            log.debug("Reenabling the standard path stripping")
+            del ev["E_STRIP_NON_EXIST_ONLY"]
 
         self.setOwnPath()
 

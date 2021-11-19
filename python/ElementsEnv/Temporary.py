@@ -3,25 +3,8 @@
 from shutil import rmtree
 
 import os
-import tempfile
-if not 'mkdtemp' in dir(tempfile):
-    # mkdtemp has been introduced in python 2.3, I simulate it
-    import warnings
-    warnings.filterwarnings(
-        action='ignore', message='.*tmpnam.*', category=RuntimeWarning)
 
-    def mkdtemp():
-        name = os.tmpnam()  # @UndefinedVariable
-        os.mkdir(name, 0o700)
-        return name
-
-    def mkstemp():
-        name = os.tmpnam()  # @UndefinedVariable
-        return (os.open(name, os.O_CREAT | os.O_RDWR | os.O_EXCL, 0o600),
-                name)
-else:
-    # use the real mkdtemp
-    from tempfile import mkdtemp, mkstemp
+from tempfile import mkdtemp, mkstemp
 
 
 class TempDir(object):
@@ -39,9 +22,15 @@ class TempDir(object):
         self._keep_var = keep_var
         self._name = mkdtemp(suffix, prefix, base_dir)
 
-    def getName(self):
+    def getName(self, stem=None):
         """Returns the name of the temporary directory"""
-        return self._name
+
+        name = self._name
+
+        if stem:
+            name = os.path.join(name, stem)
+
+        return name
 
     def __str__(self):
         """Convert to string."""
