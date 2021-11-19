@@ -1,16 +1,13 @@
+build:
+  noarch: python
+  string: '32'
 package:
   name: elementsenv
-  version: 3.18.0
-
-source:
-  path: ../
-
-build: 
-   noarch: python
-   string: eden300_0
-   
+  version: '0.0'
 requirements:
   build:
-    - python
+  - python
   host:
-    - python
+  - python
+source:
+  path: ../
