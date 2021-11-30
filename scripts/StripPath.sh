@@ -1,5 +1,5 @@
 StripPath_extra_args=""
-if [ -n "E_STRIP_NON_EXIST_ONLY" ]; then
+if [ -n "${E_STRIP_NON_EXIST_ONLY}" ]; then
   StripPath_extra_args="--strip-non-exist-only"
 fi
 StripPath_tmpfile=`python%(this_python_version)s -m ElementsEnv.PathStripper ${StripPath_extra_args} --shell=sh --mktemp -e PATH -e LD_LIBRARY_PATH -e PYTHONPATH -e HPATH `
