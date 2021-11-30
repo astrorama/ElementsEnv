@@ -534,21 +534,20 @@ class NativeMachine:
         if compiler_name == "vc":
             ncv = "9.0.0"
         else:
+            ncv = None
             try:
-                try:
-                    gpp = self._findCompiler(compiler_root[compiler_name])
-                except IndexError:
-                    log.error("Cannot find the %s executable" % compiler_root[compiler_name])
-                compstr = Popen(gpp + " --version", shell=True,
-                                stdin=PIPE, stdout=PIPE, stderr=PIPE,
-                                close_fds=True).communicate()[0]
-                m = compiler_re[compiler_name].search(compstr)
+                gpp = self._findCompiler(compiler_root[compiler_name])
+                log.debug("Found the compiler executable: %s", gpp)
+            except IndexError:
+                log.error("Cannot find the %s executable" % compiler_root[compiler_name])
+            compstr = Popen(gpp + " --version", shell=True,
+                            stdin=PIPE, stdout=PIPE, stderr=PIPE,
+                            close_fds=True).communicate()[0].decode("UTF-8")
+            m = compiler_re[compiler_name].search(compstr)
 
-                if m:
-                    ncv = m.group(1).decode()
-                else:
-                    ncv = None
-            except:
+            if m:
+                ncv = m.group(1)
+            else:
                 ncv = None
 
         if position:
@@ -564,6 +563,9 @@ class NativeMachine:
         @param position: if not None returns up to the nth position. ie for gcc 3.4.5 with
         position=2, it returns 3.4
         """
+
+        log = logging.getLogger()
+
         if not self._compversion:
 
             nc_name = self.nativeCompilerName()
@@ -573,24 +575,28 @@ class NativeMachine:
 
         ncv = self._compversion
 
+        if ncv:
+            log.debug("Found the compiler full version: %s", ncv)
+
+        rv = None
         if position:
-            try:
-                ncv = ".".join(self._compversion.split(".")[:position])
-            except AttributeError:
-                ncv = None
-        return ncv
+            rv = ".".join(self._compversion.split(".")[:position])
+
+        return rv
 
     def nativeCompiler(self):
 
         if not self._compiler:
 
-            root_name = self.nativeCompilerName()
-            try:
-                cvers = [
-                    int(c) for c in self.nativeCompilerVersion(position=COMPILER_VERSION_POSITION).split(".")]
-                self._compiler = root_name + "".join([str(i) for i in cvers])
-            except:
-                self._compiler = None
+            log = logging.getLogger()
+
+            compiler_name = self.nativeCompilerName()
+            if compiler_name:
+                log.debug("Found the compiler name: %s", compiler_name)
+
+            cvers = [
+                int(c) for c in self.nativeCompilerVersion(position=COMPILER_VERSION_POSITION).split(".")]
+            self._compiler = compiler_name + "".join([str(i) for i in cvers])
 
         return self._compiler
     # CMT derived informations
@@ -702,9 +708,20 @@ class NativeMachine:
         on linux platforms
         @param all_types: if True returns also the debug configs. Otherwise only the opt ones.
         """
+        log = logging.getLogger()
+
         comp = self.nativeCompiler()
+        if comp:
+            log.debug("Found the compiler: %s", comp)
+
         mach = self.machine()
+        if mach:
+            log.debug("Found the machine architecture: %s", mach)
+
         osflav = self.binaryOSFlavour()
+        if osflav:
+            log.debug("Found the OS flavour: %s", osflav)
+
         natconf = getBinaryTag(architecture=mach, platformtype=osflav,
                                compiler=comp, binary_type=binary_type)
         return natconf
@@ -768,7 +785,7 @@ class NativeMachine:
         try:
             sysctl = Popen(
                 ['sysctl', '-n', 'hw.ncpu'], stdout=PIPE)
-            scStdout = sysctl.communicate()[0]
+            scStdout = sysctl.communicate()[0].decode("UTF-8")
             res = int(scStdout)
 
             if res > 0:
@@ -806,7 +823,7 @@ class NativeMachine:
                 dmesg = open('/var/run/dmesg.boot').read()
             except IOError:
                 dmesg_process = Popen(
-                    ['dmesg'], stdout=PIPE)
+                    ['dmesg'], stdout=PIPE).decode("UTF-8")
                 dmesg = dmesg_process.communicate()[0]
 
             res = 0
