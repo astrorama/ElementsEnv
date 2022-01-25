@@ -16,6 +16,9 @@ $PYTHON $PREFIX/bin/FixInstallPath -n this_install_version "" $python_loc/Elemen
 $PYTHON $PREFIX/bin/FixInstallPath -n this_euclid_base \$CONDA_PREFIX/opt/euclid $python_loc/ElementsEnv/Login.py
 $PYTHON $PREFIX/bin/FixInstallPath -n this_euclid_base \$CONDA_PREFIX/opt/euclid $PREFIX/bin/ElementsEnv_config.{,c}sh
 $PYTHON $PREFIX/bin/FixInstallPath -n this_etc_install_prefix \$CONDA_PREFIX/etc $PREFIX/bin/ElementsEnv_config.{,c}sh
+$PYTHON $PREFIX/bin/FixInstallPath -n  this_install_prefix \$CONDA_PREFIX $PREFIX/bin/ElementsEnv_group_setup.{,c}sh
+$PYTHON $PREFIX/bin/FixInstallPath -n  this_install_prefix \$CONDA_PREFIX $PREFIX/bin/ElementsEnv_group_login.{,c}sh
+$PYTHON $PREFIX/bin/FixInstallPath -n  this_install_prefix \$CONDA_PREFIX $PREFIX/bin/ElementsEnv_config.{,c}sh
 
 $PYTHON $PREFIX/bin/FixInstallPath -n this_python_version "" $PREFIX/bin/eclipse_pythonpath_fix
 $PYTHON $PREFIX/bin/FixInstallPath -n this_python_version "" $PREFIX/bin/ELogin.csh
