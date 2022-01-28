@@ -13,9 +13,12 @@ $PYTHON $PREFIX/bin/FixInstallPath \$CONDA_PREFIX $PREFIX/etc/profile.d/elements
 
 $PYTHON $PREFIX/bin/FixInstallPath -n this_install_version "" $python_loc/ElementsEnv/Login.py
 
-$PYTHON $PREFIX/bin/FixInstallPath -n this_euclid_base \$CONDA_PREFIX/opt/euclid $python_loc/ElementsEnv/Login.py
-$PYTHON $PREFIX/bin/FixInstallPath -n this_euclid_base \$CONDA_PREFIX/opt/euclid $PREFIX/bin/ElementsEnv_config.{,c}sh
+$PYTHON $PREFIX/bin/FixInstallPath -n this_elementsenv_base \$CONDA_PREFIX/opt/euclid $python_loc/ElementsEnv/Login.py
+$PYTHON $PREFIX/bin/FixInstallPath -n this_elementsenv_base \$CONDA_PREFIX/opt/euclid $PREFIX/bin/ElementsEnv_config.{,c}sh
+
 $PYTHON $PREFIX/bin/FixInstallPath -n this_etc_install_prefix \$CONDA_PREFIX/etc $PREFIX/bin/ElementsEnv_config.{,c}sh
+$PYTHON $PREFIX/bin/FixInstallPath -n this_custom_prefix '""' $PREFIX/bin/ElementsEnv_config.{,c}sh
+									  
 $PYTHON $PREFIX/bin/FixInstallPath -n  this_install_prefix \$CONDA_PREFIX $PREFIX/bin/ElementsEnv_group_setup.{,c}sh
 $PYTHON $PREFIX/bin/FixInstallPath -n  this_install_prefix \$CONDA_PREFIX $PREFIX/bin/ElementsEnv_group_login.{,c}sh
 $PYTHON $PREFIX/bin/FixInstallPath -n  this_install_prefix \$CONDA_PREFIX $PREFIX/bin/ElementsEnv_config.{,c}sh

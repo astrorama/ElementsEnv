@@ -1,9 +1,9 @@
 build:
   noarch: python
-  string: '32'
+  string: '0.0'
 package:
   name: elementsenv
-  version: '0.0'
+  version: 3.18.1
 requirements:
   build:
   - python
