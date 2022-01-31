@@ -1,6 +1,7 @@
 """ Main script to setup the basic ElementsEnv environment """
 
 import sys
+import sysconfig
 import os
 import logging
 import shutil
@@ -25,10 +26,9 @@ if not MY_OWN_VERSION.startswith("%"):
     HAS_VERSION = True
 
 if HAS_PREFIX:
-    from distutils.sysconfig import get_python_lib
-    if MY_OWN_PREFIX != "/usr":
+    if MY_OWN_PREFIX != sys.prefix:
         # funky location yeah
-        PYTHON_LOC = get_python_lib(prefix=MY_OWN_PREFIX)
+        PYTHON_LOC = sysconfig.get_path('purelib').replace(sys.prefix, MY_OWN_PREFIX)
     else:
         # if the location is standard, don't try to be funny
         PYTHON_LOC = None

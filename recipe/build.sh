@@ -2,7 +2,7 @@
 
 $PYTHON -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv --global-option="--skip-install-fix" --install-option="--etc-root=$PREFIX"
 
-python_loc=$($PYTHON -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+python_loc=$($PYTHON -c "from sysconfig import get_path; print(get_path('purelib'))")
 
 $PYTHON $PREFIX/bin/FixInstallPath \$CONDA_PREFIX $PREFIX/bin/ELogin.{,c}sh
 $PYTHON $PREFIX/bin/FixInstallPath \$CONDA_PREFIX $PREFIX/bin/ElementsEnv_group_{login,setup}.{,c}sh

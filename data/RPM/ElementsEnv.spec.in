@@ -1,6 +1,6 @@
 # sitelib for noarch packages, sitearch for others (remove the unneeded one)
 %global __python${python_explicit_version} ${full_exec_python}
-%global python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='${usr_prefix}'))")
+%global python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${usr_prefix}'))")
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           ${project}
@@ -22,7 +22,7 @@ AutoReq: no
 Requires: python${python_explicit_version}, cmake
 
 %define __python${python_explicit_version} ${full_exec_python}
-%define python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='${usr_prefix}'))")
+%define python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${usr_prefix}'))")
 %define _bindir ${usr_prefix}/bin
 %define _datadir ${usr_prefix}/share
 %define _sysconfdir ${etc_prefix}
@@ -57,7 +57,7 @@ rm -rf $$RPM_BUILD_ROOT
 %{_datadir}/%{name}/make/*
 
 %post
-python_loc=$$(%{__python${python_explicit_version}} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='$$RPM_INSTALL_PREFIX0'))")
+python_loc=$$(%{__python${python_explicit_version}} -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '$$RPM_INSTALL_PREFIX0'))")
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/ELogin.{,c}sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_group_{login,setup}.{,c}sh
 %{__python${python_explicit_version}} $${RPM_INSTALL_PREFIX0}/bin/FixInstallPath $$RPM_INSTALL_PREFIX0 $$RPM_INSTALL_PREFIX0/bin/ElementsEnv_config.{,c}sh
