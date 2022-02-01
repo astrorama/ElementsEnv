@@ -33,7 +33,7 @@ logging.basicConfig(format='%(levelname)s\t: %(message)s', level=logging.INFO)
 
 from string import Template
 
-__version__ = "3.18.0"
+__version__ = "3.18.1"
 __project__ = "ElementsEnv"
 __full_exec__ = sys.executable
 __usr_loc__ = os.path.dirname(os.path.dirname(__full_exec__))
@@ -56,12 +56,15 @@ dist_full_exec_python = __full_exec__
 
 this_use_custom_prefix = "no"
 
-# Fix the dist locations if the python executable is not in the default location
+# Fix the dist locations if the python executable is not in the default
+# location
 if __usr_loc__ != "/usr":
-    dist_elementsenv_base = os.path.join(__root_loc__, dist_elementsenv_base.lstrip("/"))
+    dist_elementsenv_base = os.path.join(
+        __root_loc__, dist_elementsenv_base.lstrip("/"))
     dist_etc_prefix = os.path.join(__root_loc__, dist_etc_prefix.lstrip("/"))
     dist_usr_prefix = os.path.join(__root_loc__, dist_usr_prefix.lstrip("/"))
-    dist_custom_prefix = os.path.join(__root_loc__, dist_custom_prefix.lstrip("/"))
+    dist_custom_prefix = os.path.join(
+        __root_loc__, dist_custom_prefix.lstrip("/"))
     this_use_custom_prefix = "yes"
 
 # variable interpolated at install time
@@ -138,10 +141,10 @@ else:
     etc_install_prefix = os.path.join(etc_install_root, "etc")
 
 etc_files = [(os.path.join(etc_install_prefix, "profile.d"), [os.path.join("data", "profile", "elementsenv.sh"),
-                                       os.path.join("data", "profile", "elementsenv.csh")]),
+                                                              os.path.join("data", "profile", "elementsenv.csh")]),
              (os.path.join(etc_install_prefix, "sysconfig"),
-                  [os.path.join("data", "sys", "config", "elementsenv")])
-            ]
+              [os.path.join("data", "sys", "config", "elementsenv")])
+             ]
 
 use_custom_install_root = False
 for a in sys.argv:
@@ -173,7 +176,8 @@ for a in sys.argv:
         e_base = a.split("=")[1:]
         if len(e_base) == 1:
             this_elementsenv_base = e_base[0]
-            this_custom_prefix = os.path.normpath(os.path.join(this_elementsenv_base, "..", "..", "usr"))
+            this_custom_prefix = os.path.normpath(
+                os.path.join(this_elementsenv_base, "..", "..", "usr"))
         sys.argv.remove(a)
 
 for a in sys.argv:
@@ -212,7 +216,8 @@ class MyBuildScripts(_build_scripts):
         for script in self.scripts:
             script = convert_path(script)
             outfile = os.path.join(self.build_dir, os.path.basename(script))
-            call([__exec__, fixscript, "-n", "this_python_version", dist_impl_major_version, outfile])
+            call([__exec__, fixscript, "-n", "this_python_version",
+                  dist_impl_major_version, outfile])
 
 
 class MySdist(_sdist):
@@ -223,7 +228,8 @@ class MySdist(_sdist):
         if fext == ".in":
             return os.path.join("dist", fname)
         else:
-            logging.error("Error: the %s file has not the '.in' extension" % filename)
+            logging.error(
+                "Error: the %s file has not the '.in' extension" % filename)
             sys.exit(1)
 
     @staticmethod
@@ -236,7 +242,8 @@ class MySdist(_sdist):
 
     def expand_template_file(self, filename):
         out_fname = self._get_template_target(filename)
-        logging.info("Generating %s from the %s template" % (out_fname, filename))
+        logging.info("Generating %s from the %s template" %
+                     (out_fname, filename))
         rmd160_digest = getRMD160Digest(self._get_sdist_filepath())
         sha256_digest = getSHA256Digest(self._get_sdist_filepath())
         changelog_content = open(self._get_changelog_filepath()).read()
@@ -254,7 +261,7 @@ class MySdist(_sdist):
                 python_explicit_version=dist_exp_version,
                 python_implicit_version=dist_impl_major_version,
                 full_exec_python=dist_full_exec_python
-                )
+            )
         with open(out_fname, "w") as out_f:
             out_f.write(src)
 
@@ -275,8 +282,8 @@ class MyBdistRpm(_bdist_rpm):
 
     @staticmethod
     def run():
-        logging.error("Cannot run directly the bdist_rpm target. Please rather use the generated " \
-               "spec file (together with the sdist target) in the dist sub-directory")
+        logging.error("Cannot run directly the bdist_rpm target. Please rather use the generated "
+                      "spec file (together with the sdist target) in the dist sub-directory")
         sys.exit(1)
 
 
@@ -321,7 +328,8 @@ class MyInstall(_install):
             if use_local_install:
                 this_install = os.path.dirname(self.install_scripts)
             else:
-                this_install = os.path.dirname(os.path.dirname(self.install_scripts))
+                this_install = os.path.dirname(
+                    os.path.dirname(self.install_scripts))
 
         return this_install
 
@@ -330,7 +338,8 @@ class MyInstall(_install):
         proc_list = self.get_config_scripts()
         this_install = os.path.join(self.get_etc_install_root(), "etc")
         for p in proc_list:
-            call([__exec__, fixscript, "-n", "this_etc_install_prefix", this_install, p])
+            call([__exec__, fixscript, "-n",
+                  "this_etc_install_prefix", this_install, p])
 
     def fix_install_path(self):
         fixscript = os.path.join(self.install_scripts, fixscript_name)
@@ -355,7 +364,8 @@ class MyInstall(_install):
 
         this_install = self.get_etc_install_root()
 
-        file2fix = os.path.join(this_install, "etc", "sysconfig", "elementsenv")
+        file2fix = os.path.join(this_install, "etc",
+                                "sysconfig", "elementsenv")
         if os.path.exists(file2fix):
             p_list.append(file2fix)
         return p_list
@@ -403,10 +413,12 @@ class MyInstall(_install):
                 logging.debug("Calling: ", " ".join([__exec__, fixscript,
                                                      "-n", "this_python_version",
                                                      dist_impl_major_version, full_s]))
-                call([__exec__, fixscript, "-n", "this_python_version", dist_impl_major_version, full_s])
+                call([__exec__, fixscript, "-n", "this_python_version",
+                      dist_impl_major_version, full_s])
 
     def create_extended_init(self):
-        init_file = os.path.join(self.install_lib, "ElementsEnv", "__init__.py")
+        init_file = os.path.join(
+            self.install_lib, "ElementsEnv", "__init__.py")
 
         if not os.path.exists(init_file):
             logging.info("Creating the %s file" % init_file)
@@ -442,7 +454,7 @@ __path__ = extend_path(__path__, __name__)  # @ReservedAssignment
         _install.run(self)
         # postinstall
         if not skip_custom_postinstall:
-#            self.print_install_locations()
+            #            self.print_install_locations()
             self.custom_post_install()
 
 
@@ -484,8 +496,10 @@ class PyTest(Command):
 
     def _generate_runtests_file(self):
         import subprocess
-        errno = subprocess.call([pytest_cmd, "--genscript=%s" % self.runtests_filename])
-        logging.warning("%s generated. Please consider to add it to your sources" % self.runtests_filename)
+        errno = subprocess.call(
+            [pytest_cmd, "--genscript=%s" % self.runtests_filename])
+        logging.warning(
+            "%s generated. Please consider to add it to your sources" % self.runtests_filename)
         if errno != 0:
             raise SystemExit(errno)
 
@@ -523,8 +537,9 @@ class MyInstallScripts(_install_scripts):
                     os.chmod(file, mode)
             if skip_custom_postinstall:
                 for file in self.get_outputs():
-                    if  os.path.splitext(file)[1] in [".sh", ".csh"] or os.path.basename(file) == fixscript_name:
-                        mode = os.stat(file)[ST_MODE] & ~(S_IEXEC | S_IXUSR | S_IXGRP | S_IXOTH)
+                    if os.path.splitext(file)[1] in [".sh", ".csh"] or os.path.basename(file) == fixscript_name:
+                        mode = os.stat(file)[ST_MODE] & ~(
+                            S_IEXEC | S_IXUSR | S_IXGRP | S_IXOTH)
                         log.info("changing mode of %s to %o", file, mode)
                         os.chmod(file, mode)
 
@@ -556,15 +571,16 @@ class Uninstall(Command):
 
     description = 'Uninstallation of recorded files'
     user_options = [
-            ('root=', None, 'path to the root install location'),
-        ]
+        ('root=', None, 'path to the root install location'),
+    ]
 
     def initialize_options(self):
         self.root = None
 
     def finalize_options(self):
         if self.root:
-            assert os.path.exists(self.root), "The %s root installation directory doesn't exist" % self.root
+            assert os.path.exists(
+                self.root), "The %s root installation directory doesn't exist" % self.root
 
     def run(self):
 
