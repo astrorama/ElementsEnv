@@ -48,3 +48,4 @@ do
     cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/zzz-elementsenv_${CHANGE}.sh"
 done
 
+cp "${RECIPE_DIR}/pre_activate.sh" "${PREFIX}/etc/conda/activate.d/aaa-elementsenv_activate.sh"
