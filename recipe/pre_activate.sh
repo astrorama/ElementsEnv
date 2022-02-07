@@ -1,3 +1,4 @@
 #!/bin/bash
 
 export _EDEN_OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
