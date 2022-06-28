@@ -100,7 +100,7 @@ if [[ "${ELEMENTSENV_USE_BASE}" == "yes" ]]; then
       fi
     fi
 
-    my_python_base=$(python%(this_python_version)s -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='${ELEMENTSENV_BASE}'))")
+    my_python_base=$(python%(this_python_version)s -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${ELEMENTSENV_BASE}'))")
     if [[ -d ${my_python_base} ]]; then
       if [[ -n "$PYTHONPATH" ]]; then
         export PYTHONPATH=${my_python_base}:${PYTHONPATH}
@@ -167,7 +167,7 @@ if [[ "${ELEMENTSENV_USE_PREFIX}" == "yes" ]]; then
       fi
     fi
     
-    my_python_base=$(python%(this_python_version)s -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='${my_own_exe_prefix0}'))")
+    my_python_base=$(python%(this_python_version)s -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${my_own_exe_prefix0}'))")
     if [[ -d ${my_python_base} ]]; then
       if [[ -n "$PYTHONPATH" ]]; then
         export PYTHONPATH=${my_python_base}:${PYTHONPATH}
@@ -235,7 +235,7 @@ if [[ "${ELEMENTSENV_USE_CUSTOM_PREFIX}" == "yes" ]]; then
       fi
     fi
 
-    my_python_base=$(python%(this_python_version)s -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix='${ELEMENTSENV_CUSTOM_PREFIX}'))")
+    my_python_base=$(python%(this_python_version)s -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${ELEMENTSENV_CUSTOM_PREFIX}'))")
     if [[ -d ${my_python_base} ]]; then
       if [[ -n "$PYTHONPATH" ]]; then
         export PYTHONPATH=${my_python_base}:${PYTHONPATH}
