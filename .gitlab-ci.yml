@@ -3,8 +3,8 @@ stages:
    - validate
    - dist
 
-# before_script:
-#    - dnf install -y python-unversioned-command openssl python3-pip
+before_script:
+   - dnf install -y python-unversioned-command openssl python3-pip
 
 build:
    stage: build
