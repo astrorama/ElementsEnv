@@ -4,7 +4,7 @@ stages:
    - dist
 
 before_script:
-   - dnf install -y python-unversioned-command openssl python3-pip
+   - dnf install -y python-unversioned-command openssl python3-pip gcc-c++
 
 build:
    stage: build
