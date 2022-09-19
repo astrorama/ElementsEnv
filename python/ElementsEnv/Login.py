@@ -491,7 +491,7 @@ The type is to be chosen among the following list:
         supported_binarytags = self._nativemachine.supportedBinaryTag(
             all_types=True)
         if opts.binary_tag not in supported_binarytags:
-            log.warning("%s is not in the list of distributed configurations" % opts.binary_tag)
+            log.debug("%s is not in the list of distributed configurations" % opts.binary_tag)
             if supported_binarytags:
                 log.warning(
                     "Please switch to a supported one with 'ELogin -b <binary_tag>' before building")
