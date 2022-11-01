@@ -319,7 +319,7 @@ option(SQUEEZED_INSTALL
 option(SANITIZE_OPTIONS
        "Activate the Sanitizing options"
        OFF)
-       
+
 if(NOT SANITIZE_STYLE)
   set(SANITIZE_STYLE "undefined" CACHE STRING "Style used for the -fsanitize= option" FORCE)
 endif()
@@ -493,7 +493,7 @@ if(NOT ELEMENTS_FLAGS_SET)
     check_and_use_cxx_option(-Wfloat-equal CXX_HAS_FLOAT_EQUAL)
     check_and_use_c_option(-Wfloat-equal C_HAS_FLOAT_EQUAL)
   endif()
-  
+
   if(CONVERSION_WARNING)
     check_and_use_cxx_option(-Wconversion CXX_HAS_CONVERSION)
     check_and_use_c_option(-Wconversion C_HAS_CONVERSION)
@@ -547,7 +547,7 @@ if(NOT ELEMENTS_FLAGS_SET)
   if (ELEMENTS_LINKOPT)
     check_cxx_compiler_flag(-flto CXX_HAS_LTO)
   endif()
-  
+
   if(CXX_HAS_LTO)
     set(CMAKE_CXX_FLAGS_RELEASE "-flto ${CMAKE_CXX_FLAGS_RELEASE}"
         CACHE STRING "Flags used by the compiler during release builds."
@@ -725,14 +725,14 @@ if ( ELEMENTS_CPP11 )
       set(ODB_CXX_EXTRA_FLAGS --std c++11)
     endif()
   else()
-    message(WARNING "The -std=c++11 option is not available")  
+    message(WARNING "The -std=c++11 option is not available")
   endif()
 
   check_c_compiler_flag("-std=c11" HAS_C11_FLAG)
   if(HAS_C11_FLAG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
   else()
-    message(WARNING "The -std=c11 option is not available")  
+    message(WARNING "The -std=c11 option is not available")
   endif()
 
 endif()
@@ -746,7 +746,7 @@ if ( ELEMENTS_CPP14 )
       check_and_use_cxx_option(-stdlib=libc++ CXX_HAS_MINUS_STDLIB)
     endif()
   else()
-    message(WARNING "The -std=c++14 option is not available")  
+    message(WARNING "The -std=c++14 option is not available")
   endif()
 
   check_c_compiler_flag("-std=c11" HAS_C11_FLAG)
@@ -768,7 +768,7 @@ if ( ELEMENTS_CPP17 )
       check_and_use_cxx_option(-stdlib=libc++ CXX_HAS_MINUS_STDLIB)
     endif()
   else()
-    message(WARNING "The -std=c++17 option is not available")  
+    message(WARNING "The -std=c++17 option is not available")
   endif()
 
   check_c_compiler_flag("-std=c17" HAS_C17_FLAG)
@@ -789,7 +789,7 @@ if ( ELEMENTS_CPP20 )
       check_and_use_cxx_option(-stdlib=libc++ CXX_HAS_MINUS_STDLIB)
     endif()
   else()
-    message(WARNING "The -std=c++20 option is not available")  
+    message(WARNING "The -std=c++20 option is not available")
   endif()
 
   check_c_compiler_flag("-std=c2x" HAS_C2X_FLAG)

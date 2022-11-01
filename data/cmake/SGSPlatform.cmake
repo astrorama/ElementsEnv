@@ -27,7 +27,7 @@ function(getShortBuildType short_type long_type)
   # Convert CMAKE_BUILD_TYPE to SGS_BUILD_TYPE
 
   string(TOLOWER "${long_type}" lower_long_type)
-  
+
   if("${lower_long_type}" STREQUAL "release")
     set(${short_type} opt PARENT_SCOPE)
   elseif("${lower_long_type}" STREQUAL "debug")
@@ -44,7 +44,7 @@ function(getShortBuildType short_type long_type)
     message(FATAL_ERROR "Build type ${lower_long_type} not supported.")
   endif()
 
-  
+
 endfunction()
 
 ################################################################################
@@ -59,21 +59,21 @@ function(getCompVersionNumbers compiler_name comp_major_var comp_minor_var)
     find_program(compiler_exe NAMES ${compiler_name}
                DOC "Host C compiler")
   endif()
-               
+
   if("${compiler_name}" STREQUAL "gcc")
-    
+
     execute_process(COMMAND ${compiler_exe} -dumpversion OUTPUT_VARIABLE compiler_version)
     string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})
     list(LENGTH compiler_version_components compiler_version_components_nb)
     if(compiler_version_components_nb LESS "2")
       execute_process(COMMAND ${compiler_exe} --version OUTPUT_VARIABLE compiler_version)
-      string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})  
+      string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})
     endif()
     list(GET compiler_version_components 0 compiler_major)
     list(GET compiler_version_components 1 compiler_minor)
-    
+
   elseif("${compiler_name}" STREQUAL "icc")
-    
+
     execute_process(COMMAND ${compiler_exe} -dumpversion OUTPUT_VARIABLE compiler_version)
     string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})
     list(GET compiler_version_components 0 compiler_major)
@@ -97,24 +97,24 @@ function(getCompVersionNumbers compiler_name comp_major_var comp_minor_var)
       list(GET compiler_version_components 0 compiler_major)
       list(GET compiler_version_components 1 compiler_minor)
     endif()
-    
+
   else()
-  
+
     message(WARNING "Unknown host C compiler ${compiler_name}")
     set(compiler_major)
     set(compiler_minor)
-  
+
   endif()
 
   set(${comp_major_var} ${compiler_major} PARENT_SCOPE)
   set(${comp_minor_var} ${compiler_minor} PARENT_SCOPE)
-  
+
 
 endfunction()
 
 
 function(getLongBuildType long_type short_type)
-  
+
   # Convert SGS_BUILD_TYPE to CMAKE_BUILD_TYPE
 
   if("${short_type}" STREQUAL "opt")
@@ -241,7 +241,7 @@ function(sgs_find_host_compiler)
         list(LENGTH GCC_VERSION_COMPONENTS GCC_VERSION_COMPONENTS_NB)
         if(GCC_VERSION_COMPONENTS_NB LESS "2")
           execute_process(COMMAND ${SGS_HOST_C_COMPILER} --version OUTPUT_VARIABLE GCC_VERSION)
-          string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})  
+          string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})
         endif()
         list(GET GCC_VERSION_COMPONENTS 0 GCC_MAJOR)
         list(GET GCC_VERSION_COMPONENTS 1 GCC_MINOR)
@@ -345,7 +345,7 @@ function(sgs_get_target_platform)
   # but transient
   set(SGS_ARCH  ${arch})
 
-  if (os MATCHES "([^0-9.]+)([0-9.]+)")    
+  if (os MATCHES "([^0-9.]+)([0-9.]+)")
     set(SGS_OS     "${CMAKE_MATCH_1}")
     set(SGS_OSVERS "${CMAKE_MATCH_2}")
   else()
@@ -361,7 +361,7 @@ function(sgs_get_target_platform)
   if(SGS_SUBOS)
     set(SGS_COREOS ${SGS_SUBOS})
   else()
-    set(SGS_COREOS ${SGS_OS})  
+    set(SGS_COREOS ${SGS_OS})
   endif()
 
   if (comp MATCHES "([^0-9.]+)([0-9.]+|max)")
@@ -373,7 +373,7 @@ function(sgs_get_target_platform)
   endif()
 
   getLongBuildType(type ${SGS_BUILD_TYPE})
-  
+
   set(CMAKE_BUILD_TYPE ${type} CACHE STRING
       "Choose the type of build, options are: empty, Debug, Release, Coverage, Profile, RelWithDebInfo, MinSizeRel." FORCE)
 
@@ -387,8 +387,8 @@ function(sgs_get_target_platform)
     set(CMAKE_SYSTEM_NAME Windows PARENT_SCOPE)
   elseif("${SGS_COREOS}" STREQUAL "mac" OR "${SGS_COREOS}" STREQUAL "osx")
     set(CMAKE_SYSTEM_NAME Darwin PARENT_SCOPE)
-  elseif("${SGS_COREOS}" STREQUAL "slc" OR "${SGS_COREOS}" STREQUAL "sl" OR "${SGS_COREOS}" STREQUAL "ub" 
-         OR "${SGS_COREOS}" STREQUAL "fc" OR "${SGS_COREOS}" STREQUAL "co" OR "${SGS_COREOS}" STREQUAL "cos" 
+  elseif("${SGS_COREOS}" STREQUAL "slc" OR "${SGS_COREOS}" STREQUAL "sl" OR "${SGS_COREOS}" STREQUAL "ub"
+         OR "${SGS_COREOS}" STREQUAL "fc" OR "${SGS_COREOS}" STREQUAL "co" OR "${SGS_COREOS}" STREQUAL "cos"
          OR "${SGS_COREOS}" STREQUAL "linux")
     set(CMAKE_SYSTEM_NAME Linux PARENT_SCOPE)
   else()
