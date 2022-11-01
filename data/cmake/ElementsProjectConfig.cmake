@@ -426,12 +426,14 @@ macro(elements_project project version)
         message(STATUS "Using the Nose python test framework")
         set(PYFRMK_TEST ${NOSE_EXECUTABLE})
         set(PYFRMK_NAME "PythonNose")
+        set(PYFRMK_EXTRA_OPTS ${NOSE_EXTRA_OPTIONS})
       else()
         message(WARNING "The Nose python test framework cannot be found")
         find_package(PyTest QUIET)
         if(PYTEST_FOUND)
           message(WARNING "Using Py.Test instead")
           set(PYFRMK_TEST ${PYTEST_EXECUTABLE})
+          set(PYFRMK_EXTRA_OPTS ${PYTEST_EXTRA_OPTIONS})
           set(PYFRMK_NAME "PyTest")
         endif()
       endif()
@@ -441,6 +443,7 @@ macro(elements_project project version)
         message(STATUS "Using the Py.Test python test framework")
         set(PYFRMK_TEST ${PYTEST_EXECUTABLE})
         set(PYFRMK_NAME "PyTest")
+        set(PYFRMK_EXTRA_OPTS ${PYTEST_EXTRA_OPTIONS})
       else()
         message(WARNING "The Py.Test python test framework cannot be found")
         find_package(Nose QUIET)
@@ -448,6 +451,7 @@ macro(elements_project project version)
           message(WARNING "Using Nose instead")
           set(PYFRMK_TEST ${NOSE_EXECUTABLE})
           set(PYFRMK_NAME "PythonNose")
+          set(PYFRMK_EXTRA_OPTS ${NOSE_EXTRA_OPTIONS})
         endif()
       endif()
     endif()
@@ -863,6 +867,12 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
 
   if(ELEMENTS_BUILD_TESTS)
 
+    add_custom_target(HTMLSummary)
+    if(TEST_HTML_REPORT)
+      add_custom_command(TARGET HTMLSummary
+                         COMMAND echo "The HTMLSummary target is obsolete")
+    endif()
+
     add_custom_target(JUnitSummary)
     if(TEST_JUNIT_REPORT)
       find_python_module(lxml)
@@ -1015,6 +1025,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
     endif()
   endif()
 
+  set(CPACK_EXTRA_CMAKEFLAGS "${CPACK_EXTRA_CMAKEFLAGS} -DMERGE_HTML_DOC_TREES=${MERGE_HTML_DOC_TREES}")
 
   if(RPM_FORWARD_PREFIX_PATH)
   
@@ -3428,10 +3439,19 @@ function(elements_add_unit_test name)
       endif()
     endif()
 
-    add_test(NAME ${package}.${name}
-             WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
-             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-             ${executable}${exec_suffix} ${exec_argument})
+    if (USE_MEMORYCHECK)
+      separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
+      add_test(NAME ${package}.${name}
+               WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
+               COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
+               ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.memcheck.xml ${executable}${exec_suffix} ${exec_argument})
+    else()
+      add_test(NAME ${package}.${name}
+               WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
+               COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
+               ${executable}${exec_suffix} ${exec_argument})
+    endif()
+
 
     set_property(GLOBAL APPEND PROPERTY TEST_LIST ${package}.${name}:${executable}${exec_suffix})
 
@@ -3518,10 +3538,19 @@ function(elements_add_test name)
     endif()
   endforeach()
 
-  add_test(NAME ${package}.${name}
-           WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
-           COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-           ${cmdline})
+  if (USE_MEMORYCHECK)
+    separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
+    add_test(NAME ${package}.${name}
+             WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
+             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
+             ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${name}.memcheck.xml ${cmdline})
+  else()
+    add_test(NAME ${package}.${name}
+             WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
+             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
+              ${cmdline})
+  endif()
+
 
   set_property(TEST ${package}.${name} APPEND PROPERTY LABELS ${package})
   set_property(TEST ${package}.${name} PROPERTY CMDLINE "${cmdline}")
@@ -3679,13 +3708,25 @@ function(add_python_test_dir)
 
   if(PYFRMK_TEST)
     set(PYFRMK_JUNIT_FILE_OPT)
+    set(PYFRMK_COVERAGE_OPT)
     if("${PYFRMK_NAME}" STREQUAL "PyTest")
       if(TEST_JUNIT_REPORT)
-        set(PYFRMK_JUNIT_FILE_OPT "--junit-xml=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${pytest_name}.JUnit.xml")
+        set(PYFRMK_JUNIT_FILE_OPT --junit-xml=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${pytest_name}.JUnit.xml)
+      endif()
+      if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
+        find_python_module(pytest_cov)
+        if(PY_PYTEST_COV)
+          set(PYFRMK_COVERAGE_OPT  --cov-report=xml:${PROJECT_BINARY_DIR}/cov/${PYFRMK_NAME}/coverage.xml --cov-report=html:${PROJECT_BINARY_DIR}/cov/${PYFRMK_NAME}/html)
+          set(PYFRMK_COVERAGE_OPT ${PYFRMK_COVERAGE_OPT} --cov-append)
+        endif()
+        get_property(proj_python_package_list GLOBAL PROPERTY PROJ_PYTHON_PACKAGE_LIST)
+        foreach(p ${proj_python_package_list})
+          set(PYFRMK_COVERAGE_OPT ${PYFRMK_COVERAGE_OPT} --cov ${p})
+        endforeach()
       endif()
     endif()
     elements_add_test(${pytest_name}
-                      COMMAND ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${pysrcs}
+                      COMMAND  ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_COVERAGE_OPT} ${PYFRMK_EXTRA_OPTS} ${pysrcs}
                       ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})
     set_property(TEST ${package}.${pytest_name} APPEND PROPERTY LABELS Python UnitTest ${PYFRMK_NAME})
     if(PYTEST_ARG_TIMEOUT)
@@ -4257,7 +4298,7 @@ function(elements_generate_env_conf filename)
 
   get_filename_component(fn ${filename} NAME)
   message(STATUS "Generating ${fn}")  
-  
+
   file(WRITE ${filename} "${data}")
 endfunction()
 
@@ -4302,9 +4343,10 @@ macro(elements_external_project_environment)
     # Check that it is not a "Elements project" (the environment is included in a
     # different way in elements_generate_env_conf).
     list(FIND used_elements_projects ${pack} elements_project_idx)
-    if((NOT "${pack}" STREQUAL "ElementsProject") AND (elements_project_idx EQUAL -1))
+    if((NOT "${pack}" STREQUAL "ElementsProject") AND (elements_project_idx EQUAL -1) AND (NOT "${pack}" STREQUAL "PythonModules"))
       message(STATUS "    ${pack}")
       # this is needed to get the non-cache variables for the packages
+
       find_package(${pack} QUIET)
 
       if("${pack}" STREQUAL "PythonInterp" OR "${pack}" STREQUAL "PythonLibs")
@@ -4638,9 +4680,14 @@ function(elements_add_python_program executable module)
   get_directory_property(elements_module_name name)
   get_directory_property(elements_module_version version)
 
+  set(PYTHON_SCRIPT_VERSION ${PYTHON_VERSION_MAJOR})
+  if(PYTHON_EXPLICIT_VERSION)
+    set(PYTHON_SCRIPT_VERSION ${PYTHON_EXPLICIT_VERSION})
+  endif()
+
   if(PYPROG_NO_CONFIG_FILE)
     add_custom_command(OUTPUT ${executable_file}
-                       COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_VERSION_MAJOR}" 
+                       COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_SCRIPT_VERSION}" 
                                --module ${module} --outdir ${CMAKE_BINARY_DIR}/scripts --execname ${executable} 
                                --project-name ${CMAKE_PROJECT_NAME} --elements-module-name ${elements_module_name}
                                --elements-module-version ${elements_module_version} 
@@ -4648,7 +4695,7 @@ function(elements_add_python_program executable module)
                        DEPENDS ${program_file})  
   else()
     add_custom_command(OUTPUT ${executable_file}
-                       COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_VERSION_MAJOR}"
+                       COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_SCRIPT_VERSION}"
                                --module ${module} --outdir ${CMAKE_BINARY_DIR}/scripts --execname ${executable}
                                --project-name ${CMAKE_PROJECT_NAME} --elements-module-name ${elements_module_name}
                                --elements-module-version ${elements_module_version} 

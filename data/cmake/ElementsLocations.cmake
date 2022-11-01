@@ -112,7 +112,7 @@ set(AUX_DIR_NAME "auxdir" CACHE STRING "Name of the auxiliary files directory")
 set(MAKE_DIR_NAME "make" CACHE STRING "Name of the make files directory")
 set(DOC_DIR_NAME "doc" CACHE STRING "Name of the documentation directory")
 
-set(INCLUDE_INSTALL_SUFFIX ${CMAKE_INSTALL_INCLUDEDIR} CACHE STRING "Final suffix for the install directory of the header files")
+set(INCLUDE_INSTALL_SUFFIX include CACHE STRING "Final suffix for the install directory of the header files")
 set(BIN_INSTALL_SUFFIX ${CMAKE_BIN_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the binaries")
 set(LIB_INSTALL_SUFFIX ${CMAKE_LIB_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the libraries")
 
@@ -180,7 +180,7 @@ if(SQUEEZED_INSTALL)
   find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
 
   execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
-                  "import sys, sysconfig; print(sysconfig.get_path('platlib').replace(sys.prefix +'/',''))"
+                  "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"
                   OUTPUT_VARIABLE PYTHON_INSTALL_SUFFIX
                   ERROR_QUIET
                   OUTPUT_STRIP_TRAILING_WHITESPACE)

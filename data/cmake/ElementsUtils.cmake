@@ -1,5 +1,5 @@
 
-if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_LESS 3.1)
+if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_LESS 3.1 OR USE_DEBUG_PRINT)
   macro(include_guard)
 
     set(_EXTRA_ARGS ${ARGN})
@@ -853,7 +853,9 @@ function(find_python_module module)
 
     find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
 
-    string(TOUPPER ${module} module_upper)
+    string(TOUPPER ${module} module_upper_tmp)
+    string(REPLACE "." "_" module_upper ${module_upper_tmp})
+
     if(NOT PY_${module_upper})
         if(ARGC GREATER 1 AND "${ARGV1}" STREQUAL "REQUIRED")
             set(${module}_FIND_REQUIRED TRUE)
@@ -902,7 +904,7 @@ function(elements_include_directories)
       if(_is_loc)
         set(use_sys FALSE)
       else()
-        set(use_sys TRUE)      
+        set(use_sys TRUE)
       endif()
     else()
       set(use_sys FALSE)
@@ -912,7 +914,7 @@ function(elements_include_directories)
       if(_is_this)
         set(use_sys FALSE)
       else()
-        set(use_sys TRUE)      
+        set(use_sys TRUE)
       endif()
     endif()
 

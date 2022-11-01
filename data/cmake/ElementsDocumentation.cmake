@@ -12,6 +12,17 @@ include_guard(GLOBAL)
 
   if(USE_DOXYGEN)
 
+  option(MERGE_HTML_DOC_TREES
+         "Merge the Doxygen and Sphinx HTML trees into a single one"
+         FALSE)
+
+  if(MERGE_HTML_DOC_TREES)
+    set(DOXYGEN_HTML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc/html)
+  else()
+    set(DOXYGEN_HTML_OUTPUT_DIR html)
+  endif()
+
+
 
   # Add Doxygen generation
   find_package(Doxygen QUIET)
@@ -34,7 +45,11 @@ include_guard(GLOBAL)
 
 
     if(USE_SPHINX)
-      set(DOX_LINK_TO_SPHINX "<tab type=\"user\" url=\"../../sphinx/html/index.html\" title=\"Sphinx\"/>")
+      if(MERGE_HTML_DOC_TREES)
+        set(DOX_LINK_TO_SPHINX "<tab type=\"user\" url=\"sphinx/index.html\" title=\"Sphinx\"/>")
+      else()
+        set(DOX_LINK_TO_SPHINX "<tab type=\"user\" url=\"../../sphinx/html/index.html\" title=\"Sphinx\"/>")
+      endif()
     else()
       set(DOX_LINK_TO_SPHINX "")
     endif()
@@ -124,6 +139,14 @@ include_guard(GLOBAL)
 
   if(USE_SPHINX AND (NOT "${PYTHON_EXPLICIT_VERSION}" STREQUAL "2"))
 
+  if(MERGE_HTML_DOC_TREES)
+    set(SPHINX_HTML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc/html/sphinx)
+  else()
+    set(SPHINX_HTML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc/sphinx/html)
+  endif()
+
+
+
   find_package(Sphinx REQUIRED)
   if(SPHINX_FOUND)
 
@@ -133,18 +156,6 @@ include_guard(GLOBAL)
 
     if(NOT SPHINX_APIDOC_OPTIONS)
       set(SPHINX_APIDOC_OPTIONS "" CACHE STRING "Extra options to pass to sphinx-apidoc" FORCE)
-    endif()
-    
-    if(USE_DOXYGEN AND DOXYGEN_FOUND AND USE_SPHINX_BREATHE)
-      set(APPEND_BREATHE_EXT "extensions.append('breathe')")
-    else()
-      set(APPEND_BREATHE_EXT "")
-    endif()
-
-    if(USE_SPHINX_NUMPYDOC)
-      set(APPEND_NUMPYDOC_EXT "extensions.append(numpydoc_extension)")
-    else()
-      set(APPEND_NUMPYDOC_EXT "pass")
     endif()
 
 
@@ -175,12 +186,24 @@ include_guard(GLOBAL)
 
     get_property(proj_python_package_list GLOBAL PROPERTY PROJ_PYTHON_PACKAGE_LIST)
 
+
+    if(EXTRA_SPHINX_FILES)
+      foreach (esf IN LISTS EXTRA_SPHINX_FILES)
+        if(EXISTS "${esf}")
+          file(COPY ${esf} DESTINATION ${PROJECT_BINARY_DIR}/doc/sphinx)
+        endif()
+      endforeach()
+    endif()
+
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/doc")
+      copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/doc ${PROJECT_BINARY_DIR}/doc/sphinx)
+    endif()
+
+
     add_custom_target(sphinx
-                      COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/doc ${PROJECT_BINARY_DIR}/doc/sphinx 
-                      COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/html
+                      COMMAND  ${CMAKE_COMMAND} -E make_directory ${SPHINX_HTML_OUTPUT_DIR}
                       COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/_static
-                      COMMAND  ${SPHINX_BUILD_CMD} ${SPHINX_BUILD_OPTIONS} -b html . html
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc
+                      COMMAND  ${SPHINX_BUILD_CMD} ${SPHINX_BUILD_OPTIONS} -b html . ${SPHINX_HTML_OUTPUT_DIR}
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/sphinx
                       COMMENT "Generating Sphinx documentation" VERBATIM)
 
@@ -307,21 +330,67 @@ Python Package
     
     endforeach()
 
+    # Generation of the cmake index.rst file for the cmake directory
+
 
 
     # Generation of the top index.rst file for the project
 
 
      if(USE_DOXYGEN AND DOXYGEN_FOUND)
-       set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../../doxygen/html/index.html>`_.")
+       if(MERGE_HTML_DOC_TREES)
+         set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../index.html>`_.")
+       else()
+         set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../../doxygen/html/index.html>`_.")
+       endif()
      else()
        set(SPHINX_ORIGINAL_DOX "")
      endif()
 
 
+    find_file(sphinx_main_cmake_index_file
+              NAMES index.rst
+              PATHS ${CMAKE_CURRENT_SOURCE_DIR}
+              PATH_SUFFIXES cmake
+              NO_DEFAULT_PATH)
+
+    set(SPHINX_CMAKE_MODULES "")
+
+    if(sphinx_main_cmake_index_file)
+      configure_file(
+                     "${sphinx_main_cmake_index_file}"
+                     "${PROJECT_BINARY_DIR}/doc/sphinx/cmake/index.rst"
+                     COPYONLY
+                    )
+      set(SPHINX_CMAKE_MODULES "cmake/index")
+    else()
+
+       file(GLOB cm_list RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/*.cmake)
+       foreach(cm ${cm_list})
+          set(sphinx_cmake_module_lines "${sphinx_cmake_module_lines}
+.. cmake-module:: ../../../../${cm}")
+
+       endforeach()
+
+      find_file_to_configure(index_cmake.rst.in
+                             FILETYPE "Sphinx index"
+                             OUTPUTDIR "${PROJECT_BINARY_DIR}/doc/sphinx/cmake"
+                             OUTPUTNAME "index.rst"
+                             PATHS ${CMAKE_MODULE_PATH}
+                             PATH_SUFFIXES doc)
+
+      if(sphinx_cmake_module_lines)
+        set(SPHINX_CMAKE_MODULES "cmake/index")
+      endif()
+
+    endif()
+
+
+
+
     find_file(sphinx_main_project_index_file
               NAMES index.rst
-              PATHS ${CMAKE_SOURCE_DIR}
+              PATHS ${CMAKE_CURRENT_SOURCE_DIR}
               PATH_SUFFIXES doc
               NO_DEFAULT_PATH)
 
@@ -345,7 +414,7 @@ Python Package
 * :ref:`genindex`
 * :ref:`search`
 "
-        )      
+        )
       endif()
     
       find_file_to_configure(index.rst.in
@@ -363,18 +432,27 @@ Python Package
 
   if(INSTALL_DOC)
 
-    install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/
+    if(MERGE_HTML_DOC_TREES)
+      set(DOC_DIST_TREE ${CMAKE_BINARY_DIR}/doc/html/)
+    else()
+      set(DOC_DIST_TREE ${CMAKE_BINARY_DIR}/doc/)
+    endif()
+
+
+    install(DIRECTORY ${DOC_DIST_TREE}
             DESTINATION ${DOC_INSTALL_SUFFIX}
             PATTERN "CVS" EXCLUDE
             PATTERN ".svn" EXCLUDE
             PATTERN "*~" EXCLUDE)
 
-    foreach(_do ChangeLog README README.md)
+    foreach(_do ChangeLog CHANGELOG.md README README.md)
+      set(_do_file)
       find_file(_do_file
                 NAMES ${_do}
-                PATHS ${CMAKE_SOURCE_DIR}
+                PATHS ${CMAKE_CURRENT_SOURCE_DIR}
                 PATH_SUFFIXES doc
-                NO_DEFAULT_PATH)
+                NO_DEFAULT_PATH
+                NO_CACHE)
 
       if(_do_file)
           install(FILES ${_do_file}
@@ -383,5 +461,4 @@ Python Package
     endforeach()
 
   endif()
-  
-  
+

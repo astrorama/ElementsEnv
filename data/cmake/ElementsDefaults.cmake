@@ -1,3 +1,22 @@
+#[=======================================================================[.rst:
+ElementsDefaults
+-----------------
+
+This file set the default values for various CMake cache variables used by Elements itself. The default
+values for a new project are stored in the `ElementsBuildFlags` module.
+
+.. cmake:variable:: ELEMENTS_HIDE_SYMBOLS
+
+   Enable explicit symbol visibility on gcc-4. Set to ``ON``
+
+.. cmake:variable:: CXX_SUGGEST_OVERRIDE
+
+   Enable the -Wsuggest-override warning. Set to ``ON``
+
+
+#]=======================================================================]
+
+
 set(ELEMENTS_HIDE_SYMBOLS ON
     CACHE STRING "Enable explicit symbol visibility on gcc-4"
     FORCE)
@@ -31,3 +50,6 @@ set(USE_PYTHON_DOXYGEN OFF
     CACHE STRING "Use Doxygen for the Python Documentation"
     FORCE)
 
+set(EXTRA_SPHINX_FILES ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md
+    CACHE STRING "List of extra doc files for the sphinx generation"
+    FORCE)
