@@ -11,8 +11,7 @@ platforms       darwin
 supported_archs	noarch
 description     ElementsEnv environment setup
 master_sites    http://degauden.isdc.unige.ch/elementsenv/repo/sources 
-checksums           rmd160  ${rmd160} \
-                    sha256  ${sha256}
+checksums       sha256  ${sha256}
 
 
 

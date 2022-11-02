@@ -192,10 +192,6 @@ for a in sys.argv:
 fixscript_name = "FixInstallPath"
 
 
-def getRMD160Digest(filepath):
-    return check_output(["openssl", "dgst", "-rmd160", filepath]).split()[-1]
-
-
 def getSHA256Digest(filepath):
     return check_output(["openssl", "dgst", "-sha256", filepath]).split()[-1]
 
@@ -244,14 +240,12 @@ class MySdist(_sdist):
         out_fname = self._get_template_target(filename)
         logging.info("Generating %s from the %s template" %
                      (out_fname, filename))
-        rmd160_digest = getRMD160Digest(self._get_sdist_filepath())
         sha256_digest = getSHA256Digest(self._get_sdist_filepath())
         changelog_content = open(self._get_changelog_filepath()).read()
         with open(filename) as in_f:
             src = Template(in_f.read()).substitute(
                 version=__version__,
                 project=__project__,
-                rmd160=rmd160_digest,
                 sha256=sha256_digest,
                 changelog=changelog_content,
                 elementsenv_base=dist_elementsenv_base,
