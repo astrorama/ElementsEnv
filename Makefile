@@ -18,12 +18,17 @@ include $(SGS_MAKEFILE)
 
 
 configure:
-	$(MAKE) -f $(SGS_MAKEFILE) $(CODEEN_CACHE)
+	$(MAKE) -f $(SGS_MAKEFILE) _configure
 	$(call setup_env)
 	$(MAKE) configure-conda
 	sed -i "s/__version__ = \".*\"/__version__ = \"$(VERSION)\"/g" setup.py
 
+install:
+	
 
+test:
+
+quality:
 
 package: FORCE
 	$(MAKE) conda-package
