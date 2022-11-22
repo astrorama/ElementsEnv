@@ -1,0 +1,15 @@
+@Library(value='integration-library@release-9', changelog=false) _
+
+pipelineSGS(
+    artifactId:"elementsenv",
+    groupId:"st",
+    component:"sgs",
+    skipQuality:true,
+    skipTest:false,
+    artifactType:'Conda',
+    pkgFolder : './dist/noarch'
+
+)
+
+
+
