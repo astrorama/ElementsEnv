@@ -649,7 +649,7 @@ class NativeMachine:
                     if self.OSFlavour() == "SuSE" and int(self.OSVersion(position=1)) > 10:
                         cmtflavour = f + self.OSVersion(position=1)
                 if not cmtflavour:
-                    cmtflavour = "lx"
+                    cmtflavour = "linux"
         return cmtflavour
 
     def OSEquivalentFlavour(self):
