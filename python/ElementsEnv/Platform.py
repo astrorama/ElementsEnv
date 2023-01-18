@@ -252,7 +252,8 @@ LINUX_FLAVOUR_ALIASES = {
     "deb": ["Debian"],
     "ub": ["Ubuntu"],
     "ml": ["Mandriva Linux"],
-    "bb": ["Big Box Linux"]
+    "bb": ["Big Box Linux"],
+    "ry": ["Rocky Linux"]
 }
 
 LSB_FLAVOUR_ALIASES = {
@@ -265,6 +266,7 @@ LSB_FLAVOUR_ALIASES = {
 FLAVOUR_RUNTIME_COMPATIBILITY = {
     "slc7": ["slc7", "co7"],
     "co7": ["co7", "slc7"],
+    "ry9": ["ry9", "co7", "slc7"],
     "fc32": ["fc32", "fc25", "fc24", "fc23", "fc22", "fc21", "fc20", "fc19", "slc7"],
     "fc25": ["fc25", "fc24", "fc23", "fc22", "fc21", "fc20", "fc19", "slc7"],
     "fc24": ["fc24", "fc23", "fc22", "fc21", "fc20", "fc19", "slc7"],
@@ -303,6 +305,7 @@ FLAVOUR_RUNTIME_EQUIVALENCE = {
     "fc19": ["fc19"],
     "slc7": ["slc7"],
     "co7": ["co7"],
+    "ry7": ["ry9", "co7"],
     "slc6": ["slc6"],
     "slc5": ["slc5", "co5", "rhel5", "ub9", "fc13", "fc12", "fc11", "fc10"],
     "rh73": ["rh73", "suse80", "suse81", "suse82", "suse83"],
@@ -323,6 +326,7 @@ SUPPORTED_COMPILERS = {
     "fc19": ["gcc48"],
     "slc7": ["gcc48"],
     "co7": ["gcc48"],
+    "ry9": ["gcc11"],
     "slc6": ["gcc46", "gcc45", "gcc44"],
     "slc5": ["gcc46", "gcc43", "gcc45", "icc11"],
     "win32": ["vc71", "vc9"],
