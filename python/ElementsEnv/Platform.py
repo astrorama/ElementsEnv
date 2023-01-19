@@ -305,7 +305,7 @@ FLAVOUR_RUNTIME_EQUIVALENCE = {
     "fc19": ["fc19"],
     "slc7": ["slc7"],
     "co7": ["co7"],
-    "ry7": ["ry9", "co7"],
+    "ry9": ["ry9", "co7"],
     "slc6": ["slc6"],
     "slc5": ["slc5", "co5", "rhel5", "ub9", "fc13", "fc12", "fc11", "fc10"],
     "rh73": ["rh73", "suse80", "suse81", "suse82", "suse83"],
