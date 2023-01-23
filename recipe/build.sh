@@ -47,7 +47,5 @@ python $PREFIX/bin/FixInstallPath -n this_python_version "" $PREFIX/bin/StripPat
 for CHANGE in "activate" "deactivate"
 do
     mkdir -p "${PREFIX}/etc/conda/${CHANGE}.d"
-    cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/zzz-elementsenv_${CHANGE}.sh"
+    cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/${CHANGE}_elementsenv.sh"
 done
-
-cp "${RECIPE_DIR}/pre_activate.sh" "${PREFIX}/etc/conda/activate.d/aaa-elementsenv_activate.sh"
