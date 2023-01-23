@@ -1,15 +1,6 @@
 #!/bin/bash
 
-unset CFLAGS
-unset CXXFLAGS
-unset CPPFLAGS
-unset DEBUG_CFLAGS
-unset DEBUG_CXXFLAGS
-unset DEBUG_CPPFLAGS
-unset LDFLAGS
-
 export LANG='en_US.UTF-8'
-export BINARY_TAG=x86_64-conda_cos6-gcc93-o2g
 export SOFTWARE_BASE_VAR=ELEMENTSENV_BASE
 export ELEMENTSENV_BASE=${CONDA_PREFIX}/opt/euclid
 export ELEMENTSENV_USE_BASE=yes
