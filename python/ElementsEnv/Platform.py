@@ -149,6 +149,7 @@ BINARY_OPT_LIST = ["x86_64-slc5-gcc43-opt", "i686-slc5-gcc43-opt",
                    "x86_64-slc6-gcc46-opt", "i686-slc6-gcc46-opt",
                    "x86_64-slc7-gcc48-opt", "i686-slc7-gcc48-opt",
                    "x86_64-co7-gcc48-opt", "i686-co7-gcc48-opt",
+                   "x86_64-ry9-gcc11-opt", "i686-ry9-gcc11-opt",
                    "x86_64-fc19-gcc48-opt", "i686-fc19-gcc48-opt",
                    "x86_64-fc20-gcc48-opt", "i686-fc20-gcc48-opt",
                    "x86_64-fc21-gcc49-opt", "i686-fc21-gcc49-opt",
@@ -260,7 +261,8 @@ LSB_FLAVOUR_ALIASES = {
     "sl": ["ScientificSL"],
     "slc": ["ScientificCERNSLC"],
     "fc": ["Fedora", "Fedora Core"],
-    "co": ["CentOS"]
+    "co": ["CentOS"],
+    "ry": ["Rocky", "Rocky Linux"]
 }
 
 FLAVOUR_RUNTIME_COMPATIBILITY = {
@@ -305,7 +307,7 @@ FLAVOUR_RUNTIME_EQUIVALENCE = {
     "fc19": ["fc19"],
     "slc7": ["slc7"],
     "co7": ["co7"],
-    "ry9": ["ry9", "co7"],
+    "ry9": ["ry9"],
     "slc6": ["slc6"],
     "slc5": ["slc5", "co5", "rhel5", "ub9", "fc13", "fc12", "fc11", "fc10"],
     "rh73": ["rh73", "suse80", "suse81", "suse82", "suse83"],
