@@ -1,13 +1,13 @@
 build:
-  noarch: python
-  string: '1.0'
+  string: '0.15'
 package:
   name: elementsenv
-  version: 3.18.1
+  version: '3.19'
 requirements:
   build:
-  - python
-  host:
-  - python
+  - python =3.9.15
+  - setuptools
+  run:
+  - python =3.9.15
 source:
   path: ../
