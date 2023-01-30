@@ -5,9 +5,9 @@ package:
   version: '3.19'
 requirements:
   build:
-  - python =3.9.15
+  - python
   - setuptools
   run:
-  - python =3.9.15
+  - python
 source:
   path: ../
