@@ -2,3 +2,4 @@ include ChangeLog
 # exclude python/ElementsEnv/__init__.*
 recursive-include tests *
 recursive-include data *
+recursive-exclude tests/__pycache__ *

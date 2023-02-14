@@ -1,6 +1,6 @@
 # sitelib for noarch packages, sitearch for others (remove the unneeded one)
 %global __python${python_explicit_version} ${full_exec_python}
-%global python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${usr_prefix}'))")
+%global python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(get_path('data'), '${usr_prefix}'))")
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           ${project}
@@ -22,7 +22,7 @@ AutoReq: no
 Requires: python${python_explicit_version}, cmake
 
 %define __python${python_explicit_version} ${full_exec_python}
-%define python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${usr_prefix}'))")
+%define python${python_explicit_version}_sitelib %(%{__python${python_explicit_version}} -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(get_path('data'), '${usr_prefix}'))")
 %define _bindir ${usr_prefix}/bin
 %define _datadir ${usr_prefix}/share
 %define _sysconfdir ${etc_prefix}
