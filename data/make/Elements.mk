@@ -176,7 +176,7 @@ endif
 
 ifndef CTEST_ARGS
   CTEST_ARGS = -T test --output-junit $(BUILDDIR)/Testing/JUnitTestReport.xml $(CTEST_EXTRA_ARGS)
-endif
+endif 
 
 # This wrapping around the test target is used to ensure the generation of
 # the XML output from ctest.
