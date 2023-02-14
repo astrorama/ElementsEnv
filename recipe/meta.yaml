@@ -1,13 +1,16 @@
 build:
-  string: '0.15'
+  string: '0.18'
 package:
   name: elementsenv
   version: '3.19'
 requirements:
   build:
-  - python =3.9.15
+  - python =3.9.*
   - setuptools
   run:
-  - python =3.9.15
+  - python =3.9.*
+  run_constrainted:
+  - python =3.9.*
 source:
   path: ../
+
