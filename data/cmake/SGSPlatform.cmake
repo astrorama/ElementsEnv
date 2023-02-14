@@ -1,5 +1,5 @@
 ################################################################################
-# Astro CMake toolchain
+# SGS Platform
 #-------------------------------------------------------------------------------
 # The Astro CMake toolchain is required to build a project using the libraries and
 # tools provided by SPI/SFT (a.k.a. SGSCMT).
@@ -184,7 +184,7 @@ function(sgs_find_host_os)
               string(REGEX REPLACE ".*Ubuntu ([0-9]+)[.]([0-9]+).*" "\\1" osvers "${issue}")
             endif()
             break()
-          elseif(issue MATCHES "Scientific Linux|SLC|Fedora|CentOS Linux|CentOS") # RedHat-like distributions
+          elseif(issue MATCHES "Scientific Linux|SLC|Fedora|CentOS Linux|CentOS|Rocky Linux") # RedHat-like distributions
             string(TOLOWER "${CMAKE_MATCH_0}" os)
             if("${os}" STREQUAL fedora)
               set(os fc) # we use an abbreviation for Fedora
@@ -193,7 +193,10 @@ function(sgs_find_host_os)
               set(os sl) # we use an abbreviation for Scientific Linux
             endif()
             if(("${os}" STREQUAL "centos linux") OR ("${os}" STREQUAL "centos"))
-              set(os co) # we use an abbreviation for Scientific Linux
+              set(os co) # we use an abbreviation for CentOS
+            endif()
+            if(("${os}" STREQUAL "rocky linux") OR ("${os}" STREQUAL "rocky"))
+              set(os ry) # we use an abbreviation for Rocky Linux
             endif()
             if(issue MATCHES ".*release ([0-9]+)[. ].*")
               string(REGEX REPLACE ".*release ([0-9]+)[. ].*" "\\1" osvers "${issue}")
@@ -245,7 +248,7 @@ function(sgs_find_host_compiler)
         endif()
         list(GET GCC_VERSION_COMPONENTS 0 GCC_MAJOR)
         list(GET GCC_VERSION_COMPONENTS 1 GCC_MINOR)
-        set(cvers ${GCC_MAJOR}${GCC_MINOR})
+        set(cvers ${GCC_MAJOR})
       endif()
     elseif(SGS_HOST_C_COMPILER MATCHES /icc)
       set(compiler icc)
@@ -279,7 +282,7 @@ function(sgs_find_host_compiler)
         list(GET CLANG_VERSION_COMPONENTS 0 CLANG_MAJOR)
         list(GET CLANG_VERSION_COMPONENTS 1 CLANG_MINOR)
       endif()
-      set(cvers ${CLANG_MAJOR}${CLANG_MINOR})
+      set(cvers ${CLANG_MAJOR})
     endif()
 
 
@@ -387,8 +390,9 @@ function(sgs_get_target_platform)
     set(CMAKE_SYSTEM_NAME Windows PARENT_SCOPE)
   elseif("${SGS_COREOS}" STREQUAL "mac" OR "${SGS_COREOS}" STREQUAL "osx")
     set(CMAKE_SYSTEM_NAME Darwin PARENT_SCOPE)
-  elseif("${SGS_COREOS}" STREQUAL "slc" OR "${SGS_COREOS}" STREQUAL "sl" OR "${SGS_COREOS}" STREQUAL "ub"
-         OR "${SGS_COREOS}" STREQUAL "fc" OR "${SGS_COREOS}" STREQUAL "co" OR "${SGS_COREOS}" STREQUAL "cos"
+  elseif("${SGS_COREOS}" STREQUAL "slc" OR "${SGS_COREOS}" STREQUAL "sl" OR "${SGS_COREOS}" STREQUAL "ub" 
+         OR "${SGS_COREOS}" STREQUAL "fc" OR "${SGS_COREOS}" STREQUAL "co" OR "${SGS_COREOS}" STREQUAL "ry"
+         OR "${SGS_COREOS}" STREQUAL "cos"
          OR "${SGS_COREOS}" STREQUAL "linux")
     set(CMAKE_SYSTEM_NAME Linux PARENT_SCOPE)
   else()

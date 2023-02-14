@@ -27,14 +27,6 @@ fi
 
 
 
-export CMAKEFLAGS="-DCPACK_REMOVE_SYSTEM_DEPS=ON \
- -DPYTHON_EXPLICIT_VERSION=3 \
- -DCMAKE_USE_CCACHE=YES \
- -DUSE_RPM_CMAKE_MACRO:BOOL=OFF \
- -DRPMBUILD_EXTRA_ARGS=\"--dbpath=${CONDA_PREFIX}/var/lib/rpm --define '__cmake ${CONDA_PREFIX}/bin/cmake' \" \
- -DUSE_ENV_FLAGS:BOOL=OFF \
- -DCMAKE_SUPPRESS_REGENERATION=ON "
-
 # https://euclid.roe.ac.uk/issues/17998
 export QT_PLUGIN_PATH=$CONDA_PREFIX/plugins
 export FONTCONFIG_FILE=$CONDA_PREFIX/etc/fonts/fonts.conf
