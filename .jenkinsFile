@@ -1,15 +1,23 @@
-@Library(value='integration-library@release-9', changelog=false) _
-
+#!groovy
+@Library('integration-library@release-10') _
+import euclid.sgs.jenkins.BashUtils
 pipelineSGS(
-    artifactId:"elementsenv",
-    groupId:"st",
-    component:"sgs",
-    skipQuality:true,
-    skipTest:false,
-    artifactType:'Conda',
-    pkgFolder : './dist/noarch'
-
+	name:"st_elementsenv",
+	component:'sgs', 
+	packageType: "Conda",
+	skipTest: true,
+	skipQuality: true,
+	skipPublishQuality: true,
+	skipDocumentation: true,
+	skipPublishDocumentation: true,
+	skipPackage: false, 
+	skipUpload: false,
+	skipContinuous: true,
+	skipRelease: true,
+	pkgFolder: "build.codeen/dist/linux-64",
+	configure: ['make configure'],
+	build: BashUtils.EMPTY_BASH_COMMAND,
+	package: ['make build']
 )
-
 
 
