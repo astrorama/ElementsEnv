@@ -1,38 +1,19 @@
-NAME := elementsenv
-VERSION :=  3.18.0
-
-SGS_MAKE_LIB := SGSTargets.makefile
-SGS_SEARCH :=  ~/Work/Projects/SGS /opt/euclid-dev.in2p3.fr/CentOS7/SGS /cvmfs/euclid-dev.in2p3.fr/CentOS7/SGS 
+SGS_SEARCH := /opt/SGS /cvmfs/euclid-dev.in2p3.fr/SGS /cvmfs/euclid.in2p3.fr/SGS
 
 ifndef SGS_MAKEFILE
-_makefile := lib/python3.9/site-packages/sgsenv/SGSTargets.makefile
+_makefile := share/sgsenv/make/SGSTargets.makefile
 SGS_MAKE_LIB_LIST := $(foreach dir,$(SGS_SEARCH),$(wildcard $(dir)/$(_makefile)))
 SGS_MAKEFILE := $(firstword $(SGS_MAKE_LIB_LIST))
 endif
 
-SGS := $(dir $(SGS_MAKEFILE))/../../../../
+ifndef SGS_MAKEFILE
+$(error SGS_MAKEFILE not found in $(SGS_MAKE_LIB_LIST):$(SGS_SEARCH))
+endif
+SGS := $(dir $(SGS_MAKEFILE))/../../../
 
 include $(SGS_MAKEFILE)
 
-.PHONY: FORCE
-
-
-configure:
-	$(MAKE) -f $(SGS_MAKEFILE) _configure
-	$(call setup_env)
-	$(MAKE) configure-conda
-	sed -i "s/__version__ = \".*\"/__version__ = \"$(VERSION)\"/g" setup.py
-
-install:
-	
-
-test:
-
-quality:
-
-package: FORCE
-	$(MAKE) conda-package
 
 
 
-
+FORCE:

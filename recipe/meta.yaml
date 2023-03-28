@@ -1,7 +1,7 @@
 build:
   string: '0.18'
 package:
-  name: elementsenv
+  name: st_elementsenv
   version: '3.19'
 requirements:
   build:
