@@ -135,9 +135,9 @@ class Environment:
             else:
                 # set variable
                 if shell_type == 'csh':
-                    out += 'setenv %s "%s"\n' % (key, self.env[key])
+                    out += 'setenv %s "%s"\n' % (key, self.env[key].replace('"', '\\"'))
                 elif shell_type == 'sh':
-                    out += 'export %s="%s"\n' % (key, self.env[key])
+                    out += 'export %s="%s"\n' % (key, self.env[key].replace('"', '\\"'))
                 elif shell_type == 'bat':
                     out += 'set %s=%s\n' % (key, self.env[key])
         return out
