@@ -2,6 +2,7 @@ import os
 import re
 from optparse import OptionParser
 
+
 def main():
     parser = OptionParser(
         usage="ERROR: Usage %prog <project> <outputfile>")
@@ -76,6 +77,7 @@ def main():
     # Overwrite the file only if there are changes
     if outputdata != olddata:
         open(outputfile, "w").write(outputdata)
+
 
 if __name__ == "__main__":
     main()
