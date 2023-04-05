@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Remove preactivate script : LD_LIBRARY_PATH env var is handled by EDEN direcltly (Frédéric Leroux)
-- Remove CMAKEFLAGS from activate.sh. CMAKEFLAGS will be overriden by CT_ElementsProjectDefinition 
+- Remove CMAKEFLAGS from activate.sh. CMAKEFLAGS will be overriden by CT_ElementsProjectDefinition
   activate script according to local/codeen build (Frédéric Leroux)
 - Remove the `tests/__pycache__` directory from the packaging
 
