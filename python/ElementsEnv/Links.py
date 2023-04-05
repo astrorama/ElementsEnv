@@ -184,4 +184,3 @@ def fixLinks(treebase, show=False, absolute=False, dryrun=False):
     log.debug("Fixing Links in %s" % treebase)
     for root, _, files in walk(treebase):
         visitor(data, root, files)
-

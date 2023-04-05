@@ -1,4 +1,4 @@
-#image: 
+#image:
 #   name: fedora:latest
 #   entrypoint: [ '/bin/sh', '-c' ]
 
@@ -39,6 +39,3 @@ dist:
    script:
       - python setup.py sdist
    needs: [validate]
-
-
-    

@@ -1,5 +1,5 @@
 # Changelog
-All notable changes to this project will be documented in this file. This project 
+All notable changes to this project will be documented in this file. This project
 is a companion software for the Elements project. It manges the environment needed to run
 the software in a multi-release software tree.
 
@@ -53,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace distutils by setuptools (Frédéric Leroux)
 
 ### Fixed
-- various fixes for the python3 (explicit version) and python (implicit) 
+- various fixes for the python3 (explicit version) and python (implicit)
   version 3 series
 - Fix the localisation of the lsb_release utility
 - Use relative import to avoid messing around with the PYTHONPATH
@@ -70,15 +70,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - data/RPM/EuclidEnv.spec.in: fix the spec generation if the python explicit
-  version is empty. The RPM post install script were failing in that case 
+  version is empty. The RPM post install script were failing in that case
 - python/EuclidWrapper/logging.py: fix the absolute import of the system
-  logging feature. The EuclidWrapper script was working fine with python3 but 
-  not with the default system python (python 2) 
+  logging feature. The EuclidWrapper script was working fine with python3 but
+  not with the default system python (python 2)
 
 ## [3.8.1] - 2018-08-23
 
 ### Fixed
-- bypass of the tests in the jenkins CI. Please have look at 
+- bypass of the tests in the jenkins CI. Please have look at
   https://euclid.roe.ac.uk/issues/8257
 
 ## [3.8] - 2018-08-20
@@ -88,12 +88,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add the EuclidWrapper new feature (Nikos)
 - implement the python explicit version handling in the scripts.
 - add the .jenkinsFile.
-- add the full support (distribution and run) for the usage of the 
+- add the full support (distribution and run) for the usage of the
 
 ### Removed
-- remove the generation of the runtests.py script. The "--genscript" 
+- remove the generation of the runtests.py script. The "--genscript"
   option of py.test has been obsoleted
-  python3 executable from an unusual location. 
+  python3 executable from an unusual location.
 
 ## [3.6] - 2018-06-15
 
@@ -105,11 +105,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - global fixing of the python 3 explicit version used in the scripts. That
   version is correctly interpolated for every use. Please note that the
-  explicit version is detected from the base name of the interpreter which 
+  explicit version is detected from the base name of the interpreter which
   is used
-  
+
 ### Changed
-- the RPM distribution kit (tar.gz and SPEC file) is now using the python 
+- the RPM distribution kit (tar.gz and SPEC file) is now using the python
   interpreter fullpath to assert the install root. No on-the-fly rpm relocation
   should be needed then.
 
@@ -141,14 +141,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add the possibility to setup a custom prefix location
 - Compile the file (Login.py) which is modified in the RPM postinstall phase
-- Make the use prefix flag set automatically if EUCLID_BASE is special. If 
+- Make the use prefix flag set automatically if EUCLID_BASE is special. If
   the --relocate option is passed for the /opt/euclid location at the
   rpm install command, the use custom prefix flag is set to "yes" in the
   /etc/sysconfig/euclid. Please note that the --relocate option is just changing
   the EUCLID_BASE location. It doesn't relocate anything.
 
 ### Fixed
-- Fix a bug which didn't pickup the right project from the user area it has 
+- Fix a bug which didn't pickup the right project from the user area it has
   been reported at https://euclid.roe.ac.uk/issues/5098 it happens when
     - the version is explicitly asked for: E-Run Elements 5.0.1 ...
     - and the layout of the project has an explicit version directory:
@@ -168,7 +168,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix the guard that avoid that the SAME config file is read twice. Before any
-  file pointed by EUCLID_CONFIG_FILE was no reread. That was causing a 
+  file pointed by EUCLID_CONFIG_FILE was no reread. That was causing a
   problem of local and CVMFS installations together.
 
 ## [3.0] - 2017-03-06
@@ -179,7 +179,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.1.2] - 2017-02-27
 
 ### Fixed
-- hotfix of the Euclid.Run.Script module. Remove obsolete buggy part for 
+- hotfix of the Euclid.Run.Script module. Remove obsolete buggy part for
   the extra search path implemented in a searchPath.py python file.
 
 ## [2.1.1] - 2017-02-24
@@ -209,7 +209,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update to the latest cmake library of Elements (3.10)
 
 ### Added
-- add ERun_autocompletion.sh script (Tristan Grégoire). Please note 
+- add ERun_autocompletion.sh script (Tristan Grégoire). Please note
   that this script has to be called by hand from the .bashrc for the moment.
 
 ## [1.14.1] - 2015-12-04
@@ -228,9 +228,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - fix the cleaning of the ELogin banner
-- fix the setup of the environment for bash. Now it is not repeated for 
+- fix the setup of the environment for bash. Now it is not repeated for
   every subshell.
-  
+
 ### Added
 - add the new "python setup.py test" command. It is based on a generated
   py.test script.
@@ -244,7 +244,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.13] - 2015-10-07
 
 ### Changed
-- update to the cmake library of Elements 3.8 
+- update to the cmake library of Elements 3.8
 
 ### Added
 - introduction of the draft generation of the python SWIG bindings
@@ -263,7 +263,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update to the cmake library of the Elements 3.7.1 version
 
 ### Fixed
-- fix of the conversion of the CMAKE_PROJECT_PATH environment variable 
+- fix of the conversion of the CMAKE_PROJECT_PATH environment variable
   into a cmake list
 
 ## [1.12] - 2015-08-03
@@ -337,7 +337,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix the default BINARY_TAG and set it to the RelWithDebugInfo type.
 - Cure the logic for the full setup of the ELogin wrapper. It is done if
   the shell is either a login one or non-interactive.
-  
+
 ### Added
 - Add the "--implicit-latest" option to E-Run.
 

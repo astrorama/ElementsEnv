@@ -55,7 +55,7 @@ The installation of the ElementsEnv package can be done in 2 ways:
 
   - with the RPM package format — this is essentially for the Linux
     RedHat-like platform,
-  - or with the custom local installation from the source tarball. 
+  - or with the custom local installation from the source tarball.
 
 The first method being quite adequate for development or production
 servers and the second one is more suited for custom installation on a
@@ -119,12 +119,12 @@ Remarks:
   the `PATH` environment variable at the `/usr/bin` location. They can
   thus be easily located by the `which` command and thus, we can call
   them with:
-  ``source `/usr/bin/which <script>.sh``` 
+  ``source `/usr/bin/which <script>.sh```
   Please note that the `which` command is the one from the system, not
   an alias of the shell.
 - For the local installation, the scripts have to be addressed with
   their full path: `source <install_prefix>/bin/<script>.sh`
-    
+
   - For the local installation, the initial setup done with the
     `ELogin.sh` script updates the environment part that was not needed
     for the standard installation
@@ -145,7 +145,7 @@ shells, the command looks like:
 
     source `/usr/bin/which ELogin.csh`
 
-  
+
 and for the sh-like shell:
 
     source `/usr/bin/which ELogin.sh`
@@ -157,7 +157,7 @@ the csh-like:
 
     source $HOME/Work/ElementsEnv/bin/ELogin.csh
 
-  
+
 and for the sh-like:
 
     source $HOME/Work/ElementsEnv/bin/ELogin.sh
@@ -168,7 +168,7 @@ For csh-like shells:
     alias ELogin
     > ELogin source `/usr/bin/which ELogin.csh`
 
-  
+
 and for sh-like shells:
 
     alias ELogin
@@ -191,8 +191,8 @@ the environment variables are inherited from the main parent shell and
 only the shallow setup of the core shell is needed. That second setup is
 usually only aliases for for the ELogin procedure. To summarize:
 
-1.  The **login part** is called like 
-        source <install_prefix>/bin/ELogin.sh 
+1.  The **login part** is called like
+        source <install_prefix>/bin/ELogin.sh
     This will provide the full environment. With both environment
     variables and aliases
 2.  The **shell only part** is called like:
@@ -210,8 +210,8 @@ different cases, 2 wrappers have been written : `ElementsEnv_group_login.sh`
 and `ElementsEnv_group_setup.sh`. They will provide respectively the “full
 login” and “shell setup only” feature that are mentioned above. ie :
 
-1.  The **login part** is called from the `.bash_profile` file like: 
-        source <install_prefix>/bin/ElementsEnv_group_login.sh 
+1.  The **login part** is called from the `.bash_profile` file like:
+        source <install_prefix>/bin/ElementsEnv_group_login.sh
 2.  The **shell only part** is called from the `.bashrc` file like:
         source <install_prefix>/bin/ElementsEnv_group_setup.sh
 
@@ -226,7 +226,7 @@ configuration file. It contains:
     ELEMENTSENV_BASE=/opt
     ELEMENTSENV_USE_BASE=no
 
-  
+
 The `ELEMENTSENV_BASE` environment variable points to the main installation
 location of the ElementEnv software projects (like Elements and Alexandria).
 Its default value is `/opt`. The `ELEMENTSENV_USE_BASE` is only used
@@ -275,34 +275,34 @@ complex for bash: The `$HOME/.bash_profile$` has to follow its main
 skeleton has to look like:
 
     # .bash_profile
-    
+
     # Get the aliases and functions
     if [ -f ~/.bashrc ]; then
         . ~/.bashrc
     fi
-    
+
     # User specific environment and startup programs
-    
+
     ...
     ...
-    
+
     source <install_prefix>/bin/ElementsEnv_group_login.sh
 
 and for the `$HOME/.bashrc`:
 
     # .bashrc
-    
+
     # Source global definitions
     if [ -f /etc/bashrc ]; then
         . /etc/bashrc
     fi
-    
+
     # User specific aliases and functions
-    
+
     ...
     ...
-    
-    
+
+
     source <install_prefix>/bin/ElementsEnv_group_setup.sh
 
 ## Customisation
@@ -356,7 +356,7 @@ structure of the software tree must look like:
     $ELEMENTSENV_BASE/Alexandria/2.0
     ...
 
-  
+
 Please note that the `ELEMENTSENV_BASE` location can be completely
 independent from the `<install_prefix>` location.
 
@@ -378,7 +378,7 @@ extension in the configuration file:
     ELEMENTSENV_USE_BASE=no
     ELEMENTSENV_POST_SCRIPT=${ELEMENTSENV_BASE}/scripts/my_site
 
-  
+
 and the `/opt/scripts/my_site.sh` and
 `/opt/scripts/my_site.csh` should be written accordingly for the
 tuning.

@@ -110,7 +110,7 @@ class Environment:
     def commit(self):
         """
         Forget the old values for the changes done so far (avoids that the
-        changes are rolled-back when the instance goes out of scope). 
+        changes are rolled-back when the instance goes out of scope).
         """
         self.old_values = {}
 

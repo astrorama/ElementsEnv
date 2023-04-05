@@ -66,14 +66,14 @@ arch_type=`uname -m`
 # prepend path entries from the base to the environment
 if [[ "${ELEMENTSENV_USE_BASE}" == "yes" ]]; then
   if [[ -d ${ELEMENTSENV_BASE} ]]; then
-    
+
     if [[ -d ${ELEMENTSENV_BASE}/bin ]]; then
       export PATH=${ELEMENTSENV_BASE}/bin:${PATH}
     fi
     if [[ -d ${ELEMENTSENV_BASE}/scripts ]]; then
       export PATH=${ELEMENTSENV_BASE}/scripts:${PATH}
     fi
-    
+
     if [[ "${arch_type}" == "x86_64" ]]; then
       if [[ -d ${ELEMENTSENV_BASE}/lib32 ]]; then
         if [[ -n "$LD_LIBRARY_PATH" ]]; then
@@ -117,7 +117,7 @@ if [[ "${ELEMENTSENV_USE_BASE}" == "yes" ]]; then
       fi
     fi
     unset my_python_base
-    
+
     if [[ -n "$CMAKE_PREFIX_PATH" ]]; then
       export CMAKE_PREFIX_PATH=${ELEMENTSENV_BASE}:${CMAKE_PREFIX_PATH}
     else
@@ -126,7 +126,7 @@ if [[ "${ELEMENTSENV_USE_BASE}" == "yes" ]]; then
     if [[ -d ${ELEMENTSENV_BASE}/cmake ]]; then
       export CMAKE_PREFIX_PATH=${ELEMENTSENV_BASE}/cmake:${CMAKE_PREFIX_PATH}
     fi
-    
+
   fi
 fi
 
@@ -140,7 +140,7 @@ if [[ "${ELEMENTSENV_USE_PREFIX}" == "yes" ]]; then
     if [[ -d ${my_own_exe_prefix0}/scripts ]]; then
       export PATH=${my_own_exe_prefix0}/scripts:${PATH}
     fi
-    
+
     if [[ "${arch_type}" == "x86_64" ]]; then
       if [[ -d ${my_own_exe_prefix0}/lib32 ]]; then
         if [[ -n "$LD_LIBRARY_PATH" ]]; then
@@ -166,7 +166,7 @@ if [[ "${ELEMENTSENV_USE_PREFIX}" == "yes" ]]; then
         fi
       fi
     fi
-    
+
     my_python_base=$(python%(this_python_version)s -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${my_own_exe_prefix0}'))")
     if [[ -d ${my_python_base} ]]; then
       if [[ -n "$PYTHONPATH" ]]; then
@@ -184,7 +184,7 @@ if [[ "${ELEMENTSENV_USE_PREFIX}" == "yes" ]]; then
       fi
     fi
     unset my_python_base
-    
+
     if [[ -n "$CMAKE_PREFIX_PATH" ]]; then
       export CMAKE_PREFIX_PATH=${my_own_exe_prefix0}:${CMAKE_PREFIX_PATH}
     else
@@ -208,7 +208,7 @@ if [[ "${ELEMENTSENV_USE_CUSTOM_PREFIX}" == "yes" ]]; then
     if [[ -d ${ELEMENTSENV_CUSTOM_PREFIX}/scripts ]]; then
       export PATH=${ELEMENTSENV_CUSTOM_PREFIX}/scripts:${PATH}
     fi
-    
+
     if [[ "${arch_type}" == "x86_64" ]]; then
       if [[ -d ${ELEMENTSENV_CUSTOM_PREFIX}/lib32 ]]; then
         if [[ -n "$LD_LIBRARY_PATH" ]]; then
@@ -252,7 +252,7 @@ if [[ "${ELEMENTSENV_USE_CUSTOM_PREFIX}" == "yes" ]]; then
       fi
     fi
     unset my_python_base
-    
+
     if [[ -n "$CMAKE_PREFIX_PATH" ]]; then
       export CMAKE_PREFIX_PATH=${ELEMENTSENV_CUSTOM_PREFIX}:${CMAKE_PREFIX_PATH}
     else
@@ -278,4 +278,3 @@ export ELEMENTSENV_CONFIG_SCRIPT=${my_own_exe_prefix0}/bin/Elementsenv_config.sh
 
 unset my_own_prefix0
 unset my_own_exe_prefix0
-

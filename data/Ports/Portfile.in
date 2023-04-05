@@ -10,7 +10,7 @@ categories      elementsenv
 platforms       darwin
 supported_archs	noarch
 description     ElementsEnv environment setup
-master_sites    http://degauden.isdc.unige.ch/elementsenv/repo/sources 
+master_sites    http://degauden.isdc.unige.ch/elementsenv/repo/sources
 checksums       sha256  ${sha256}
 
 
@@ -21,7 +21,7 @@ extract.suffix .tar.gz
 
 extract.cmd       tar
 extract.pre_args  -xvzf
-extract.post_args 
+extract.post_args
 
 # use_configure    no
 
@@ -35,4 +35,4 @@ if {$${name} ne $${subport}} {
     build.cmd       "$${python.bin} setup.py"
     destroot.cmd       "$${python.bin} setup.py"
 
-} 
+}

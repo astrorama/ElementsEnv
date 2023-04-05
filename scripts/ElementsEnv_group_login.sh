@@ -16,14 +16,14 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
     rm -f ${E_BANNER}
     unset E_BANNER
   else
-    
+
     needs_cleanup2=no
-    
+
     if [[ -r ${my_own_prefix2}/bin/ELogin.sh ]]; then
       elogscr=${my_own_prefix2}/bin/ELogin.sh
     else
       elogscr=`/usr/bin/which ELogin.sh`
-    fi    
+    fi
     if [[ -e ${elogscr} ]]; then
       . ${elogscr} --quiet "$@"
       needs_cleanup2=yes
@@ -56,9 +56,9 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
         unset stripscr
       fi
     fi
-                            
+
     unset needs_cleanup2
-      
+
   fi
 
   export ELOGIN_DONE=yes
@@ -66,4 +66,3 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
   unset my_own_prefix2
 
 fi
-

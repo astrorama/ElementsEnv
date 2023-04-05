@@ -36,5 +36,3 @@ def test_shell_scripts(file_list = collect_files()):
     for i in range(len(file_list)):
         assert(returncode_list[i] == 0),"Test Failed for " + file_list[i]
         print("test passed for " + file_list[i])
-
-

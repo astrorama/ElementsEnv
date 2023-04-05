@@ -70,7 +70,7 @@ setenv ELEMENTSENV_CUSTOM_PREFIX `readlink -m ${ELEMENTSENV_CUSTOM_PREFIX}`
 
 set arch_type=`uname -m`
 
-# prepend path entries from the base to the environment 
+# prepend path entries from the base to the environment
 if ( "${ELEMENTSENV_USE_BASE}" == "yes" ) then
   if ( -d ${ELEMENTSENV_BASE} ) then
 
@@ -80,64 +80,64 @@ if ( "${ELEMENTSENV_USE_BASE}" == "yes" ) then
     if ( -d ${ELEMENTSENV_BASE}/scripts ) then
       setenv PATH ${ELEMENTSENV_BASE}/scripts:${PATH}
     endif
-    
+
     if ( "${arch_type}" == "x86_64" ) then
       if ( -d ${ELEMENTSENV_BASE}/lib32 ) then
-        if ( $?LD_LIBRARY_PATH ) then 
+        if ( $?LD_LIBRARY_PATH ) then
           setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib32:${LD_LIBRARY_PATH}
         else
-          setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib32        
+          setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib32
         endif
       endif
     endif
     if ( -d ${ELEMENTSENV_BASE}/lib ) then
-      if ( $?LD_LIBRARY_PATH ) then 
+      if ( $?LD_LIBRARY_PATH ) then
         setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib:${LD_LIBRARY_PATH}
       else
-        setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib        
+        setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib
       endif
     endif
     if ( "${arch_type}" == "x86_64" ) then
       if ( -d ${ELEMENTSENV_BASE}/lib64 ) then
-        if ( $?LD_LIBRARY_PATH ) then 
+        if ( $?LD_LIBRARY_PATH ) then
           setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib64:${LD_LIBRARY_PATH}
         else
-          setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib64        
+          setenv LD_LIBRARY_PATH ${ELEMENTSENV_BASE}/lib64
         endif
       endif
     endif
-    
+
     set my_python_base=`python%(this_python_version)s -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${ELEMENTSENV_BASE}'))"`
     if ( -d ${my_python_base} ) then
-      if ( $?PYTHONPATH ) then 
+      if ( $?PYTHONPATH ) then
         setenv PYTHONPATH ${my_python_base}:${PYTHONPATH}
       else
-        setenv PYTHONPATH ${my_python_base}        
-      endif       
+        setenv PYTHONPATH ${my_python_base}
+      endif
     else
       if ( -d ${ELEMENTSENV_BASE}/python ) then
-        if ( $?PYTHONPATH ) then 
+        if ( $?PYTHONPATH ) then
           setenv PYTHONPATH ${ELEMENTSENV_BASE}/python:${PYTHONPATH}
         else
-          setenv PYTHONPATH ${ELEMENTSENV_BASE}/python        
+          setenv PYTHONPATH ${ELEMENTSENV_BASE}/python
         endif
       endif
-    endif  
+    endif
     unset my_python_base
-    
-    if ( $?CMAKE_PREFIX_PATH ) then 
+
+    if ( $?CMAKE_PREFIX_PATH ) then
       setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_BASE}:${CMAKE_PREFIX_PATH}
     else
-      setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_BASE}        
+      setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_BASE}
     endif
     if ( -d ${ELEMENTSENV_BASE}/cmake ) then
       setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_BASE}/cmake:${CMAKE_PREFIX_PATH}
-    endif                
-            
+    endif
+
   endif
 endif
 
-# prepend path entries from the prefix to the environment 
+# prepend path entries from the prefix to the environment
 if ( "${ELEMENTSENV_USE_PREFIX}" == "yes" ) then
  if ( -d ${my_own_exe_prefix0} ) then
 
@@ -147,59 +147,59 @@ if ( "${ELEMENTSENV_USE_PREFIX}" == "yes" ) then
     if ( -d ${my_own_exe_prefix0}/scripts ) then
       setenv PATH ${my_own_exe_prefix0}/scripts:${PATH}
     endif
-    
+
     if ( "${arch_type}" == "x86_64" ) then
       if ( -d ${my_own_exe_prefix0}/lib32 ) then
-        if ( $?LD_LIBRARY_PATH ) then 
+        if ( $?LD_LIBRARY_PATH ) then
           setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib32:${LD_LIBRARY_PATH}
         else
-          setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib32        
+          setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib32
         endif
       endif
     endif
     if ( -d ${my_own_exe_prefix0}/lib ) then
-      if ( $?LD_LIBRARY_PATH ) then 
+      if ( $?LD_LIBRARY_PATH ) then
         setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib:${LD_LIBRARY_PATH}
       else
-        setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib        
+        setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib
       endif
     endif
     if ( "${arch_type}" == "x86_64" ) then
       if ( -d ${my_own_exe_prefix0}/lib64 ) then
-        if ( $?LD_LIBRARY_PATH ) then 
+        if ( $?LD_LIBRARY_PATH ) then
           setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib64:${LD_LIBRARY_PATH}
         else
-          setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib64        
+          setenv LD_LIBRARY_PATH ${my_own_exe_prefix0}/lib64
         endif
       endif
     endif
-    
+
     set my_python_base=`python%(this_python_version)s -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${my_own_exe_prefix0}'))"`
     if ( -d ${my_python_base} ) then
-      if ( $?PYTHONPATH ) then 
+      if ( $?PYTHONPATH ) then
         setenv PYTHONPATH ${my_python_base}:${PYTHONPATH}
       else
-        setenv PYTHONPATH ${my_python_base}        
-      endif       
+        setenv PYTHONPATH ${my_python_base}
+      endif
     else
       if ( -d ${my_own_exe_prefix0}/python ) then
-        if ( $?PYTHONPATH ) then 
+        if ( $?PYTHONPATH ) then
           setenv PYTHONPATH ${my_own_exe_prefix0}/python:${PYTHONPATH}
         else
-          setenv PYTHONPATH ${my_own_exe_prefix0}/python        
+          setenv PYTHONPATH ${my_own_exe_prefix0}/python
         endif
       endif
-    endif  
+    endif
     unset my_python_base
-    
-    if ( $?CMAKE_PREFIX_PATH ) then 
+
+    if ( $?CMAKE_PREFIX_PATH ) then
       setenv CMAKE_PREFIX_PATH ${my_own_exe_prefix0}:${CMAKE_PREFIX_PATH}
     else
-      setenv CMAKE_PREFIX_PATH ${my_own_exe_prefix0}        
+      setenv CMAKE_PREFIX_PATH ${my_own_exe_prefix0}
     endif
     if ( -d ${my_own_exe_prefix0}/cmake ) then
       setenv CMAKE_PREFIX_PATH ${my_own_exe_prefix0}/cmake:${CMAKE_PREFIX_PATH}
-    endif                
+    endif
 
  endif
 endif
@@ -215,59 +215,59 @@ if ( "${ELEMENTSENV_USE_CUSTOM_PREFIX}" == "yes" ) then
     if ( -d ${ELEMENTSENV_CUSTOM_PREFIX}/scripts ) then
       setenv PATH ${ELEMENTSENV_CUSTOM_PREFIX}/scripts:${PATH}
     endif
-    
+
     if ( "${arch_type}" == "x86_64" ) then
       if ( -d ${ELEMENTSENV_CUSTOM_PREFIX}/lib32 ) then
-        if ( $?LD_LIBRARY_PATH ) then 
+        if ( $?LD_LIBRARY_PATH ) then
           setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib32:${LD_LIBRARY_PATH}
         else
-          setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib32        
+          setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib32
         endif
       endif
     endif
     if ( -d ${ELEMENTSENV_CUSTOM_PREFIX}/lib ) then
-      if ( $?LD_LIBRARY_PATH ) then 
+      if ( $?LD_LIBRARY_PATH ) then
         setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib:${LD_LIBRARY_PATH}
       else
-        setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib        
+        setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib
       endif
     endif
     if ( "${arch_type}" == "x86_64" ) then
       if ( -d ${ELEMENTSENV_CUSTOM_PREFIX}/lib64 ) then
-        if ( $?LD_LIBRARY_PATH ) then 
+        if ( $?LD_LIBRARY_PATH ) then
           setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib64:${LD_LIBRARY_PATH}
         else
-          setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib64        
+          setenv LD_LIBRARY_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/lib64
         endif
       endif
     endif
-    
+
     set my_python_base=`python%(this_python_version)s -c "import sys; from sysconfig import get_path; print(get_path('purelib').replace(sys.prefix, '${ELEMENTSENV_CUSTOM_PREFIX}'))"`
     if ( -d ${my_python_base} ) then
-      if ( $?PYTHONPATH ) then 
+      if ( $?PYTHONPATH ) then
         setenv PYTHONPATH ${my_python_base}:${PYTHONPATH}
       else
-        setenv PYTHONPATH ${my_python_base}        
-      endif       
+        setenv PYTHONPATH ${my_python_base}
+      endif
     else
       if ( -d ${ELEMENTSENV_CUSTOM_PREFIX}/python ) then
-        if ( $?PYTHONPATH ) then 
+        if ( $?PYTHONPATH ) then
           setenv PYTHONPATH ${ELEMENTSENV_CUSTOM_PREFIX}/python:${PYTHONPATH}
         else
-          setenv PYTHONPATH ${ELEMENTSENV_CUSTOM_PREFIX}/python        
+          setenv PYTHONPATH ${ELEMENTSENV_CUSTOM_PREFIX}/python
         endif
       endif
-    endif  
+    endif
     unset my_python_base
-    
-    if ( $?CMAKE_PREFIX_PATH ) then 
+
+    if ( $?CMAKE_PREFIX_PATH ) then
       setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_CUSTOM_PREFIX}:${CMAKE_PREFIX_PATH}
     else
-      setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_CUSTOM_PREFIX}        
+      setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_CUSTOM_PREFIX}
     endif
     if ( -d ${ELEMENTSENV_CUSTOM_PREFIX}/cmake ) then
       setenv CMAKE_PREFIX_PATH ${ELEMENTSENV_CUSTOM_PREFIX}/cmake:${CMAKE_PREFIX_PATH}
-    endif                
+    endif
 
  endif
 endif
@@ -284,4 +284,3 @@ setenv ELEMENTSENV_CONFIG_SCRIPT ${my_own_exe_prefix0}/bin/ElementsEnv_config.cs
 
 unset my_own_prefix0
 unset my_own_exe_prefix0
-

@@ -145,7 +145,7 @@ def getProjectFromManifest(manifest):
     file.
 
     @param manifest: path to the manifest file
-    @return: tuple with the project name and version as (name, version) 
+    @return: tuple with the project name and version as (name, version)
     """
     from xml.dom.minidom import parse
     m = parse(manifest)

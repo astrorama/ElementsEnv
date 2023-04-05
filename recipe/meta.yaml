@@ -13,4 +13,3 @@ requirements:
   - python =3.9.*
 source:
   path: ../
-

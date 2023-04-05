@@ -34,7 +34,7 @@ if pythonpath:
         external = etree.Element('pydev_pathproperty')
         external.set('name', 'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH')
         xml.getroot().append(external)
-    
+
     # Get the element of the project paths and empty it. If it doesn't
     # exist create an empty new one
     project = xml.xpath('//pydev_pathproperty[@name="org.python.pydev.PROJECT_SOURCE_PATH"]')
@@ -46,7 +46,7 @@ if pythonpath:
         project = etree.Element('pydev_pathproperty')
         project.set('name', 'org.python.pydev.PROJECT_SOURCE_PATH')
         xml.getroot().append(project)
-    
+
     cwd = os.getcwd()
     for path in pythonpath.split(':'):
         element = etree.Element('path')

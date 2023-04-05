@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-n","--name", metavar="NAME",
-                        default="this_install_prefix", 
+                        default="this_install_prefix",
                         help="name of the prefix variable to replace (default: %(default)s)")
     parser.add_argument('prefix', metavar="PREFIX",
                         help="prefix to replace")
@@ -33,5 +33,5 @@ if __name__ == '__main__':
     logging.debug(args)
 
     fixInstallPath(args.prefix, args.files, args.name)
-    
+
     sys.exit(0)

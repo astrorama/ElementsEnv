@@ -13,7 +13,7 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
   . ${confscr} "$@"
   unset confscr
 
-  # shell part. has to deal with the shell settings. Pretty much everything but 
+  # shell part. has to deal with the shell settings. Pretty much everything but
   # the environment variables. The script can be manually called from .bashrc
   if [[ -r ${my_own_prefix4}/bin/ElementsEnv_group_setup.sh ]]; then
     shellscr=${my_own_prefix4}/bin/ElementsEnv_group_setup.sh
@@ -25,7 +25,7 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
   fi
   unset shellscr
 
-  # login part. has to deal with the environment. The script can be called manually from 
+  # login part. has to deal with the environment. The script can be called manually from
   # .bash_profile
   if ( (shopt -q login_shell || [[ -o login ]]) && ( [[ $- == *i* ]] || -o interactive) ) 2> /dev/null ; then
     if [[ -r ${my_own_prefix4}/bin/ElementsEnv_group_login.sh ]]; then

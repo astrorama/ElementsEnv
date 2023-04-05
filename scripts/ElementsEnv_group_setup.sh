@@ -15,11 +15,11 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
     elogscr=${my_own_prefix3}/bin/ELogin.sh
   else
     elogscr=`/usr/bin/which ELogin.sh`
-  fi    
+  fi
   if [[ -e ${elogscr} ]]; then
-  
+
     needs_cleanup3=no
-  
+
     if [[ -n "$ELOGIN_DONE" ]]; then
       # The login part has already been done. Only the shell (setup) part is redone.
       # This is mandatory for the creation of a subshell.
@@ -28,7 +28,7 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
       # The full login and setup is not performed.
       export E_BANNER=`mktemp`
       . ${elogscr} --quiet "$@" >> ${E_BANNER}
-      
+
       if [[ ! -n "$ELEMENTSENV_POST_DONE" ]]; then
         if [[ -n "$ELEMENTSENV_POST_SCRIPT" ]]; then
           if [[ -r ${my_own_prefix3}/bin/${ELEMENTSENV_POST_SCRIPT}.sh ]]; then
@@ -44,9 +44,9 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
           unset epostscr
         fi
       fi
-                
+
     fi
-    
+
     if [[ "$needs_cleanup3" = "yes" ]]; then
       if [[ "x$E_NO_STRIP_PATH" ==  "x" ]] ; then
         if [[ -r ${my_own_prefix3}/bin/StripPath.sh ]]; then
@@ -57,14 +57,13 @@ if [[ ! -e ${HOME}/.noElementsEnvLoginScript ]]; then
         . ${stripscr}
         unset stripscr
       fi
-    fi    
-    
+    fi
+
     unset needs_cleanup3
-    
+
   fi
   unset elogscr
-    
+
   unset my_own_prefix3
 
 fi
-

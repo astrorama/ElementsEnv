@@ -3,14 +3,14 @@
 import euclid.sgs.jenkins.BashUtils
 pipelineSGS(
 	name:"st_elementsenv",
-	component:'sgs', 
+	component:'sgs',
 	packageType: "Conda",
 	skipTest: true,
 	skipQuality: true,
 	skipPublishQuality: true,
 	skipDocumentation: true,
 	skipPublishDocumentation: true,
-	skipPackage: false, 
+	skipPackage: false,
 	skipUpload: false,
 	skipContinuous: true,
 	skipRelease: true,
@@ -19,5 +19,3 @@ pipelineSGS(
 	build: BashUtils.EMPTY_BASH_COMMAND,
 	package: ['make build']
 )
-
-

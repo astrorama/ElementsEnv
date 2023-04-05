@@ -21,7 +21,7 @@
 
 * Tue Apr 7 2020 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 3.12-1
 - update to the latest make and cmake library of Elements (5.10)
-- various fixes for the python3 (explicit version) and python (implicit) 
+- various fixes for the python3 (explicit version) and python (implicit)
   version 3 series
 - Modify EuclidWrapper to accept extra config files (Alejandro Alvarez Ayllon).
 - Fix the localisation of the lsb_release utility
@@ -33,24 +33,24 @@
 
 * Thu Oct 11 2018 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 3.8.2-1
 - data/RPM/EuclidEnv.spec.in: fix the spec generation if the python explicit
-  version is empty. The RPM post install script were failing in that case 
+  version is empty. The RPM post install script were failing in that case
 - python/EuclidWrapper/logging.py: fix the absolute import of the system
-  logging feature. The EuclidWrapper script was working fine with python3 but 
-  not with the default system python (python 2) 
+  logging feature. The EuclidWrapper script was working fine with python3 but
+  not with the default system python (python 2)
 
 * Thu Aug 23 2018 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 3.8.1-1
-- bypass of the tests in the jenkins CI. Please have look at 
+- bypass of the tests in the jenkins CI. Please have look at
   https://euclid.roe.ac.uk/issues/8257
 
 * Mon Aug 20 2018 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 3.8-1
 - add the CTEST_OUTPUT_ON_FAILURE=1 as default environement variable
 - add the EuclidWrapper new feature (Nikos)
-- remove the generation of the runtests.py script. The "--genscript" 
+- remove the generation of the runtests.py script. The "--genscript"
   option of py.test has been obsoleted
 - implement the python explicit version handling in the scripts.
 - add the .jenkinsFile.
-- add the full support (distribution and run) for the usage of the 
-  python3 executable from an unusual location. 
+- add the full support (distribution and run) for the usage of the
+  python3 executable from an unusual location.
 
 * Fri Jun 15 2018 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 3.6-1
 - update to the latest cmake library of Elements (5.4)
@@ -58,9 +58,9 @@
 * Thu Mar 29 2018 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch>
 - global fixing of the python 3 explicit version used in the scripts. That
   version is correctly interpolated for every use. Please note that the
-  explicit version is detected from the base name of the interpreter which 
+  explicit version is detected from the base name of the interpreter which
   is used
-- the RPM distribution kit (tar.gz and SPEC file) is now using the python 
+- the RPM distribution kit (tar.gz and SPEC file) is now using the python
   interpreter fullpath to assert the install root. No on-the-fly rpm relocation
   should be needed then.
 
@@ -82,14 +82,14 @@
 * Fri Jul 28 2017 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 3.1.1-1
 - Add the possibility to setup a custom prefix location
 - Compile the file (Login.py) which is modified in the RPM postinstall phase
-- Fix a bug which didn't pickup the right project from the user area it has 
+- Fix a bug which didn't pickup the right project from the user area it has
   been reported at https://euclid.roe.ac.uk/issues/5098 it happens when
   - the version is explicitly asked for: E-Run Elements 5.0.1 ...
   - and the layout of the project has an explicit version directory:
   ~/Work/Projects/Elements/5.0.1 (instead of simply
   ~/Work/Projects/Elements)
   In that case, the /opt/euclid/Elements/5.0.1 was called anyway.
-- Make the use prefix flag set automatically if EUCLID_BASE is special. If 
+- Make the use prefix flag set automatically if EUCLID_BASE is special. If
   the --relocate option is passed for the /opt/euclid location at the
   rpm install command, the use custom prefix flag is set to "yes" in the
   /etc/sysconfig/euclid. Please note that the --relocate option is just changing
@@ -101,14 +101,14 @@
 - Add the automatic record of the installed files
 - Add the uninstall command. It also works with the --root offset
 - Fix the guard that avoid that the SAME config file is read twice. Before any
-  file pointed by EUCLID_CONFIG_FILE was no reread. That was causing a 
+  file pointed by EUCLID_CONFIG_FILE was no reread. That was causing a
   problem of local and CVMFS installations together.
 
 * Mon Mar 6 2017 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 3.0-1
 - update to the latest cmake library of Elements (5.0)
 
 * Mon Feb 27 2017 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 2.1.2-1
-- hotfix of the Euclid.Run.Script module. Remove obsolete buggy part for 
+- hotfix of the Euclid.Run.Script module. Remove obsolete buggy part for
   the extra search path implemented in a searchPath.py python file.
 
 * Fri Feb 24 2017 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 2.1.1-1
@@ -124,7 +124,7 @@
 
 * Mon Jan 25 2016 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 1.15-1
 - update to the latest cmake library of Elements (3.10)
-- add ERun_autocompletion.sh script (Tristan Grégoire). Please note 
+- add ERun_autocompletion.sh script (Tristan Grégoire). Please note
   that this script has to be called by hand from the .bashrc for the moment.
 
 * Fri Dec 4 2015 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 1.14.1-1
@@ -135,7 +135,7 @@
 * Fri Nov 27 2015 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 1.14-1
 - update to the cmake library of Elements 3.9
 - fix the cleaning of the ELogin banner
-- fix the setup of the environment for bash. Now it is not repeated for 
+- fix the setup of the environment for bash. Now it is not repeated for
   every subshell.
 - add the new "python setup.py test" command. It is based on a generated
   py.test script.
@@ -145,7 +145,7 @@
   directory of a project before trying to list its version subdirectories.
 
 * Wed Oct 7 2015 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 1.13-1
-- update to the cmake library of Elements 3.8 
+- update to the cmake library of Elements 3.8
 - introduction of the draft generation of the python SWIG bindings
 
 * Tue Aug 18 2015 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 1.12.2-1
@@ -154,7 +154,7 @@
 
 * Wed Aug 5 2015 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 1.12.1-1
 - update to the cmake library of the Elements 3.7.1 version
-- fix of the conversion of the CMAKE_PROJECT_PATH environment variable 
+- fix of the conversion of the CMAKE_PROJECT_PATH environment variable
   into a cmake list
 
 * Mon Aug 3 2015 Hubert Degaudenzi <Hubert.Degaudenzi@unige.ch> 1.12-1

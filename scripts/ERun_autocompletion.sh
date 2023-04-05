@@ -78,7 +78,7 @@ function _find_project_bin() {
     done
 }
 
-_ERun() 
+_ERun()
 {
     ## Set local variables
     local cur prev opts _projects _CreateElementsProject_opts
@@ -147,4 +147,3 @@ _ERun()
 
 ## Make completion works for ERun command line
 complete -F _ERun ERun
-

@@ -8,6 +8,3 @@ set(st_elementsenv_OVERRIDE_VERSION TRUE)
 sgs_conda_project(
 	LIBRARY st_elementsenv linux-64 .
 )
-
-
-

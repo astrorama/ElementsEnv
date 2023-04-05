@@ -10,9 +10,9 @@ if ( ! -e ${HOME}/.noElementsEnvLoginScript ) then
     set confscr=`/usr/bin/which ElementsEnv_config.csh`
   endif
   source ${confscr} "${*:q}"
-  unset confscr    
-  
-  # shell part. has to deal with the shell settings. Pretty much everything but 
+  unset confscr
+
+  # shell part. has to deal with the shell settings. Pretty much everything but
   # the environment variables. The script can be manually called from .tcshrc
   if ( -r ${my_own_prefix4}/bin/ElementsEnv_group_setup.csh ) then
     set shellscr=${my_own_prefix4}/bin/ElementsEnv_group_setup.csh
@@ -24,7 +24,7 @@ if ( ! -e ${HOME}/.noElementsEnvLoginScript ) then
   endif
   unset shellscr
 
-  # login part. has to deal with the environment. The script can be called manually from 
+  # login part. has to deal with the environment. The script can be called manually from
   # .login
   if ($?loginsh || ! $?prompt) then
     if ( -r ${my_own_prefix4}/bin/ElementsEnv_group_login.csh ) then
@@ -37,13 +37,13 @@ if ( ! -e ${HOME}/.noElementsEnvLoginScript ) then
     endif
     unset loginscr
   endif
-  
+
   if ( $?E_BANNER ) then
     rm -f ${E_BANNER}
     unsetenv E_BANNER
   endif
-  
-  
+
+
   unset my_own_prefix4
 
 endif

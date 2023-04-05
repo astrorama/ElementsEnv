@@ -4,7 +4,7 @@ import os
 
 def isValidSimpleVersion(version):
     '''
-    Check if the specified version number is a valid one for the project. 
+    Check if the specified version number is a valid one for the project.
     '''
     return (re.match(r"^v[0-9]+r[0-9]+(p[0-9]+)?(g[0-9]+)?$", version)
             or re.match(r"^[0-9]+\.[0-9]+(\.[0-9]+)?$", version)

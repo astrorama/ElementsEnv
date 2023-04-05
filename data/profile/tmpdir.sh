@@ -16,4 +16,3 @@ if ( shopt -q login_shell || [[ -o login ]] ) ; then
   export TMPDIR TMP TEMP
 
 fi
-

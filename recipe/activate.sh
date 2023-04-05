@@ -31,4 +31,3 @@ fi
 export QT_PLUGIN_PATH=$CONDA_PREFIX/plugins
 export FONTCONFIG_FILE=$CONDA_PREFIX/etc/fonts/fonts.conf
 export FONTCONFIG_PATH=$CONDA_PREFIX/etc/fonts/
-
