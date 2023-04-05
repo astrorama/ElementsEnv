@@ -10,23 +10,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [3.20.0] - 2023-02-14
+
+### Added
+- Add CI/CD for CODEEN (Frédéric Leroux)
+- Add the ry symbol for Rocky Linux
+- Add the full binary tag for Rocky 9 to the list of supported platforms
+
 ### Changed
 - Move to the [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format
+- Move to the Elements 6.2.0 CMake and Make libraries
+- Replacement of the get_python_lib function from distutils
+- Convert the Changelog into a "keep a changelog" markdown file
+- Move the log warning about the supported configurations to DEBUG
+- set the default token in the binary tag to linux instead of lx
+  This happens when the distribution is not recognized.
+- Update conda recipe for EDEN 3.1 (Frédéric Leroux)
+
+### Removed
+- Remove preactivate script : LD_LIBRARY_PATH env var is handled by EDEN direcltly (Frédéric Leroux)
+- Remove CMAKEFLAGS from activate.sh. CMAKEFLAGS will be overriden by CT_ElementsProjectDefinition 
+  activate script according to local/codeen build (Frédéric Leroux)
+- Remove the `tests/__pycache__` directory from the packaging
+
+### Fixed
+- Fix the "purelib" prefix by using the sysconfig.get_path('data') call
+
 
 ## [3.18.0] - 2021-04-12
 
 ### Changed
 - update to the latest make and cmake library of Elements (5.14)
 
+
 ## [3.16.0] - 2020-07-20
 
 ### Fixed
 - specific release version for Euclid
 
+
 ## [3.16] - 2020-07-20
 
 ### Changed
 - update to the latest make and cmake library of Elements (5.12)
+
 
 ## [3.14] - 2020-04-30
 
@@ -41,10 +69,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - fixup of the explicit python in the shebang mangling.
 
+
 ## [3.12.1] - 2020-04-08
 
 ### Changed
 - update to the latest make and cmake library of Elements (5.10.1)
+
 
 ## [3.12] - 2020-04-07
 
@@ -61,10 +91,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Modify EuclidWrapper to accept extra config files (Alejandro Alvarez Ayllon).
 
+
 ## [3.10] - 2019-04-12
 
 ### Changed
 - update to the latest make and cmake library of Elements (5.6)
+
 
 ## [3.8.2] - 2018-10-11
 
@@ -75,11 +107,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   logging feature. The EuclidWrapper script was working fine with python3 but
   not with the default system python (python 2)
 
+
 ## [3.8.1] - 2018-08-23
 
 ### Fixed
 - bypass of the tests in the jenkins CI. Please have look at
   https://euclid.roe.ac.uk/issues/8257
+
 
 ## [3.8] - 2018-08-20
 
@@ -95,10 +129,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   option of py.test has been obsoleted
   python3 executable from an unusual location.
 
+
 ## [3.6] - 2018-06-15
 
 ### Changed
 - update to the latest cmake library of Elements (5.4)
+
 
 ## [3.4] - 2018-03-29
 
@@ -113,6 +149,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   interpreter fullpath to assert the install root. No on-the-fly rpm relocation
   should be needed then.
 
+
 ## [3.3] - 2017-08-09
 
 ### Added
@@ -120,21 +157,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   EdenEnv.sh. It is looked in the path and should have no side effect if
   it doesn't exist.
 
+
 ## [3.2] - 2017-08-08
 
 ### Changed
 - update to the latest cmake library of Elements (5.2)
+
 
 ## [3.1.3] - 2017-08-03
 
 ### Fixed
 - hotfix: remove wrong import in the PlatformTest.py file.
 
+
 ## [3.1.2] - 2017-08-02
 
 ### Fixed
 - hotfix from Elements 5.1.1 cmake library. There was a typo in the automatic
   dependency generation for the spec files.
+
 
 ## [3.1.1] - 2017-08-28
 
@@ -159,6 +200,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Update to the latest CMake library of Elements (5.1).
 
+
 ## [3.1] - 2017-04-04
 
 ### Added
@@ -171,10 +213,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   file pointed by EUCLID_CONFIG_FILE was no reread. That was causing a
   problem of local and CVMFS installations together.
 
+
 ## [3.0] - 2017-03-06
 
 ### Changed
 - update to the latest cmake library of Elements (5.0)
+
 
 ## [2.1.2] - 2017-02-27
 
@@ -182,10 +226,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - hotfix of the Euclid.Run.Script module. Remove obsolete buggy part for
   the extra search path implemented in a searchPath.py python file.
 
+
 ## [2.1.1] - 2017-02-24
 
 ### Fixed
 - hotfix of the Euclid.ConfigFile module.
+
 
 ## [2.1] - 2016-12-16
 
@@ -195,6 +241,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - fix up many issues related to the python 3 compatibility.
 
+
 ## [2.0] - 2016-03-22
 
 ### Changed
@@ -202,6 +249,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - fix bug in ERun autocompletion (Tristan Grégoire)
+
 
 ## [1.15] - 2016-01-25
 
@@ -212,6 +260,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add ERun_autocompletion.sh script (Tristan Grégoire). Please note
   that this script has to be called by hand from the .bashrc for the moment.
 
+
 ## [1.14.1] - 2015-12-04
 
 ### Fixed
@@ -220,6 +269,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - add a generic lx type in the BINARY_TAG. This corresponds
   to an unkown linux box.
+
 
 ## [1.14] - 2015-11-27
 
@@ -235,11 +285,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add the new "python setup.py test" command. It is based on a generated
   py.test script.
 
+
 ## [1.13.1] - 2015-10-13
 
 ### Fixed
 - Bugfix. The E-Run command was not checking the existence of the
   directory of a project before trying to list its version subdirectories.
+
 
 ## [1.13] - 2015-10-07
 
@@ -249,6 +301,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - introduction of the draft generation of the python SWIG bindings
 
+
 ## [1.12.2] - 2015-08-18
 
 ### Changed
@@ -256,6 +309,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - fix a bug in the toolchain crawling of projects
+
 
 ## [1.12.1] - 2015-08-05
 
@@ -266,6 +320,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix of the conversion of the CMAKE_PROJECT_PATH environment variable
   into a cmake list
 
+
 ## [1.12] - 2015-08-03
 
 ### Changed
@@ -275,6 +330,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix the E-Run command to work with the User_area without version
   directory.
 
+
 ## [1.11] - 2015-06-15
 
 ### Changed
@@ -283,6 +339,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - contains the CMake Bootstrap Toolchain.
 
+
 ## [1.10] - 2015-02-26
 
 ### Changed
@@ -290,6 +347,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - fixes for the MacPort warnings.
+
 
 ## [1.9] - 2015-02-02
 
@@ -302,10 +360,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - new version of the latex class with the new Euclid logo.
 
+
 ## [1.8] - 2014-11-07
 
 ### Changed
 - updated the cmake library to the Elements 3.3 version.
+
 
 ## [1.7] - 2014-10-13
 
@@ -315,6 +375,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - fixed the version extraction from the SVN tags.
 
+
 ## [1.6] - 2014-10-06
 
 ### Changed
@@ -323,6 +384,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - fixed the User_area location default from ~/Work to ~/Work/Projects.
 
+
 ## [1.5] - 2014-08-28
 
 ### Changed
@@ -330,6 +392,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - mostly a removal of the win32 part
+
 
 ## [1.4] - 2014-07-14
 
